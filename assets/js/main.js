@@ -1,8 +1,17 @@
     $(document).ready(function() {
        // put all your jQuery goodness in here.
        
-        $('li').click(function() {
+        $('div.sidebar-nav li').click(function() {
             anchor = $(this).find('a:first').attr('href');
+            servePage(anchor.substring(1, anchor.length));
+        });
+        
+        if(!window.location.hash){
+            servePage('tournament');
+        }
+        
+        $("div#content-tab a").live("click", function(){
+            anchor = $(this).attr('href');
             servePage(anchor.substring(1, anchor.length));
         });
     });
@@ -11,9 +20,9 @@
         $.post('index.php', { page: anchor},
             function(data) {
                 if(data.error == true){
-                    $('#container').html(data.html);
+                    $('.content').html(data.html);
                 }else{
-                    $('#container').html(data.html);
+                    $('.content').html(data.html);
                 }
         }, "json");
     }

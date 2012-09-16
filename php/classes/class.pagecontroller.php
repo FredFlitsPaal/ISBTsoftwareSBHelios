@@ -4,16 +4,26 @@ class pageController{
     //security, login, etc.. later in dev.
     
     public function page($l_sPage){
+        $l_sPage = explode("/", $l_sPage);
         
-        switch($l_sPage){
-            case "instellingen":
+        switch($l_sPage[0]){
+            case "settings":
                 $l_aNotFound["error"] = false;
-                $l_aNotFound["html"] = file_get_contents('pages/instellingen.html');
+                $l_aNotFound["html"] = file_get_contents('pages/settings/settings.html');
             break;
             
-            case "home":
+            case "tournament":
                 $l_aNotFound["error"] = false;
-                $l_aNotFound["html"] = file_get_contents('pages/home.html');
+                $l_aNotFound["html"] = file_get_contents('pages/tournament/header.html');
+                
+                //default page for tournament
+                if(!isset($l_sPage[1])){
+                    $l_aNotFound["html"] .= file_get_contents('pages/tournament/currentmatches.html');
+                }else{
+                    $l_aNotFound["html"] .= file_get_contents('pages/tournament/'.$l_sPage[1].'.html');
+                }
+                
+                $l_aNotFound["html"] .= file_get_contents('pages/tournament/footer.html');
             break;
             
             default:
