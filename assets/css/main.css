@@ -1,4 +1,5 @@
-    	
+ /*     General     */
+   	
       a {
 	      color: #000;
       }
@@ -20,9 +21,12 @@
       }
       
       body {
-      	background: #f5f5f5;
-        padding-top: 90px;
-        padding-bottom: 40px;
+      	background: #fff;
+      }
+
+/*     Le Header     */
+      .header .navbar {
+	      margin-bottom: 0;
       }
       
       .header .navbar-inner {
@@ -33,20 +37,18 @@
 		  border-bottom-width: 3px;
 	      }
 
-      .header .navbar-inner .container {
+      .header .navbar-inner .container-fluid {
        	  background-image: url('../img/header-bg.png') !important;
        	  background-repeat: no-repeat;
+       	  margin: 0 20px;
        	  }
 	  
 	  .header .navbar-inner, .header .brand {
        	color: #333 !important;
-	  }    
-      .header .brand {
-      	padding: 20px 20px;
 	  }
 	  
-	  .header .navbar-text {
-		  line-height: 58px;
+      .header .brand {
+      	padding: 20px 0;
 	  }
 	  
 	  .header a {
@@ -56,149 +58,34 @@
 	  .header a:hover {
 		  color: #000;
 	  }
-	  
-	  .header .nav-user {
-		  margin: 17px 0 17px 10px;
-	  }
-	  
-	  .content {
-		  background: #fff;
-	  }
-	  
-	  .content .nav-tabs a {
-		  color: #ffbb00;
-	  }
-	  
-	  .content .nav-tabs > .active > a {
-		  color: #333;
-	  }
-	  
-	  .content .nav-pills {
-		  margin-top: 10px;
-	  }
-	  
-	  .content .nav-pills a {
-		  color: #333;
-	  }
-	  
-	  .content .nav-pills > .active > a {
-		  background-color: #ffc600;
-		  color: #fff;
-	  }
-	  
-	  .content-nav-btns {
-		  margin-top: 15px;
-		  margin-left: 15px;
-	  }
-	  
-	  .sidebar-nav {
-		  overflow: hidden;
-		  text-overflow: ellipsis;
-		  white-space: nowrap;
-		  text-align: center;
-		  font-weight: bold;
-	  }
-	  
-	  .sidebar-nav .nav-list img {
-		  opacity: 0.5;
-	  }
-	  
-	  .sidebar-nav .nav-list .active img {
-		  opacity: 0.9;
-	  }
-	  
-	  .nav-list > li > a {
-		  padding:3px 0;
-		  }
 
-	 .nav-list a:hover {
-		  background: transparent !important;
-	  }
-	  
-	  .nav-list a:hover {
-		  color: #555
-	  }
-	  
-	  .nav-list a:hover img {
-		  opacity: 0.7;
-	  }
+/*     Le Navigation     */
+	.navigation {
+		background-color: #f5f5f5;
+		border-bottom: 1px solid #ddd;
+		margin: 0 0 20px 0;
+	}
 
-	  .nav-list > .active > a, .nav-list > .active > a:hover {
-		  background-color: transparent;
-		  text-shadow: rgba(0, 255, 198, 0.1) 0 -1px 0;
-		  color: #333;
-		  }
-		  
-	  .nav-list a {
-		  color: #999;
-	  }
-		  
-	  .well {
-		  background: #fff;
-		  -webkit-box-shadow:0;
-		  box-shadow:0;
-		}
-		
-		.modal-table-results td {
-			background: #fff !important;
-			border: 0;
-		}
-		
-		.match-table td {
-			line-height: 24px;
-		}
-		
-		.table td {
-			vertical-align: middle;
-		}
-		
-		.alert a {
-			color: #C09853;
-			text-decoration: underline;
-		}
-		
-		.alert a:hover {
-			text-decoration: none;
-		}
-		
-		.court {
-       	  background-image: url('../img/badminton-court.png') !important;
-       	  background-repeat: no-repeat;
-       	  height: 220px;
-       	  width: 150px !important;
-       	  margin: 0 30px;
-		}
-		
-		.court h4 {
-			margin-top: 82px;
-		}
-		
-		.court .info {
-			margin-top: 13px !important;
-		}
-		
-		.court .btn-small {
-			margin-top: 20px;
-		}
-		
-		.match-playing {
-			background-color: #DFF0D8;
-		}
-		
-		.match-playing .info {
-			color: #468847;
-			font-weight: bold;
-		}
-		
-		.locked {
-			background-color: #F2DEDE;
-		}
-		
-		.locked .info {
-			color: #B94A48;
-			font-weight: bold;
-		}
-		
-		#overview-courts ul li {
-			margin-bottom: 20px;
-		}
+	.navigation .nav {
+		margin: 0 20px;
+		margin-bottom: 5px !important;
+	}
+	
+	.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+		background-color: #ffaa00 !important;
+		color: #222;
+	}
+
+/*     Le Body     */
+	.body {
+		margin: 0 20px;
+	}
+	
+	.body .span2 {
+		background: #f5f5f5;
+		border-left: 1px solid #ccc;
+		padding: 10px 0;
+		padding-left: 20px !important;
+	}
+
+/*     Le Footer     */
