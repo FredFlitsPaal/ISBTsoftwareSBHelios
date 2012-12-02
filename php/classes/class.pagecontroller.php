@@ -3,36 +3,39 @@
 class pageController{
     //security, login, etc.. later in dev.
     
-    public function page($l_sPage){
-        $l_sPage = explode("/", $l_sPage);
+    public function __construct($p_sPage){
+        $this->page($p_sPage);
+    }
+
+    private function page($p_sPage){
+        $p_sPage = explode("/", $p_sPage);
         
-        switch($l_sPage[0]){
+        switch($p_sPage[0]){
             case "settings":
-                $l_aNotFound["error"] = false;
-                $l_aNotFound["html"] = file_get_contents('pages/settings/settings.html');
+                $l_aPageCall["error"] = false;
+                $l_aPageCall["html"] = file_get_contents(PAGE_DIR.'settings/settings.html');
             break;
             
             case "tournament":
-                $l_aNotFound["error"] = false;
-                $l_aNotFound["html"] = file_get_contents('pages/tournament/header.html');
+                $l_aPageCall["error"] = false;
+                $l_aPageCall["html"] = file_get_contents(PAGE_DIR.'tournament/header.html');
                 
                 //default page for tournament
-                if(!isset($l_sPage[1])){
-                    $l_aNotFound["html"] .= file_get_contents('pages/tournament/currentmatches.html');
+                if(!isset($p_sPage[1])){
+                    $l_aPageCall["html"] .= file_get_contents(PAGE_DIR.'tournament/currentmatches.html');
                 }else{
-                    $l_aNotFound["html"] .= file_get_contents('pages/tournament/'.$l_sPage[1].'.html');
+                    $l_aPageCall["html"] .= file_get_contents(PAGE_DIR.'tournament/'.$p_sPage[1].'.html');
                 }
                 
-                $l_aNotFound["html"] .= file_get_contents('pages/tournament/footer.html');
+                $l_aPageCall["html"] .= file_get_contents(PAGE_DIR.'tournament/footer.html');
             break;
             
             default:
-                $l_aNotFound["error"] = true;
-                $l_aNotFound["html"] = file_get_contents('pages/404.html');
+                $l_aPageCall["error"] = true;
+                $l_aPageCall["html"] = file_get_contents(PAGE_DIR.'404.html');
             break;
         };
         
-        echo json_encode($l_aNotFound);
+        echo json_encode($l_aPageCall);
     }
 }
-?>
