@@ -10,4 +10,5 @@ if(isset($_POST["page"])){
     $l_sPage = $_POST["page"];
 } 
 
+Monolog::getInstance()->addDebug('calling pageController now!');
 new pageController($l_sPage);
