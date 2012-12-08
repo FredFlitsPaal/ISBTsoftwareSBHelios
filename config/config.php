@@ -28,3 +28,9 @@ define('SAVE_LOG', 1);
 
 //monolog file log destination; 'isbt.log' at the folder 'log'
 define('LOG_FILE_DESTINATION', ROOT_DIR.'log'.DIRECTORY_SEPARATOR.'isbt.log');
+
+//match status
+define('MATCH_STARTED', 0);
+define('MATCH_ENDED', 1);
+define('MATCH_NOT_YET_STARTED', 2);
+define('MATCH_FINISHED', 3);
