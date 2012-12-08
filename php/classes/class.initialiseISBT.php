@@ -6,7 +6,7 @@ class initialiseISBT{
 		//load config
 		require_once("../config/config.php");
 
-		//load monolog
-		
+		//load monolog.
+
 	}
 }
