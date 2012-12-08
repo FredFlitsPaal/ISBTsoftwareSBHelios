@@ -10,24 +10,21 @@ class pageController{
     private function page($p_sPage){
         $p_sPage = explode("/", $p_sPage);
         
+        //Deafult subpage
+        if(!isset($p_sPage[1])){
+	        $p_sPage[1] = 'index';
+         }
+        
         switch($p_sPage[0]){
-            case "settings":
+            case "match":
                 $l_aPageCall["error"] = false;
-                $l_aPageCall["html"] = file_get_contents(PAGE_DIR.'settings/settings.html');
-            break;
-            
-            case "tournament":
-                $l_aPageCall["error"] = false;
-                $l_aPageCall["html"] = file_get_contents(PAGE_DIR.'tournament/header.html');
-                
-                //default page for tournament
-                if(!isset($p_sPage[1])){
-                    $l_aPageCall["html"] .= file_get_contents(PAGE_DIR.'tournament/currentmatches.html');
+                //Subpage
+                if(!file_exists(PAGE_DIR.'match/' . $p_sPage[1] . '.html')){
+	                echo 'De stukkels die dit gemaakt hebben hebben keihard gefaald, sla ze op hun bek dat ze het fixen!';
                 }else{
-                    $l_aPageCall["html"] .= file_get_contents(PAGE_DIR.'tournament/'.$p_sPage[1].'.html');
+         	       $l_aPageCall["html"] = file_get_contents(PAGE_DIR.'match/' . $p_sPage[1] . '.html');                
                 }
                 
-                $l_aPageCall["html"] .= file_get_contents(PAGE_DIR.'tournament/footer.html');
             break;
             
             default:
@@ -35,7 +32,6 @@ class pageController{
                 $l_aPageCall["html"] = file_get_contents(PAGE_DIR.'404.html');
             break;
         };
-        
         echo json_encode($l_aPageCall);
     }
 }
