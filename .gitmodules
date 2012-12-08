@@ -1,0 +1,6 @@
+[submodule "php/packages/Monolog"]
+	path = php/packages/Monolog
+	url = https://FredFlitsPaal@github.com/Seldaek/monolog.git
+[submodule "php/packages/ClassLoader"]
+	path = php/packages/ClassLoader
+	url = https://FredFlitsPaal@github.com/symfony/ClassLoader.git
