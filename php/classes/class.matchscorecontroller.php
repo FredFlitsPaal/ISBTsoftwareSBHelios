@@ -9,7 +9,7 @@ class matchScoreController {
         $matches = $this->getMatches();
 
         ob_start();
-        include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "match-scores" . DIRECTORY_SEPARATOR . "index.html");
+        include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "match-scores" . DIRECTORY_SEPARATOR . "match-scores.html");
         return ob_get_clean();
     }
 
