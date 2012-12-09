@@ -57,15 +57,22 @@ class ToolBox{
 
     public static function getCategories()
     {
-    	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+    	try
+    	{
+	    	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 
-    	$sql = "SELECT `category`.* FROM category ORDER BY id ASC";
+	    	$sql = "SELECT `category`.* FROM category ORDER BY id ASC";
 
-    	$stmt = $pdo->prepare($sql);
-    	$stmt->bindParam(":poule", $poule);
-    	$stmt->execute();
+	    	$stmt = $pdo->prepare($sql);
+	    	$stmt->bindParam(":poule", $poule);
+	    	$stmt->execute();
 
-    	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	    	return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	    }
+	    catch(PDOException $e)
+	    {
+	    	Monolog::getInstance()->addAlert('Error selecting categories, PDOException: ' . var_export($e));
+	    }
     }
 
     public static function calculateMatchScore($match)
