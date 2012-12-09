@@ -1,0 +1,304 @@
+					<div class="row-fluid">
+						<div class="span10">
+							<div class="alert">
+								<button type="button" class="close" data-dismiss="alert">×</button>
+								<strong>Warning!</strong> Best check yo self, you're not looking too good.
+							</div>
+							<table class="table table-hover table-striped main-table matches-table">
+							<tr>
+								<th class="muted">
+									#
+								</th>
+								<th>
+									Team 1
+								</th>
+								<th>
+									Team 2
+								</th>
+								<th>
+									Poule
+								</th>
+								<th>
+									Round
+								</th>
+								<th>
+									Status
+								</th>
+								<th>
+									Score
+								</th>
+								<th>
+									Comments
+								</th>
+							</tr>
+							<?php foreach($matches as $match): ?>
+								<tr data-toggle="modal" data-target="#MatchResults-<?= $match['id'] ?>">
+									<td class="muted">
+										<?= $match['id'] ?>
+									</td>
+									<td>
+										<?= $match['team1_user1']; ?><br />
+										<?= (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+									</td>
+									<td>
+										<?= $match['team2_user1']; ?><br />
+										<?= (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+									</td>
+									<td>
+										<?= ToolBox::getCategoryLabel($match['category']) ?>
+									</td>
+									<td>
+										<?= $match['round']; ?>
+									</td>
+									<td>
+										<?= ToolBox::getMatchStatusLabel($match['status']) ?>
+									</td>
+									<td>
+										<?= ToolBox::calculateMatchScore($match); ?>
+									</td>
+									<td>
+										<?= $match['comment']; ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>						
+						</table>
+						</div>
+						<div class="span2 well">
+							<form>
+								<input class="span12" type="text" placeholder="Search…">
+							</form>
+							<p>Hier kan nog een menu komen, suggesties?</p>
+							<br>
+							<button class="span12 btn btn-primary" type="button">Start next round</button>
+						</div>
+					</div>
+	<!--     Le Modals     -->
+	<div id="MatchResults-1" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="AddMatchResults">Add match results</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table">
+				<tr>
+					<th>#1</th>
+					<th>Court 2</th>
+					<th><span class="label label-success">Men single</span> <b>B</b></th>
+				</tr>
+				<tr>
+					<td>Anton van Rooij</td>
+					<td>vs</td>
+					<td>Wouter van Dijk</td>
+				</tr>
+			</table>
+			<form class="form-inline">
+				<label><b>Results</b></label><br />
+				<table class="table modal-table-results">
+					<tr>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">1e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="21 - 15" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">2e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="9 - 21" data-mask="99-99">
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+		<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">Close</button>
+				<button class="btn btn-primary" type="submit">Save changes</button>
+			</form>
+		</div>
+	</div>
+
+	<div id="MatchResults-2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="AddMatchResults">Add match results</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table">
+				<tr>
+					<th>#1</th>
+					<th>Court 2</th>
+					<th><span class="label label-success">Men single</span> <b>B</b></th>
+				</tr>
+				<tr>
+					<td>Anton van Rooij</td>
+					<td>vs</td>
+					<td>Wouter van Dijk</td>
+				</tr>
+			</table>
+			<form class="form-inline">
+				<label><b>Results</b></label><br />
+				<table class="table modal-table-results">
+					<tr>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">1e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">2e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">3e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+		<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">Close</button>
+				<button class="btn btn-primary" type="submit">Save changes</button>
+			</form>
+		</div>
+	</div>
+
+	<div id="MatchResults-3" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="AddMatchResults">Add match results</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table">
+				<tr>
+					<th>#1</th>
+					<th>Court 2</th>
+					<th><span class="label label-success">Men single</span> <b>B</b></th>
+				</tr>
+				<tr>
+					<td>Anton van Rooij</td>
+					<td>vs</td>
+					<td>Wouter van Dijk</td>
+				</tr>
+			</table>
+			<form class="form-inline">
+				<label><b>Results</b></label><br />
+				<table class="table modal-table-results">
+					<tr>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">1e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">2e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">3e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+		<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">Close</button>
+				<button class="btn btn-primary" type="submit">Save changes</button>
+			</form>
+		</div>
+	</div>
+
+	<div id="MatchResults-4" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="AddMatchResults">Add match results</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table">
+				<tr>
+					<th>#1</th>
+					<th>Court 2</th>
+					<th><span class="label label-success">Men single</span> <b>B</b></th>
+				</tr>
+				<tr>
+					<td>Anton van Rooij</td>
+					<td>vs</td>
+					<td>Wouter van Dijk</td>
+				</tr>
+			</table>
+			<form class="form-inline">
+				<label><b>Results</b></label><br />
+				<table class="table modal-table-results">
+					<tr>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">1e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">2e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">3e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+		<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">Close</button>
+				<button class="btn btn-primary" type="submit">Save changes</button>
+			</form>
+		</div>
+	</div>
+
+	<div id="MatchResults-5" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="AddMatchResults">Add match results</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table">
+				<tr>
+					<th>#1</th>
+					<th>Court 2</th>
+					<th><span class="label label-success">Men single</span> <b>B</b></th>
+				</tr>
+				<tr>
+					<td>Anton van Rooij</td>
+					<td>vs</td>
+					<td>Wouter van Dijk</td>
+				</tr>
+			</table>
+			<form class="form-inline">
+				<label><b>Results</b></label><br />
+				<table class="table modal-table-results">
+					<tr>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">1e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">2e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+						<td>
+							<div class="input-prepend">
+								<span class="add-on">3e set</span><input class="input-small" id="prependedInput" size="16" type="text" placeholder="__ - __" data-mask="99-99">
+							</div>
+						</td>
+					</tr>
+				</table>
+		</div>
+		<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">Close</button>
+				<button class="btn btn-primary" type="submit">Save changes</button>
+			</form>
+		</div>
+	</div>
