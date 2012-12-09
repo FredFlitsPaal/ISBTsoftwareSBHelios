@@ -1,6 +1,6 @@
 <?php
 
-class pageController{
+class BpageController{
     //security, login, etc.. later in dev.
     
     public function __construct($p_sPage){
