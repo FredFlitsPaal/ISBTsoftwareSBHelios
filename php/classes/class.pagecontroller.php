@@ -11,7 +11,7 @@ class pageController{
         $p_aPage = explode("/", $p_sPage);
         
         //dit is puur voor het feit dat de default in de switch niet breekt denk ik?
-        if(!isset($p_aPage[1])) {
+        if(empty($p_aPage[1])) {
 	        $p_aPage[1] = $p_aPage[0];
         }
 		

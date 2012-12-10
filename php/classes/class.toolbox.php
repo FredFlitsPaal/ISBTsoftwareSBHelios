@@ -60,7 +60,8 @@ class ToolBox{
     	try
     	{
 	    	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
-
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
 	    	$sql = "SELECT `category`.* FROM category ORDER BY id ASC";
 
 	    	$stmt = $pdo->prepare($sql);
@@ -71,7 +72,7 @@ class ToolBox{
 	    }
 	    catch(PDOException $e)
 	    {
-	    	Monolog::getInstance()->addAlert('Error selecting categories, PDOException: ' . var_export($e));
+	    	Monolog::getInstance()->addAlert('Error selecting categories, PDOException: ' . var_export($e, true));
 	    }
     }
 
@@ -100,7 +101,7 @@ class ToolBox{
                 $team2Score++;
         }
 
-        if(!empty($match['team1_set3_score']))
+        if(!empty($match['team1_set3_score']) && $team1Score < 2 && $team2Score < 2)
         {
             if($match['team1_set3_score'] > $match['team2_set3_score'])
                 $team1Score++;
@@ -110,4 +111,14 @@ class ToolBox{
 
         return $team1Score . " - " . $team2Score;
     }
+	
+	public static function getScore($match, $set)
+	{
+		if(empty($match['team1_set' . $set . '_score']) || empty($match['team2_set' . $set . '_score']))
+		{
+			return "";
+		}
+		
+		return $match['team1_set' . $set . '_score'] . "-" . $match['team2_set' . $set . '_score'];
+	}
 }
