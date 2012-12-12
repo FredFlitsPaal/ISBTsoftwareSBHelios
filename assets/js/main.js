@@ -36,21 +36,14 @@ $(document).ready(function() {
     
 	$("form").live('submit', function()
 	{
-		var data = $(this).serializeArray();
-		if(!window.location.hash)
-			data.push({name : "page", "value" : "match-scores"});
-		else
-			data.push({name : "page", "value" : window.location.hash.substring(1)});
+		var anchor;
 		
-		$.post('pages/servePage.php', data ,
-			function(data) {
-				if(data.error == true){
-					//define some error specific stuff here later...
-					$('.viewport').html(data.html);
-				}else{
-					$('.viewport').html(data.html);
-				}
-		}, "json");
+		if(!window.location.hash)
+			anchor = "match-scores";
+		else
+			anchor = window.location.hash.substring(1);
+		
+		servePageWithData(anchor, $(this).serializeArray());
 		
 		// Fix to hide the grey overlay
 		$(".modal-backdrop").hide();
@@ -67,14 +60,24 @@ $(document).ready(function() {
 });
 
 //call for page
+function servePageWithData(anchor, data)
+{
+	if(typeof data == "undefined")
+	{
+		data = [];
+	}
+	data.push({"name" : "page", "value" : anchor});
+	
+	$.post('pages/servePage.php', data, function(data) {
+		if(data.error == true){
+			//define some error specific stuff here later...
+			$('.viewport').html(data.html);
+		}else{
+			$('.viewport').html(data.html);
+		}
+	}, "json");
+}
+
 function servePage(anchor){
-    $.post('pages/servePage.php', { page: anchor},
-        function(data) {
-            if(data.error == true){
-                //define some error specific stuff here later...
-                $('.viewport').html(data.html);
-            }else{
-                $('.viewport').html(data.html);
-            }
-    }, "json");
+	servePageWithData(anchor, []);
 }
