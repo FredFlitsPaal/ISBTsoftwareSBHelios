@@ -9,7 +9,7 @@ class pageController{
 
     private function page($p_sPage){
         $p_aPage = explode("/", $p_sPage);
-        
+		
         //dit is puur voor het feit dat de default in de switch niet breekt denk ik?
         if(empty($p_aPage[1])) {
 	        $p_aPage[1] = $p_aPage[0];
@@ -19,6 +19,11 @@ class pageController{
 		{
             case "match-scores":
 				$controller = new matchScoreController();
+                $l_aPageCall["error"] = false;
+                $l_aPageCall["html"] = $controller->actionIndex();
+            break;
+            case "poule-information":
+				$controller = new pouleInformationController();
                 $l_aPageCall["error"] = false;
                 $l_aPageCall["html"] = $controller->actionIndex();
             break;

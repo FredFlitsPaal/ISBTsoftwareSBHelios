@@ -1,7 +1,5 @@
 <?php
 
-include_once(__DIR__ . DIRECTORY_SEPARATOR . "class.toolbox.php");
-
 class matchScoreController {
 
     public function actionIndex()
