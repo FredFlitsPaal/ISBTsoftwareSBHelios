@@ -34,32 +34,32 @@
 				</th>
 			</tr>
 			<?php foreach($matches as $match): ?>
-				<tr data-toggle="modal" data-target="#MatchResults-<?= $match['id'] ?>">
+				<tr data-toggle="modal" data-target="#MatchResults-<?php echo $match['id'] ?>">
 					<td class="muted">
-						<?= $match['id'] ?>
+						<?php echo $match['id']; ?>
 					</td>
 					<td>
-						<?= $match['team1_user1']; ?><br />
-						<?= (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+						<?php echo $match['team1_user1']; ?><br />
+						<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
 					</td>
 					<td>
-						<?= $match['team2_user1']; ?><br />
-						<?= (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+						<?php echo $match['team2_user1']; ?><br />
+						<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
 					</td>
 					<td>
-						<?= ToolBox::getCategoryLabel($match['category']) ?>
+						<?php echo ToolBox::getCategoryLabel($match['category']) ?>
 					</td>
 					<td>
-						<?= $match['round']; ?>
+						<?php echo $match['round']; ?>
 					</td>
 					<td>
-						<?= ToolBox::getMatchStatusLabel($match['status']) ?>
+						<?php echo ToolBox::getMatchStatusLabel($match['status']) ?>
 					</td>
 					<td>
-						<?= ToolBox::calculateMatchScore($match); ?>
+						<?php echo ToolBox::calculateMatchScore($match); ?>
 					</td>
 					<td>
-						<?= $match['comment']; ?>
+						<?php echo $match['comment']; ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>						
@@ -77,9 +77,9 @@
 
 <!--     Le Modals     -->
 <?php foreach($matches as $match): ?>
-	<div id="MatchResults-<?= $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+	<div id="MatchResults-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
 		<form class="form-inline" method="post">
-			<input type="hidden" name="match-id" value="<?= $match['id'] ?>" />
+			<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h3 id="AddMatchResults">Add match results</h3>
@@ -87,19 +87,19 @@
 			<div class="modal-body">
 				<table class="table">
 					<tr>
-						<th>#<?= $match['id'] ?></th>
-						<th><button class="btn btn-small btn-warning disabled">Round <?= $match['round'] ?></button></th>
-						<th><span class="label label-success"><?= ToolBox::getCategoryLabel($match['category']) ?></span></th>
+						<th>#<?php echo $match['id']; ?></th>
+						<th><button class="btn btn-small btn-warning disabled">Round <?php echo $match['round']; ?></button></th>
+						<th><span class="label label-success"><?php echo ToolBox::getCategoryLabel($match['category']) ?></span></th>
 					</tr>
 					<tr>
 						<td>
-							<?= $match['team1_user1']; ?><br />
-							<?= (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+							<?php echo $match['team1_user1']; ?><br />
+							<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
 						</td>
 						<td>vs</td>
 						<td>
-							<?= $match['team2_user1']; ?><br />
-							<?= (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+							<?php echo $match['team2_user1']; ?><br />
+							<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
 						</td>
 					</tr>
 				</table>
@@ -109,17 +109,17 @@
 					<tr>
 						<td>
 							<div class="input-prepend">
-								<span class="add-on">1<sup>st</sup> set</span><input class="input-small" name="set-1" id="prependedInput" size="16" type="text" value="<?= ToolBox::getScore($match, 1) ?>" placeholder="__ - __" data-mask="99-99">
+								<span class="add-on">1<sup>st</sup> set</span><input class="input-small" name="set-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1) ?>" placeholder="__ - __" data-mask="99-99">
 							</div>
 						</td>
 						<td>
 							<div class="input-prepend">
-								<span class="add-on">2<sup>nd</sup> set</span><input class="input-small" name="set-2"  id="prependedInput" size="16" type="text" value="<?= ToolBox::getScore($match, 2) ?>"  placeholder="__ - __" data-mask="99-99">
+								<span class="add-on">2<sup>nd</sup> set</span><input class="input-small" name="set-2"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2) ?>"  placeholder="__ - __" data-mask="99-99">
 							</div>
 						</td>
 						<td>
 							<div class="input-prepend">
-								<span class="add-on">3<sup>th</sup> set</span><input class="input-small" name="set-3"  id="prependedInput" size="16" type="text" value="<?= ToolBox::getScore($match, 3) ?>"  placeholder="__ - __" data-mask="99-99">
+								<span class="add-on">3<sup>th</sup> set</span><input class="input-small" name="set-3"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 3) ?>"  placeholder="__ - __" data-mask="99-99">
 							</div>
 						</td>
 					</tr>
