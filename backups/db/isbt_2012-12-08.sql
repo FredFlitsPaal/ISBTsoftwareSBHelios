@@ -117,24 +117,16 @@ CREATE TABLE `poule` (
   `name` varchar(20) NOT NULL DEFAULT '',
   `round` int(11) NOT NULL,
   `category` int(11) NOT NULL,
-  `matches_played` int(11) NOT NULL,
-  `matches_won` int(11) NOT NULL,
-  `matches_lost` int(11) NOT NULL,
-  `matches_draw` int(11) NOT NULL,
-  `sets_won` int(11) NOT NULL,
-  `sets_lost` int(11) NOT NULL,
-  `points_won` int(11) NOT NULL,
-  `points_lost` int(11) NOT NULL,
-  `points_balance` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `poule` WRITE;
 /*!40000 ALTER TABLE `poule` DISABLE KEYS */;
 
-INSERT INTO `poule` (`id`, `name`, `round`, `category`, `matches_played`, `matches_won`, `matches_lost`, `matches_draw`, `sets_won`, `sets_lost`, `points_won`, `points_lost`, `points_balance`)
+INSERT INTO `poule` (`id`, `name`, `round`, `category`)
 VALUES
-	(1,'1',1,1,0,0,0,0,0,0,0,0,0);
+	(1,'1',1,1),
+	(2,'2',1,2);
 
 /*!40000 ALTER TABLE `poule` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -150,16 +142,25 @@ CREATE TABLE `team` (
   `user1` int(11) NOT NULL,
   `user2` int(11) DEFAULT NULL,
   `poule` int(11) NOT NULL,
+  `matches_played` int(11) NOT NULL,
+  `matches_won` int(11) NOT NULL,
+  `matches_lost` int(11) NOT NULL,
+  `matches_draw` int(11) NOT NULL,
+  `sets_won` int(11) NOT NULL,
+  `sets_lost` int(11) NOT NULL,
+  `points_won` int(11) NOT NULL,
+  `points_lost` int(11) NOT NULL,
+  `points_balance` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 LOCK TABLES `team` WRITE;
 /*!40000 ALTER TABLE `team` DISABLE KEYS */;
 
-INSERT INTO `team` (`id`, `user1`, `user2`, `poule`)
+INSERT INTO `team` (`id`, `user1`, `user2`, `poule`, `matches_played`, `matches_won`, `matches_lost`, `matches_draw`, `sets_won`, `sets_lost`, `points_won`, `points_lost`, `points_balance`)
 VALUES
-	(1,1,2,1),
-	(2,3,3,1);
+	(1,1,2,1,1,1,0,0,2,1,56,40,16),
+	(2,3,4,1,1,0,1,0,1,2,40,56,-16);
 
 /*!40000 ALTER TABLE `team` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -185,7 +186,8 @@ INSERT INTO `user` (`id`, `name`, `club`, `postponed`)
 VALUES
 	(1,'Leon Bunschoten','SB Helios',0),
 	(2,'Frederik Leenders','SB Helios',0),
-	(3,'Wouter van Dijk','SB Helios',0);
+	(3,'Wouter van Dijk','SB Helios',0),
+	(4,'Piet Jansen','SB Helios',0);
 
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
