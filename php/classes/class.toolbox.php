@@ -121,4 +121,58 @@ class ToolBox{
 		
 		return $match['team1_set' . $set . '_score'] . "-" . $match['team2_set' . $set . '_score'];
 	}
+	
+	public static function getTeamResults($team, $match)
+	{
+		list($team1_sets, $team2_sets) = explode(" - ", self::calculateMatchScore($match));
+		list($points_won, $points_lost) = self::getPoints($team, $match);
+		
+		$matches_won = 0;
+		$matches_draw = 0;
+		$matches_lost = 0;
+		
+		if($team == 1)
+		{
+			$sets_won = $team1_sets;
+			$sets_lost = $team2_sets;
+		}
+		else
+		{
+			$sets_won = $team2_sets;
+			$sets_lost = $team1_sets;
+		}
+		if($team1_sets == $team2_sets)
+			$matches_draw = 1;
+		else if($team == 1 && $team1_sets > $team2_sets)
+			$matches_won = 1;
+		else if($team == 1 && $team1_sets < $team2_sets)
+			$matches_lost = 1;
+		else if($team == 2 && $team2_sets > $team1_sets)
+			$matches_won = 1;
+		else
+			$matches_lost = 1;
+		
+		return array(
+			"matches_won" => $matches_won,
+			"matches_draw" => $matches_draw,
+			"matches_lost" => $matches_lost,
+			"sets_won" =>  $sets_won,
+			"sets_lost" => $sets_lost,
+			"points_won" => $points_won,
+			"points_lost" => $points_lost
+		);
+		
+		
+	}
+	
+	public static function getPoints($team, $match)
+	{
+		$team1 = $match['team1_set1_score'] + $match['team1_set2_score'] + $match['team1_set3_score'];
+		$team2 = $match['team2_set1_score'] + $match['team2_set2_score'] + $match['team2_set3_score'];
+		
+		if($team == 1)
+			return array($team1, $team2);
+		
+		return array($team2, $team1);
+	}
 }
