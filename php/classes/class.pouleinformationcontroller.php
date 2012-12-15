@@ -20,8 +20,8 @@ class pouleInformationController
 		
 		if(!empty($_POST['startNextRound']))
 		{
-			$message = $this->endRound($poule['id'], $matches);
-			$matches = array();
+			$message = $this->endRound($poule, $matches);
+			$matches = $this->getMatches($poule['id']);
 		}
 		
 		$pouleResults = $this->getPouleResults($poule['id']);
@@ -144,7 +144,17 @@ class pouleInformationController
             $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-            $sql = "SELECT `match`.*, `user1`.name as `team1_user1`, `user2`.name `team1_user2`, `user3`.name as `team2_user1`, `user4`.name as `team2_user2`, `category`.id as category
+            $sql = "SELECT 
+						`match`.*,
+						`user1`.name as `team1_user1`,
+						`user2`.name `team1_user2`,
+						`user3`.name as `team2_user1`,
+						`user4`.name as `team2_user2`,
+						`category`.id as category,
+						`user1`.postponed as `user1_postponed`,
+						`user2`.postponed as `user2_postponed`,
+						`user3`.postponed as `user3_postponed`,
+						`user4`.postponed as `user4_postponed`
                     FROM `match` 
                     INNER JOIN `team` `team1` ON(team1.id = match.team1) 
                     INNER JOIN `team` `team2` ON(team2.id = match.team2) 
@@ -231,13 +241,74 @@ class pouleInformationController
 	private function startNextRound($pdo, $poule)
 	{
 		$sql = "UPDATE 
-					poule
+					`poule`
 				SET
 					`round` = `round` + 1
 				WHERE
 					`id` = :poule";
 		$stmt = $pdo->prepare($sql);
-		$stmt->bindParam(":poule", $poule);
+		$stmt->bindParam(":poule", $poule['id']);
 		$stmt->execute();
+		
+		$this->generateMatches($pdo, $poule);
+	}
+	
+	private function generateMatches($pdo, $poule)
+	{
+		$teams = $this->getTeams($pdo, $poule);
+		$matches = array();
+		
+		if(sizeof($teams) > 1)
+		{
+			foreach($teams as $team1)
+			{
+				foreach($teams as $team2)
+				{
+					if(!in_array($team1['id'] . "-" . $team2['id'], $matches) && !in_array($team2['id'] . "-" . $team1['id'], $matches) && $team1['id'] != $team2['id'])
+					{
+						$matches[] = ($team1['id'] . "-" . $team2['id']);
+					}
+				}
+			}	
+		}
+		
+		if(sizeof($matches > 0))
+		{
+			$this->addMatches($pdo, $matches, $poule);
+		}
+	}
+	
+	private function addMatches($pdo, $matches, $poule)
+	{
+		if(sizeof($matches) > 0)
+		{
+			Monolog::getInstance()->addDebug('Matches: ' . var_export($matches, true));
+			
+			foreach($matches as $match)
+			{
+				list($team1, $team2) = explode("-", $match);
+				
+				$sql = "INSERT INTO `match` (`team1`, `team2`, `round`, `status`)
+						VALUES (:team1, :team2, :round, :status)";
+				$stmt = $pdo->prepare($sql);
+				$stmt->bindParam(":team1", $team1);
+				$stmt->bindParam(":team2", $team2);
+				$stmt->bindValue(":round", $poule['round'] + 1);
+				$stmt->bindValue(":status", MATCH_NOT_YET_STARTED);
+				$stmt->execute();
+			}
+		}
+	}
+	
+	private function getTeams($pdo, $poule)
+	{
+		$sql = "SELECT *
+				FROM `team`
+				WHERE `poule` = :poule";
+		$stmt = $pdo->prepare($sql);
+		$stmt->bindParam(":poule", $poule['id']);
+		$stmt->execute();
+		
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 }

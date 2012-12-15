@@ -141,7 +141,7 @@
 									<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
 								</td>
 								<td class="print-hide">
-									<button class="btn btn-small btn-danger disabled"><?php echo ToolBox::getCategoryLabel($match['category']) ?></button>
+									<?php echo ToolBox::getCategoryLabel($match['category']) ?>
 								</td>
 								<td>
 									<?php echo ToolBox::calculateMatchScore($match); ?>
