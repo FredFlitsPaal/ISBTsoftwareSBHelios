@@ -1,150 +1,59 @@
 <?php
 
-class pouleInformationController 
+class CourtInformationController 
 {
 
     public function actionIndex()
     {
 		ob_start();
-
-		if(!empty($_POST['poule']))
+		
+		if(!empty($_POST['action']) && $_POST['action'] == "start-match")
 		{
-			$poule = $this->getPoule($_POST['poule']);
-		}
-		else
-		{
-			$poule = $this->getFirstPoule();
+			$message = $this->startMatch($_POST['match-id']);
 		}
 		
-		$matches = $this->getMatches($poule['id']);
-		
-		if(!empty($_POST['startNextRound']))
+		if(!empty($_POST['action']) && $_POST['action'] == "pause-match")
 		{
-			$message = $this->endRound($poule['id'], $matches);
-			$matches = array();
+			$this->pauseMatch($_POST['match-id'], true);
 		}
 		
-		$pouleResults = $this->getPouleResults($poule['id']);
-		$poules = $this->getPoules();
+		if(!empty($_POST['action']) && $_POST['action'] == "play-match")
+		{
+			$this->pauseMatch($_POST['match-id'], false);
+		}
 		
-        include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "poule-information" . DIRECTORY_SEPARATOR . "index.html");
-
+		if(!empty($_POST['action']) && $_POST['action'] == "end-match")
+		{
+			$message = $this->endMatch($_POST['match-id']);
+		}
+		
+		$matches = $this->getMatches();
+		$availableCourts = $this->getAvaiableCourts();
+		
+        include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "court-information" . DIRECTORY_SEPARATOR . "index.html");
+		
 		return ob_get_clean();
     }
 	
-	private function getPoule($poule)
+	private function getMatches()
 	{
         try
         {
             $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-            $sql = "SELECT `poule`.*, `category`.name as `category_name`, `category`.level as `category_level` 
-                    FROM `poule`
-					INNER JOIN `category` ON(`category`.id = `poule`.category)
-                    WHERE `poule`.`id` = :poule";
-
-            $stmt = $pdo->prepare($sql);
-			$stmt->bindParam(":poule", $poule);
-            $stmt->execute();
-
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }
-        catch(PDOException $e)
-        {
-            Monolog::getInstance()->addAlert('Error selecting poule, PDOException: ' . var_export($e, true));
-        }
-
-        return array(); 
-	}
-	
-	private function getFirstPoule()
-	{
-        try
-        {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
-			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			
-            $sql = "SELECT `poule`.*, `category`.name as `category_name`, `category`.level as `category_level` 
-                    FROM `poule`
-					INNER JOIN `category` ON(`category`.id = `poule`.category)
-					ORDER BY id
-					LIMIT 0,1";
-
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        }
-        catch(PDOException $e)
-        {
-            Monolog::getInstance()->addAlert('Error selecting poule, PDOException: ' . var_export($e, true));
-        }
-
-        return array(); 
-	}
-	
-	private function getPoules()
-	{
-        try
-        {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
-			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			
-            $sql = "SELECT `poule`.id, `category`.name as `category_name`, `category`.level as `category_level` 
-                    FROM `poule`
-					INNER JOIN `category` ON(`category`.id = `poule`.category)";
-
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(PDOException $e)
-        {
-            Monolog::getInstance()->addAlert('Error selecting poule, PDOException: ' . var_export($e, true));
-        }
-
-        return array();
-	}
-	
-    private function getPouleResults($poule)
-    {
-        try
-        {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
-			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			
-            $sql = "SELECT `team`.*, `user1`.name `user1`, `user2`.name `user2`
-                    FROM `team` 
-                    INNER JOIN `user` `user1` ON(user1 = user1.id) 
-                    LEFT JOIN `user` `user2` ON(user2 = user2.id) 
-					INNER JOIN `poule` ON(`team`.poule = `poule`.id)
-					WHERE `poule`.id = :poule
-					ORDER BY matches_won DESC, matches_draw DESC, points_balance DESC";
-
-            $stmt = $pdo->prepare($sql);
-			$stmt->bindParam(":poule", $poule);
-            $stmt->execute();
-
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(PDOException $e)
-        {
-            Monolog::getInstance()->addAlert('Error selecting poule results, PDOException: ' . var_export($e, true));
-        }
-
-        return array();      
-    }
-	
-    private function getMatches($poule)
-    {
-        try
-        {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
-			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			
-            $sql = "SELECT `match`.*, `user1`.name as `team1_user1`, `user2`.name `team1_user2`, `user3`.name as `team2_user1`, `user4`.name as `team2_user2`, `category`.id as category
+            $sql = "SELECT 
+						`match`.*,
+						`user1`.name as `team1_user1`,
+						`user2`.name `team1_user2`,
+						`user3`.name as `team2_user1`,
+						`user4`.name as `team2_user2`,
+						`category`.id as category,
+						`court`.`number` as `court`,
+						`user1`.postponed as `user1_postponed`,
+						`user2`.postponed as `user2_postponed`,
+						`user3`.postponed as `user3_postponed`,
+						`user4`.postponed as `user4_postponed`
                     FROM `match` 
                     INNER JOIN `team` `team1` ON(team1.id = match.team1) 
                     INNER JOIN `team` `team2` ON(team2.id = match.team2) 
@@ -153,12 +62,11 @@ class pouleInformationController
                     INNER JOIN `user` `user3` ON(team2.user1 = user3.id) 
                     LEFT JOIN `user` `user4` ON(team2.user2 = user4.id) 
                     INNER JOIN `poule` ON(poule.id = team1.poule)
-                    INNER JOIN `category` ON (poule.category = category.id)
-                    WHERE poule.round = match.round
-					AND poule.id = :poule";
+                    INNER JOIN `category` ON(poule.category = category.id)
+					LEFT JOIN `court` ON(`match`.court = `court`.id)
+                    WHERE poule.round = match.round";
 
             $stmt = $pdo->prepare($sql);
-			$stmt->bindParam(":poule", $poule);
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -168,76 +76,129 @@ class pouleInformationController
             Monolog::getInstance()->addAlert('Error selecting matches, PDOException: ' . var_export($e, true));
         }
 
-        return array();      
-    }
+        return array();  
+	}
 	
-	private function endRound($poule, $matches)
+	private function getAvaiableCourts()
 	{
-		$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try
+        {
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+            $sql = "SELECT `court`.*
+					FROM `court`
+					WHERE `court`.id NOT IN(
+						SELECT `match`.`court`
+						FROM `match`
+						WHERE `match`.`court` IS NOT NULL
+					)";
 
-		try
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e)
+        {
+            Monolog::getInstance()->addAlert('Error selecting matches, PDOException: ' . var_export($e, true));
+        }
+
+        return array();  
+	}
+
+	private function pauseMatch($match, $pause)
+	{
+        try
+        {
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+            $sql = "UPDATE 
+						`match`
+					SET
+						`status` = :status
+					WHERE
+						`id` = :id";
+
+            $stmt = $pdo->prepare($sql);
+			$stmt->bindParam(":id", $match);
+			$stmt->bindValue(":status", $pause ? MATCH_PAUSED : MATCH_STARTED);
+            $stmt->execute();
+        }
+        catch(PDOException $e)
+        {
+            Monolog::getInstance()->addAlert('Could not change match status, PDOException: ' . var_export($e, true));
+        }
+	}
+	
+	private function endMatch($match)
+	{
+        try
+        {
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+            $sql = "UPDATE 
+						`match`
+					SET
+						`status` = :status,
+						`court` = NULL,
+						`end_time` = NOW()
+					WHERE
+						`id` = :id";
+
+            $stmt = $pdo->prepare($sql);
+			$stmt->bindParam(":id", $match);
+			$stmt->bindValue(":status", MATCH_ENDED);
+            $stmt->execute();
+			
+			return array("type" => "alert-success", "text" => "Match ended");
+        }
+        catch(PDOException $e)
+        {
+            Monolog::getInstance()->addAlert('Error ending match, PDOException: ' . var_export($e, true));
+        }
+		
+		return array("type" => "", "text" => "Match status could not be changed");
+	}
+	
+	private function startMatch($match)
+	{
+		$courts = $this->getAvaiableCourts();
+		
+        if(sizeof($courts) == 0)
 		{
-			$pdo->beginTransaction();
-			
-			foreach($matches as $match)
-			{			
-				$this->updateTeamResults($pdo, $match['team1'], ToolBox::getTeamResults(1, $match));
-				$this->updateTeamResults($pdo, $match['team2'], ToolBox::getTeamResults(2, $match));
-			}
-			
-			$this->startNextRound($pdo, $poule);
-			
-			$pdo->commit();
-			
-			return array("type" => "alert-success", "text" => "New round started");
-		}
-		catch(PDOException $e)
-		{
-			$pdo->rollBack();
-			Monolog::getInstance()->addAlert('Error updating matches, PDOException: ' . var_export($e, true));
+			return array("type" => "", "text" => "No courts available!");
 		}
 		
-		return array("type" => "", "text" => "Failed to start a new round");
-	}
-	
-	private function updateTeamResults($pdo, $team, $results)
-	{
-		$sql = "UPDATE 
-					team
-				SET
-					`matches_played` = `matches_played` + 1,
-					`matches_won` = `matches_won` + :matches_won,
-					`matches_draw` = `matches_draw` + :matches_draw,
-					`matches_lost` = `matches_lost` + :matches_lost,
-					`sets_won` = `sets_won` + :sets_won,
-					`sets_lost` = `sets_lost` + :sets_lost,
-					`points_won` = `points_won` + :points_won,
-					`points_lost` = `points_lost` + :points_lost,
-					`points_balance` = `points_balance` + :points_won - :points_lost
-				WHERE id = :team";
-		$stmt = $pdo->prepare($sql);
-		$stmt->bindParam(":matches_won", $results['matches_won']);
-		$stmt->bindParam(":matches_draw", $results['matches_draw']);
-		$stmt->bindParam(":matches_lost", $results['matches_lost']);
-		$stmt->bindParam(":sets_won", $results['sets_won']);
-		$stmt->bindParam(":sets_lost", $results['sets_lost']);
-		$stmt->bindParam(":points_won", $results['points_won']);
-		$stmt->bindParam(":points_lost", $results['points_lost']);
-		$stmt->bindParam(":team", $team);
-		$stmt->execute();
-	}
-	
-	private function startNextRound($pdo, $poule)
-	{
-		$sql = "UPDATE 
-					poule
-				SET
-					`round` = `round` + 1
-				WHERE
-					`id` = :poule";
-		$stmt = $pdo->prepare($sql);
-		$stmt->bindParam(":poule", $poule);
-		$stmt->execute();
+		try
+        {
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+            $sql = "UPDATE 
+						`match`
+					SET
+						`court` = :court,
+						`status` = :status,
+						`start_time` = NOW()
+					WHERE
+						`id` = :id";
+
+            $stmt = $pdo->prepare($sql);
+			$stmt->bindParam(":id", $match);
+			$stmt->bindValue(":court", $courts[0]['id']);
+			$stmt->bindValue(":status", MATCH_STARTED);
+            $stmt->execute();
+			
+			return array("type" => "alert-success", "text" => "Court " . $court[0]['number'] . " assigned to the match.");
+        }
+        catch(PDOException $e)
+        {
+            Monolog::getInstance()->addAlert('Error ending match, PDOException: ' . var_export($e, true));
+        }
+		
+		return array("type" => "", "text" => "Could not assign match to court");
 	}
 }

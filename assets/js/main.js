@@ -34,14 +34,42 @@ $(document).ready(function() {
 	    $('.carrousels-hide').hide();
 	});
     
-	$("form").live('submit', function()
+	function getAnchor()
 	{
-		var anchor;
-		
 		if(!window.location.hash)
 			anchor = "match-scores";
 		else
 			anchor = window.location.hash.substring(1);
+		
+		
+		return anchor;
+	}
+	
+	$(".pause-button").live('click', function()
+	{
+		var anchor = getAnchor();
+		var data = [
+			{"name" : "match-id", "value" : $(this).data("match")},
+			{"name" : "action", "value" : "pause-match"}
+		];
+		
+		servePageWithData(anchor, data);
+	});
+	
+	$(".play-button").live('click', function()
+	{
+		var anchor = getAnchor();
+		var data = [
+			{"name" : "match-id", "value" : $(this).data("match")},
+			{"name" : "action", "value" : "play-match"}
+		];
+		
+		servePageWithData(anchor, data);
+	});
+	
+	$("form").live('submit', function()
+	{
+		var anchor = getAnchor();
 		
 		servePageWithData(anchor, $(this).serializeArray());
 		

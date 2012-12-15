@@ -22,6 +22,11 @@ class pageController{
                 $l_aPageCall["error"] = false;
                 $l_aPageCall["html"] = $controller->actionIndex();
             break;
+            case "court-information":
+				$controller = new CourtInformationController();
+                $l_aPageCall["error"] = false;
+                $l_aPageCall["html"] = $controller->actionIndex();
+            break;
             case "poule-information":
 				$controller = new pouleInformationController();
                 $l_aPageCall["error"] = false;

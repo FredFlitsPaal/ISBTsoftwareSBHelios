@@ -2,9 +2,14 @@
 
 class ToolBox{
 
-    public static function getMatchStatusLabel($status)
+    public static function getMatchStatusLabel($match)
     {
-        switch($status)
+		if(self::hasPostponedPlayers($match) && $match['status'] == MATCH_NOT_YET_STARTED)
+		{
+			return '<button class="btn btn-small btn-danger disabled">Postponed</button>';
+		}
+		
+        switch($match['status'])
         {
             case MATCH_STARTED: 
                 return '<button class="btn btn-small btn-info disabled">In progress...</button>';
@@ -14,6 +19,8 @@ class ToolBox{
                 return '<button class="btn btn-small disabled">In cue to start</button>';
             case MATCH_FINISHED:
                 return '<button class="btn btn-small btn-error disabled">Ended</button>';
+            case MATCH_PAUSED:
+                return '<button class="btn btn-small btn-warning disabled">Paused</button>';
             default:
                 return "";
         }
@@ -174,5 +181,58 @@ class ToolBox{
 			return array($team1, $team2);
 		
 		return array($team2, $team1);
+	}
+	
+	public static function getAssignCourtLabel($availableCourts, $match)
+	{
+		// If there are no courts available, the field will be disabled
+		if(sizeof($availableCourts) == 0)
+		{
+			return "<button class='btn btn-small pull-right disabled'><span class='icon-play'></span> Assign to court</button>";
+		}
+		
+		// Checks whether there is a player who is postponed
+		if(
+			(!empty($match['user1_postponed']) && $match['user1_postponed'] == 1) ||
+			(!empty($match['user2_postponed']) && $match['user2_postponed'] == 1) ||
+			(!empty($match['user3_postponed']) && $match['user3_postponed'] == 1) ||
+			(!empty($match['user4_postponed']) && $match['user4_postponed'] == 1)
+		)
+		{
+			return "<button class='btn btn-small btn-inverse pull-right' data-toggle='modal' data-target='#startpostponed-" . $match['id'] . "'><span class='icon-forward icon-white'></span> Overrule, assign to court</button>";
+		}
+		
+		// TODO: Implement time check
+		
+		return "<button class='btn btn-small btn-success pull-right' data-toggle='modal' data-target='#startmatch-" . $match['id'] . "'><span class='icon-play icon-white'></span> Assign to court</button>";
+	}
+	
+	public static function hasPostponedPlayers($match)
+	{
+		return sizeof(self::getPostponedPlayers($match)) > 0;
+	}
+	
+	public static function getPostponedPlayers($match)
+	{
+		$players = array();
+		
+		if(!empty($match['user1_postponed']) && $match['user1_postponed'] == 1)
+		{
+			$players[] = $match['team1_user1'];
+		}
+		if(!empty($match['user2_postponed']) && $match['user2_postponed'] == 1)
+		{
+			$players[] = $match['team1_user2'];
+		}
+		if(!empty($match['user3_postponed']) && $match['user3_postponed'] == 1)
+		{
+			$players[] = $match['team2_user1'];
+		}
+		if(!empty($match['user4_postponed']) && $match['user4_postponed'] == 1)
+		{
+			$players[] = $match['team2_user2'];
+		}
+		
+		return $players;
 	}
 }

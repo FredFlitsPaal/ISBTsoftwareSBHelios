@@ -1,431 +1,356 @@
-				<div class="container-fluid">
-					<div class="row-fluid">
-						<div class="span10">
-							<div class="content">
-								<div class="alert">
-									<button type="button" class="close" data-dismiss="alert">×</button>
-									<strong>Warning!</strong> Best check yo self, you're not looking too good.
-								</div>
-								<fieldset>
-									<legend>Current matches</legend>
-									<table class="table table-striped table-condensed main-table court-table">
-										<tr>
-											<th>
-												Court
-											</th>
-											<th class="muted">
-												Match #
-											</th>
-											<th>
-												Team 1
-											</th>
-											<th>
-												Team 2
-											</th>
-											<th>
-												Poule
-											</th>
-											<th>
-												Round
-											</th>
-											<th>
-												Elapsed time
-											</th>
-											<th>
-												Status
-											</th>
-											<th>
-												Comments
-											</th>
-											<th>
-												&nbsp;
-											</th>
-										</tr>
-										<tr data-toggle="modal" data-target="#MatchResults-1">
-											<td>
-												Court 1
-											</td>
-											<td class="muted">
-												1
-											</td>
-											<td>
-												Sanne Willems
-											</td>
-											<td>
-												Annelies Smout
-											</td>
-											<td>
-												<span class="label label-warning">Women Single B</span>
-											</td>
-											<td>
-												2
-											</td>
-											<td>
-												00:07:37
-											</td>
-											<td>
-												<button class="btn btn-small btn-success disabled">Playing...</button>
-												<a class="btn btn-small" href="#"><i class="icon-pause"></i></a>
-											</td>
-											<td>
-												Leon is gek!
-											</td>
-											<td>
-												<button class="btn btn-small btn-info" data-toggle="modal" data-target="#endmatch-x"><i class="icon-share icon-white"></i></button>
-											</td>
-										</tr>									
-										<tr data-toggle="modal" data-target="#MatchResults-1">
-											<td>
-												Court 2
-											</td>
-											<td class="muted">
-												6
-											</td>
-											<td>
-												Leon Bunschoten
-											</td>
-											<td>
-												Frederik Leenders
-											</td>
-											<td>
-												<span class="label label-success">Men Single A</span>
-											</td>
-											<td>
-												2
-											</td>
-											<td>
-												00:03:12
-											</td>
-											<td>
-												<button class="btn btn-small btn-warning disabled">Paused</button>
-												<a class="btn btn-small btn-inverse" href="#"><i class="icon-play icon-white"></i></a>
-											</td>
-											<td>
-												&nbsp;
-											</td>
-											<td>
-												<button class="btn btn-small btn-info" data-toggle="modal" data-target="#endmatch-x"><i class="icon-share icon-white"></i></button>
-											</td>
-										</tr>									
-										<tr>
-											<td>
-												Court 3
-											</td>
-											<td class="muted">
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-										</tr>	
-										<tr>
-											<td>
-												Court 4
-											</td>
-											<td class="muted">
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-											<td>
-												
-											</td>
-										</tr>									
-									</table>
-								</fieldset>
-								<fieldset>
-									<legend>Upcoming matches</legend>
-									<table class="table table-striped main-table court-table">
-										<tr>
-											<th class="muted">
-												Match #
-											</th>
-											<th>
-												Team 1
-											</th>
-											<th>
-												Team 2
-											</th>
-											<th>
-												Poule
-											</th>
-											<th>
-												Round
-											</th>
-											<th>
-												Status
-											</th>
-											<th>
-												Comments
-											</th>
-											<th>
-												&nbsp;
-											</th>
-										</tr>
-										<tr>
-											<td class="muted">
-												1
-											</td>
-											<td>
-												Sanne Willems
-											</td>
-											<td>
-												Annelies Smout
-											</td>
-											<td>
-												<span class="label label-warning">Women Single B</span>
-											</td>
-											<td>
-												2
-											</td>
-											<td>
-												<button class="btn btn-small disabled">In cue to start</button>
-											</td>
-											<td>
-												En Frederik is ook gek!
-											</td>
-											<td>
-												<button class="btn btn-small btn-success pull-right" data-toggle="modal" data-target="#startmatch-x"><i class="icon-play icon-white"></i> Assign to court</button>
-											</td>
-										</tr>
-										<tr>
-											<td class="muted">
-												1
-											</td>
-											<td>
-												Sanne Willems
-											</td>
-											<td>
-												Annelies Smout
-											</td>
-											<td>
-												<span class="label label-warning">Women Single B</span>
-											</td>
-											<td>
-												2
-											</td>
-											<td>
-												<button class="btn btn-small disabled">In cue to start</button>
-											</td>
-											<td>
-												Indien alle banen bezet, knop disabled
-											</td>
-											<td>
-												<button class="btn btn-small pull-right disabled"><i class="icon-play"></i> Assign to court</button>
-											</td>
-										</tr>
-										<tr>
-											<td class="muted">
-												1
-											</td>
-											<td>
-												Sanne Willems
-											</td>
-											<td>
-												Annelies Smout
-											</td>
-											<td>
-												<span class="label label-warning">Women Single B</span>
-											</td>
-											<td>
-												2
-											</td>
-											<td>
-												<button class="btn btn-small btn-danger disabled">Postponed on <b>Sanne Willems</b></button>
-											</td>
-											<td>
-												&nbsp;
-											</td>
-											<td>
-												<button class="btn btn-small btn-inverse pull-right" data-toggle="modal" data-target="#startpostponed-x"><i class="icon-forward icon-white"></i> Overrule, assign to court</button>
-											</td>
-										</tr>	
-										<tr>
-											<td class="muted">
-												1
-											</td>
-											<td>
-												Sanne Willems
-											</td>
-											<td>
-												Annelies Smout
-											</td>
-											<td>
-												<span class="label label-warning">Women Single B</span>
-											</td>
-											<td>
-												2
-											</td>
-											<td>
-												<button class="btn btn-small btn-warning disabled">Delayed, <b>Annelies Smout</b> already on a court</button>
-											</td>
-											<td>
-												&nbsp;
-											</td>
-											<td>
-												<button class="btn btn-small btn-inverse pull-right" data-toggle="modal" data-target="#startdelayed-x"><i class="icon-forward icon-white"></i> Overrule, assign to court</button>
-											</td>
-										</tr>								
-									</table>
-								</fieldset>
-							</div>
-						</div>
-						<div class="span2 well">
-							<div class="side-menu">
-								<form>
-									<input class="span12" type="text" placeholder="Search…">
-								</form>
-								<p>Hier kan nog een menu komen, suggesties?</p>
-							</div>
-						</div>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span10">
+			<div class="content">
+				<?php if(!empty($message)): ?>
+					<div class="alert <?php echo $message['type'] ?>">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+						<?php echo $message['text'] ?>
 					</div>
-				</div>
+				<?php endif; ?>
+				<fieldset>
+					<legend>Current matches</legend>
+					<table class="table table-striped table-condensed main-table court-table">
+						<tr>
+							<th>
+								Court
+							</th>
+							<th class="muted">
+								Match #
+							</th>
+							<th>
+								Team 1
+							</th>
+							<th>
+								Team 2
+							</th>
+							<th>
+								Poule
+							</th>
+							<th>
+								Round
+							</th>
+							<th>
+								Elapsed time
+							</th>
+							<th>
+								Status
+							</th>
+							<th>
+								Comments
+							</th>
+							<th>
+								&nbsp;
+							</th>
+						</tr>
+						<?php foreach($matches as $match): ?>
+							<?php if($match['status'] == MATCH_STARTED || $match['status'] == MATCH_PAUSED): ?>
+								<tr data-toggle="modal" data-target="#MatchResults-1">
+									<td>
+										Court <?php echo $match['court'] ?>
+									</td>
+									<td class="muted">
+										<?php echo $match['id'] ?>
+									</td>
+									<td>
+										<?php echo $match['team1_user1']; ?><br />
+										<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+									</td>
+									<td>
+										<?php echo $match['team2_user1']; ?><br />
+										<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+									</td>
+									<td>
+										<?php echo ToolBox::getCategoryLabel($match['category']) ?>
+									</td>
+									<td>
+										<?php echo $match['round'] ?>
+									</td>
+									<td>
+										00:07:37
+									</td>
+									<td>
+										<?php $paused = ($match['status'] == MATCH_PAUSED) ?>
+										<a type="submit" class="btn btn-small <?php echo ($paused) ? 'btn-inverse play-button' : 'pause-button' ?>" data-match="<?php echo $match['id'] ?>">
+											<span class="<?php echo ($paused) ? 'icon-play icon-white' : 'icon-pause' ?>"></span>
+										</a>
+										<?php echo ToolBox::getMatchStatusLabel($match) ?>
+									</td>
+									<td>
+										<?php echo $match['comment'] ?>
+									</td>
+									<td>
+										<button class="btn btn-small btn-info" data-toggle="modal" data-target="#endmatch-<?php echo $match['id'] ?>"><span class="icon-share icon-white"></span></button>
+									</td>
+								</tr>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</table>
+				</fieldset>
+				<fieldset>
+					<legend>Upcoming matches</legend>
+					<table class="table table-striped main-table court-table">
+						<tr>
+							<th class="muted">
+								Match #
+							</th>
+							<th>
+								Team 1
+							</th>
+							<th>
+								Team 2
+							</th>
+							<th>
+								Poule
+							</th>
+							<th>
+								Round
+							</th>
+							<th>
+								Status
+							</th>
+							<th>
+								Comments
+							</th>
+							<th>
+								&nbsp;
+							</th>
+						</tr>
+						<?php foreach($matches as $match): ?>
+							<?php if($match['status'] == MATCH_NOT_YET_STARTED): ?>
+								<tr>
+									<td class="muted">
+										<?php echo $match['id'] ?>
+									</td>
+									<td>
+										<?php echo $match['team1_user1']; ?><br />
+										<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+									</td>
+									<td>
+										<?php echo $match['team2_user1']; ?><br />
+										<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+									</td>
+									<td>
+										<?php echo ToolBox::getCategoryLabel($match['category']) ?>
+									</td>
+									<td>
+										<?php echo $match['round'] ?>
+									</td>
+									<td>
+										<?php echo ToolBox::getMatchStatusLabel($match) ?>
+									</td>
+									<td>
+										<?php echo $match['comment'] ?>
+									</td>
+									<td>
+										<?php echo ToolBox::getAssignCourtLabel($availableCourts, $match); ?>
+									</td>
+								</tr>
+							<?php endif; ?>
+						<?php endforeach; ?>
+						<tr>
+							<td class="muted">
+								1
+							</td>
+							<td>
+								Sanne Willems
+							</td>
+							<td>
+								Annelies Smout
+							</td>
+							<td>
+								<span class="label label-warning">Women Single B</span>
+							</td>
+							<td>
+								2
+							</td>
+							<td>
+								<button class="btn btn-small btn-warning disabled">Delayed, <b>Annelies Smout</b> already on a court</button>
+							</td>
+							<td>
+								&nbsp;
+							</td>
+							<td>
+								<button class="btn btn-small btn-inverse pull-right" data-toggle="modal" data-target="#startdelayed-x"><i class="icon-forward icon-white"></i> Overrule, assign to court</button>
+							</td>
+						</tr>								
+					</table>
+				</fieldset>
+			</div>
+		</div>
+		<div class="span2 well">
+			<div class="side-menu">
+				<form>
+					<input class="span12" type="text" placeholder="Search…">
+				</form>
+				<p>Hier kan nog een menu komen, suggesties?</p>
+			</div>
+		</div>
+	</div>
+</div>
 
-	<!--     Le Modals     -->
-	<div id="endmatch-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="endmatch-x" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 id="endmatch">End match</h3>
+<!--     Le Modals     -->
+<?php foreach($matches as $match): ?>
+	<?php if(!empty($match['court'])): ?>
+		<div id="endmatch-<?php echo $match['id']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 id="endmatch">End match</h3>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<tr>
+						<th>#1</th>
+						<th><button class="btn btn-small btn-warning disabled"> Round <?php echo $match['round'] ?></button></th>
+						<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
+					</tr>
+					<tr>
+						<td>
+							<?php echo $match['team1_user1']; ?><br />
+							<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+						</td>
+						<td>vs</td>
+						<td>
+							<?php echo $match['team2_user1']; ?><br />
+							<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+						</td>
+					</tr>
+				</table>
+				Are you sure you want to end this match?
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<input type="hidden" name="action" value="end-match" />
+					<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+					
+					<button class="btn" data-dismiss="modal">Of course not, you idiot...</button>
+					<button class="btn btn-primary" type="submit">Yes please.</button>
+				</form>
+			</div>
 		</div>
-		<div class="modal-body">
-			<table class="table">
-				<tr>
-					<th>#1</th>
-					<th><button class="btn btn-small btn-warning disabled"> Round 2</button></th>
-					<th><span class="label label-warning">Women Single B</span></th>
-				</tr>
-				<tr>
-					<td>Sanne Willems</td>
-					<td>vs</td>
-					<td>Annelies Smout</td>
-				</tr>
-			</table>
-			Are you sure you want to end this match?
+	<?php endif; ?>
+<?php endforeach; ?>
+
+<?php foreach($matches as $match): ?>
+	<?php if(ToolBox::hasPostponedPlayers($match)): ?>
+	<div id="startpostponed-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startpostponed-<?php echo $match['id'] ?>" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 id="startpostponed">Start postponed match</h3>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<tr>
+						<th>#<?php echo $match['id'] ?></th>
+						<th><button class="btn btn-small btn-warning disabled"> Round <?php echo $match['round'] ?></button></th>
+						<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
+					</tr>
+					<tr>
+						<td>
+							<?php echo $match['team1_user1']; ?><br />
+							<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+						</td>
+						<td>vs</td>
+						<td>
+							<?php echo $match['team2_user1']; ?><br />
+							<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+						</td>
+					</tr>
+				</table>
+				The following players are <button class="btn btn-small btn-danger disabled">Postponed</button>:
+				<ul>
+					<?php 
+						$postponedPlayers = ToolBox::getPostponedPlayers($match);
+						foreach($postponedPlayers as $player):
+					?>
+						<li>
+							<?php echo $player; ?>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+				Are you sure you want to overrule this postponement and start the match anyway?
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<input type="hidden" name="action" value="start-match" />
+					<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+					
+					<button class="btn" data-dismiss="modal">No, I just pushed a wrong button.</button>
+					<button class="btn btn-primary" type="submit">Yes offcourse, I am in charge here!</button>
+				</form>
+			</div>
 		</div>
-		<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">Offcourse not, you idiot...</button>
-				<button class="btn btn-primary" type="submit">Yes please.</button>
-			</form>
-		</div>
+	<?php endif; ?>
+<?php endforeach; ?>
+
+<div id="startdelayed-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startdelayed-x" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h3 id="startdelayed">Start delayed match</h3>
 	</div>
-	
-	<div id="startpostponed-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startpostponed-x" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 id="startpostponed">Start postponed match</h3>
-		</div>
-		<div class="modal-body">
-			<table class="table">
-				<tr>
-					<th>#1</th>
-					<th><button class="btn btn-small btn-warning disabled"> Round 2</button></th>
-					<th><span class="label label-warning">Women Single B</span></th>
-				</tr>
-				<tr>
-					<td>Sanne Willems</td>
-					<td>vs</td>
-					<td>Annelies Smout</td>
-				</tr>
-			</table>
-			This match is <button class="btn btn-small btn-danger disabled">Postponed</button> because <b>Sanne Willems</b> status is on postponed. Are you sure you want to overrule this postponement and start the match anyway?
-		</div>
-		<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No, I just pushed a wrong button.</button>
-				<button class="btn btn-primary" type="submit">Yes offcourse, I am in charge here!</button>
-			</form>
-		</div>
+	<div class="modal-body">
+		<table class="table">
+			<tr>
+				<th>#1</th>
+				<th><button class="btn btn-small btn-warning disabled"> Round 2</button></th>
+				<th><span class="label label-warning">Women Single B</span></th>
+			</tr>
+			<tr>
+				<td>Sanne Willems</td>
+				<td>vs</td>
+				<td>Annelies Smout</td>
+			</tr>
+		</table>
+		This match is <button class="btn btn-small btn-warning disabled">Delayed</button> because <b>Annelies Smout</b> is already on a court. Are you sure you want to overrule this delay and start the match anyway?
 	</div>
-	
-	<div id="startdelayed-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startdelayed-x" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 id="startdelayed">Start delayed match</h3>
-		</div>
-		<div class="modal-body">
-			<table class="table">
-				<tr>
-					<th>#1</th>
-					<th><button class="btn btn-small btn-warning disabled"> Round 2</button></th>
-					<th><span class="label label-warning">Women Single B</span></th>
-				</tr>
-				<tr>
-					<td>Sanne Willems</td>
-					<td>vs</td>
-					<td>Annelies Smout</td>
-				</tr>
-			</table>
-			This match is <button class="btn btn-small btn-warning disabled">Delayed</button> because <b>Annelies Smout</b> is already on a court. Are you sure you want to overrule this delay and start the match anyway?
-		</div>
-		<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">Nope, sorry.</button>
-				<button class="btn btn-primary" type="submit">Yes, just obey stupid machine.</button>
-			</form>
-		</div>
+	<div class="modal-footer">
+		<form method="post">
+			<input type="hidden" name="action" value="start-match" />
+			<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+			
+			<button class="btn" data-dismiss="modal">Nope, sorry.</button>
+			<button class="btn btn-primary" type="submit">Yes, just obey stupid machine.</button>
+		</form>
 	</div>
-	
-	<div id="startmatch-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startmatch-x" aria-hidden="true">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			<h3 id="startmatch">Start match</h3>
+</div>
+
+<?php foreach($matches as $match): ?>
+	<?php if(!ToolBox::hasPostponedPlayers($match)): ?>
+	<div id="startmatch-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startmatch-<?php echo $match['id'] ?>" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 id="startmatch">Start match</h3>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<tr>
+						<th>#<?php echo $match['id']; ?></th>
+						<th><button class="btn btn-small btn-warning disabled"> Round <?php echo $match['round'] ?></button></th>
+						<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
+					</tr>
+					<tr>
+						<td>
+							<?php echo $match['team1_user1']; ?><br />
+							<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+						</td>
+						<td>vs</td>
+						<td>
+							<?php echo $match['team2_user1']; ?><br />
+							<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+						</td>
+					</tr>
+				</table>
+				Are you sure that you want to assign this match to a court?
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<input type="hidden" name="action" value="start-match" />
+					<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+					
+					<button class="btn" data-dismiss="modal">NO</button>
+					<button class="btn btn-primary" type="submit">YES</button>
+				</form>
+			</div>
 		</div>
-		<div class="modal-body">
-			<table class="table">
-				<tr>
-					<th>#1</th>
-					<th><button class="btn btn-small btn-warning disabled"> Round 2</button></th>
-					<th><span class="label label-warning">Women Single B</span></th>
-				</tr>
-				<tr>
-					<td>Sanne Willems</td>
-					<td>vs</td>
-					<td>Annelies Smout</td>
-				</tr>
-			</table>
-			Are you sure that you want to assign this match to a court?
-		</div>
-		<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">NO.</button>
-				<button class="btn btn-primary" type="submit">YES.</button>
-			</form>
-		</div>
-	</div>
+	<?php endif; ?>
+<?php endforeach; ?>
