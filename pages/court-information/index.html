@@ -150,33 +150,7 @@
 									</td>
 								</tr>
 							<?php endif; ?>
-						<?php endforeach; ?>
-						<tr>
-							<td class="muted">
-								1
-							</td>
-							<td>
-								Sanne Willems
-							</td>
-							<td>
-								Annelies Smout
-							</td>
-							<td>
-								<span class="label label-warning">Women Single B</span>
-							</td>
-							<td>
-								2
-							</td>
-							<td>
-								<button class="btn btn-small btn-warning disabled">Delayed, <b>Annelies Smout</b> already on a court</button>
-							</td>
-							<td>
-								&nbsp;
-							</td>
-							<td>
-								<button class="btn btn-small btn-inverse pull-right" data-toggle="modal" data-target="#startdelayed-x"><i class="icon-forward icon-white"></i> Overrule, assign to court</button>
-							</td>
-						</tr>								
+						<?php endforeach; ?>							
 					</table>
 				</fieldset>
 			</div>
@@ -238,7 +212,7 @@
 
 <?php foreach($matches as $match): ?>
 	<?php if(ToolBox::hasPostponedPlayers($match)): ?>
-	<div id="startpostponed-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startpostponed-<?php echo $match['id'] ?>" aria-hidden="true">
+		<div id="startpostponed-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startpostponed-<?php echo $match['id'] ?>" aria-hidden="true">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h3 id="startpostponed">Start postponed match</h3>
@@ -246,7 +220,7 @@
 			<div class="modal-body">
 				<table class="table">
 					<tr>
-						<th>#<?php echo $match['id'] ?></th>
+						<th>match #<?php echo $match['id'] ?></th>
 						<th><button class="btn btn-small btn-warning disabled"> Round <?php echo $match['round'] ?></button></th>
 						<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
 					</tr>
@@ -288,40 +262,61 @@
 	<?php endif; ?>
 <?php endforeach; ?>
 
-<div id="startdelayed-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startdelayed-x" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3 id="startdelayed">Start delayed match</h3>
-	</div>
-	<div class="modal-body">
-		<table class="table">
-			<tr>
-				<th>match #<?php echo $match['id']; ?></th>
-				<th><button class="btn btn-small btn-warning disabled"> Round 2</button></th>
-				<th><span class="label label-warning">Women Single B</span></th>
-			</tr>
-			<tr>
-				<td>Sanne Willems</td>
-				<td>vs</td>
-				<td>Annelies Smout</td>
-			</tr>
-		</table>
-		This match is <button class="btn btn-small btn-warning disabled">Delayed</button> because <b>Annelies Smout</b> is already on a court. Are you sure you want to overrule this delay and start the match anyway?
-	</div>
-	<div class="modal-footer">
-		<form method="post">
-			<input type="hidden" name="action" value="start-match" />
-			<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
-			
-			<button class="btn" data-dismiss="modal">Nope, sorry.</button>
-			<button class="btn btn-primary" type="submit">Yes, just obey stupid machine.</button>
-		</form>
-	</div>
-</div>
+<?php foreach($matches as $match): ?>
+	<?php if(ToolBox::hasDelayedPlayers($match)): ?>
+		<div id="startdelayed-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startdelayed-<?php echo $match['id'] ?>" aria-hidden="true">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h3 id="startdelayed">Start delayed match</h3>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<tr>
+						<th>match #<?php echo $match['id'] ?></th>
+						<th><button class="btn btn-small btn-warning disabled"> Round <?php echo $match['round'] ?></button></th>
+						<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
+					</tr>
+					<tr>
+						<td>
+							<?php echo $match['team1_user1']; ?><br />
+							<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+						</td>
+						<td>vs</td>
+						<td>
+							<?php echo $match['team2_user1']; ?><br />
+							<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+						</td>
+					</tr>
+				</table>
+				The following players are <button class="btn btn-small btn-warning disabled">Delayed</button>:
+				<ul>
+					<?php 
+						$delayedPlayers = ToolBox::getDelayedPlayers($match);
+						foreach($delayedPlayers as $player):
+					?>
+						<li>
+							<?php echo $player; ?>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+				Are you sure you want to overrule this delay and start the match anyway?
+			</div>
+			<div class="modal-footer">
+				<form method="post">
+					<input type="hidden" name="action" value="start-match" />
+					<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+					
+					<button class="btn" data-dismiss="modal">Nope, sorry.</button>
+					<button class="btn btn-primary" type="submit">Yes, just obey stupid machine.</button>
+				</form>
+			</div>
+		</div>
+	<?php endif; ?>
+<?php endforeach; ?>
 
 <?php foreach($matches as $match): ?>
 	<?php if(!ToolBox::hasPostponedPlayers($match)): ?>
-	<div id="startmatch-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startmatch-<?php echo $match['id'] ?>" aria-hidden="true">
+		<div id="startmatch-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startmatch-<?php echo $match['id'] ?>" aria-hidden="true">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h3 id="startmatch">Start match</h3>

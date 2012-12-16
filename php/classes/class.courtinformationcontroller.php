@@ -64,7 +64,8 @@ class CourtInformationController
                     INNER JOIN `poule` ON(poule.id = team1.poule)
                     INNER JOIN `category` ON(poule.category = category.id)
 					LEFT JOIN `court` ON(`match`.court = `court`.id)
-                    WHERE poule.round = match.round";
+                    WHERE poule.round = match.round
+                    ORDER BY `match`.court ASC";
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute();

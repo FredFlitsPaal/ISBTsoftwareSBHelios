@@ -79,58 +79,60 @@
 
 <!--     Le Modals     -->
 <?php foreach($matches as $match): ?>
-	<div id="MatchResults-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
-		<form class="form-inline" method="post">
-			<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h3 id="AddMatchResults">Add match results</h3>
-			</div>
-			<div class="modal-body">
-				<table class="table">
-					<tr>
-						<th>match #<?php echo $match['id']; ?></th>
-						<th><button class="btn btn-small btn-warning disabled">Round <?php echo $match['round']; ?></button></th>
-						<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
-					</tr>
-					<tr>
-						<td>
-							<?php echo $match['team1_user1']; ?><br />
-							<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
-						</td>
-						<td>vs</td>
-						<td>
-							<?php echo $match['team2_user1']; ?><br />
-							<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
-						</td>
-					</tr>
-				</table>
+	<?php if($match['status'] > 2): ?>
+		<div id="MatchResults-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+			<form class="form-inline" method="post">
+				<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 id="AddMatchResults">Add match results</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<tr>
+							<th>match #<?php echo $match['id']; ?></th>
+							<th><button class="btn btn-small btn-warning disabled">Round <?php echo $match['round']; ?></button></th>
+							<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
+						</tr>
+						<tr>
+							<td>
+								<?php echo $match['team1_user1']; ?><br />
+								<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+							</td>
+							<td>vs</td>
+							<td>
+								<?php echo $match['team2_user1']; ?><br />
+								<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+							</td>
+						</tr>
+					</table>
 
-				<label><b>Results</b></label><br />
-				<table class="table modal-table-results">
-					<tr>
-						<td>
-							<div class="input-prepend">
-								<span class="add-on">1<sup>st</sup> set</span><input class="input-small" name="set-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1) ?>" placeholder="__ - __" data-mask="99-99">
-							</div>
-						</td>
-						<td>
-							<div class="input-prepend">
-								<span class="add-on">2<sup>nd</sup> set</span><input class="input-small" name="set-2"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2) ?>"  placeholder="__ - __" data-mask="99-99">
-							</div>
-						</td>
-						<td>
-							<div class="input-prepend">
-								<span class="add-on">3<sup>th</sup> set</span><input class="input-small" name="set-3"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 3) ?>"  placeholder="__ - __" data-mask="99-99">
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">Close</button>
-				<button class="btn btn-primary" type="submit">Save changes</button>
-			</div>
-		</form>
-	</div>
+					<label><b>Results</b></label><br />
+					<table class="table modal-table-results">
+						<tr>
+							<td>
+								<div class="input-prepend">
+									<span class="add-on">1<sup>st</sup> set</span><input class="input-small" name="set-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1) ?>" placeholder="__ - __" data-mask="99-99">
+								</div>
+							</td>
+							<td>
+								<div class="input-prepend">
+									<span class="add-on">2<sup>nd</sup> set</span><input class="input-small" name="set-2"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2) ?>"  placeholder="__ - __" data-mask="99-99">
+								</div>
+							</td>
+							<td>
+								<div class="input-prepend">
+									<span class="add-on">3<sup>th</sup> set</span><input class="input-small" name="set-3"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 3) ?>"  placeholder="__ - __" data-mask="99-99">
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal">Close</button>
+					<button class="btn btn-primary" type="submit">Save changes</button>
+				</div>
+			</form>
+		</div>
+	<?php endif; ?>
 <?php endforeach; ?>

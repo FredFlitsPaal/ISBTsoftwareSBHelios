@@ -8,6 +8,18 @@ class ToolBox{
 		{
 			return '<button class="btn btn-small btn-danger disabled">Postponed</button>';
 		}
+
+		$delayed = self::getDelayedPlayers($match);
+		if(count($delayed) > 0 && $match['status'] == MATCH_NOT_YET_STARTED){
+
+			if(count($delayed) > 1){
+				$player = 'several players';
+			}elseif(count($delayed) > 0){
+				$player = $delayed[0];
+			}
+
+			return '<button class="btn btn-small btn-warning disabled">Delayed, <b>'.$player.'</b> already on a court</button>';
+		}
 		
         switch($match['status'])
         {
@@ -188,23 +200,37 @@ class ToolBox{
 		// If there are no courts available, the field will be disabled
 		if(sizeof($availableCourts) == 0)
 		{
-			return "<button class='btn btn-small pull-right disabled'><span class='icon-play'></span> Assign to court</button>";
+			$disabled = ' disabled';
+			$icon = '';
+			$btn_success = '';
+			$btn_inverse = '';
+			$data_target_startpostponed = '';
+			$data_target_startmatch = '';
+			$data_target_startdelayed  = '';
+		}else{
+			$disabled = '';
+			$icon = ' icon-white';
+			$btn_success = ' btn-success';
+			$btn_inverse = ' btn-inverse';
+			$data_target_startpostponed = " data-target='#startpostponed-" . $match['id'] . "'";
+			$data_target_startmatch = " data-target='#startmatch-" . $match['id'] . "'";
+			$data_target_startdelayed  = " data-target='#startdelayed-" . $match['id'] . "'";
 		}
 		
 		// Checks whether there is a player who is postponed
-		if(
-			(!empty($match['user1_postponed']) && $match['user1_postponed'] == 1) ||
-			(!empty($match['user2_postponed']) && $match['user2_postponed'] == 1) ||
-			(!empty($match['user3_postponed']) && $match['user3_postponed'] == 1) ||
-			(!empty($match['user4_postponed']) && $match['user4_postponed'] == 1)
-		)
+		if(self::hasPostponedPlayers($match) == true)
 		{
-			return "<button class='btn btn-small btn-inverse pull-right' data-toggle='modal' data-target='#startpostponed-" . $match['id'] . "'><span class='icon-forward icon-white'></span> Overrule, assign to court</button>";
+			return "<button class='btn btn-small pull-right".$disabled.$btn_inverse."' data-toggle='modal'".$data_target_startpostponed."><span class='icon-forward".$icon."'></span> Overrule, assign to court</button>";
 		}
-		
+
+		// Checks whether there is a player who is delayed
+		if(self::hasDelayedPlayers($match) == true){
+			return "<button class='btn btn-small pull-right".$disabled.$btn_inverse."' data-toggle='modal'".$data_target_startdelayed."><span class='icon-forward".$icon."'></span> Overrule, assign to court</button>";
+		}
+
 		// TODO: Implement time check
 		
-		return "<button class='btn btn-small btn-success pull-right' data-toggle='modal' data-target='#startmatch-" . $match['id'] . "'><span class='icon-play icon-white'></span> Assign to court</button>";
+		return "<button class='btn btn-small pull-right".$disabled.$btn_success."' data-toggle='modal'".$data_target_startmatch."><span class='icon-play".$icon."'></span> Assign to court</button>";
 	}
 	
 	public static function hasPostponedPlayers($match)
@@ -234,5 +260,66 @@ class ToolBox{
 		}
 		
 		return $players;
+	}
+
+	public static function hasDelayedPlayers($match)
+	{
+		return count(self::getDelayedPlayers($match)) > 0;
+	}
+
+	public static function getDelayedPlayers($match){
+		// TODO: test this for teams with only one player
+		// TODO: optimize this dirty piece of code
+
+		//check for delayed teams
+		$allTeams = self::getTeamsOnCourts();
+		$delayed = array();
+
+		//
+		if(in_array($match['team1'], $allTeams) == true){
+			$delayed[] = $match['team1_user1'];
+
+			if(!empty($match['team1_user2'])){
+				$delayed[] = $match['team1_user2'];
+			}
+		}
+
+		if(in_array($match['team2'], $allTeams) == true){
+			$delayed[] = $match['team2_user1'];
+
+			if(!empty($match['team2_user2'])){
+				$delayed[] = $match['team2_user2'];
+			}
+		}
+
+		return $delayed;
+	}
+
+	public static function getTeamsOnCourts(){
+		try
+    	{
+	    	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			// TODO: create one nice array with a query, use inner join?
+	    	$sql = "SELECT `team1`, `team2` FROM `match` WHERE `court` != 'NULL'";
+
+	    	$stmt = $pdo->prepare($sql);
+	    	$stmt->execute();
+
+	    	$teamsOnCourts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	    	$allTeams = array();
+	    	
+	    	foreach ($teamsOnCourts as $team) {
+	    		$allTeams[] = $team['team1'];
+	    		$allTeams[] = $team['team2'];
+	    	}
+	    	
+	    	return $allTeams;
+	    }
+	    catch(PDOException $e)
+	    {
+	    	Monolog::getInstance()->addAlert('Error selecting teams on courts, PDOException: ' . var_export($e, true));
+	    }
 	}
 }
