@@ -1,6 +1,6 @@
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span10">
+		<div class="span12">
 			<div class="content">
 				<?php if(!empty($message)): ?>
 					<div class="alert <?php echo $message['type'] ?>">
@@ -67,7 +67,10 @@
 										<?php echo $match['round'] ?>
 									</td>
 									<td>
+										<!--
 										00:07:37
+										-->
+										N/A
 									</td>
 									<td>
 										<?php $paused = ($match['status'] == MATCH_PAUSED) ?>
@@ -178,6 +181,7 @@
 				</fieldset>
 			</div>
 		</div>
+		<!--
 		<div class="span2 well">
 			<div class="side-menu">
 				<form>
@@ -186,6 +190,7 @@
 				<p>Hier kan nog een menu komen, suggesties?</p>
 			</div>
 		</div>
+		-->
 	</div>
 </div>
 
@@ -200,7 +205,7 @@
 			<div class="modal-body">
 				<table class="table">
 					<tr>
-						<th>#1</th>
+						<th>match #<?php echo $match['id']; ?></th>
 						<th><button class="btn btn-small btn-warning disabled"> Round <?php echo $match['round'] ?></button></th>
 						<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
 					</tr>
@@ -291,7 +296,7 @@
 	<div class="modal-body">
 		<table class="table">
 			<tr>
-				<th>#1</th>
+				<th>match #<?php echo $match['id']; ?></th>
 				<th><button class="btn btn-small btn-warning disabled"> Round 2</button></th>
 				<th><span class="label label-warning">Women Single B</span></th>
 			</tr>
@@ -324,7 +329,7 @@
 			<div class="modal-body">
 				<table class="table">
 					<tr>
-						<th>#<?php echo $match['id']; ?></th>
+						<th>match #<?php echo $match['id']; ?></th>
 						<th><button class="btn btn-small btn-warning disabled"> Round <?php echo $match['round'] ?></button></th>
 						<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
 					</tr>

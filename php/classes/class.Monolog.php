@@ -39,7 +39,7 @@ use Monolog\Handler\StreamHandler;
                     $l_oLogger->addDebug('file based log activated!');
                     
                 }catch(Exception $exception){
-                    echo 'failed to activate filebased log, an unexpected error occurred in the function \'initMonolog()\', exception message: '.var_export($exception);
+                    echo 'failed to activate filebased log, an unexpected error occurred in the function \'initMonolog()\', exception message: '.var_export($exception, true);
                 }
             }
             
@@ -56,11 +56,11 @@ use Monolog\Handler\StreamHandler;
                 try {
                     //autoloader?? wut?
                     require_once(LIB_DIR.'PDOHandler.php');
-                    $l_oHandler = new PDOHandler(new PDO($l_aParams['dsn'], $l_aParams['username'], $l_aParams['password']), LOG_LEVEL);
+                    $l_oHandler = new PDOHandler(new PDO($l_aParams['dsn'], $l_aParams['username'], $l_aParams['password'], array(PDO::ATTR_PERSISTENT => true)), LOG_LEVEL);
                     $l_oLogger->pushHandler($l_oHandler);
 
                 } catch (PDOException $e) {
-                    echo 'failed to activate db based log, an unexpected error occurred in the function \'initMonolog()\', exception message: '.var_export($e);
+                    echo 'failed to activate db based log, an unexpected error occurred in the function \'initMonolog()\', exception message: '.var_export($e, true);
                 }
             }
             

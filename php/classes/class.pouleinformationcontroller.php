@@ -36,7 +36,7 @@ class pouleInformationController
 	{
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "SELECT `poule`.*, `category`.name as `category_name`, `category`.level as `category_level` 
@@ -62,7 +62,7 @@ class pouleInformationController
 	{
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "SELECT `poule`.*, `category`.name as `category_name`, `category`.level as `category_level` 
@@ -78,7 +78,7 @@ class pouleInformationController
         }
         catch(PDOException $e)
         {
-            Monolog::getInstance()->addAlert('Error selecting poule, PDOException: ' . var_export($e, true));
+            Monolog::getInstance()->addAlert('Error selecting first poule, PDOException: ' . var_export($e, true));
         }
 
         return array(); 
@@ -88,7 +88,7 @@ class pouleInformationController
 	{
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "SELECT `poule`.id, `category`.name as `category_name`, `category`.level as `category_level` 
@@ -102,7 +102,7 @@ class pouleInformationController
         }
         catch(PDOException $e)
         {
-            Monolog::getInstance()->addAlert('Error selecting poule, PDOException: ' . var_export($e, true));
+            Monolog::getInstance()->addAlert('Error selecting poules, PDOException: ' . var_export($e, true));
         }
 
         return array();
@@ -112,7 +112,7 @@ class pouleInformationController
     {
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "SELECT `team`.*, `user1`.name `user1`, `user2`.name `user2`
@@ -121,7 +121,7 @@ class pouleInformationController
                     LEFT JOIN `user` `user2` ON(user2 = user2.id) 
 					INNER JOIN `poule` ON(`team`.poule = `poule`.id)
 					WHERE `poule`.id = :poule
-					ORDER BY matches_won DESC, matches_draw DESC, points_balance DESC";
+					ORDER BY matches_won DESC, matches_draw DESC, sets_won DESC, points_won DESC, points_balance DESC";
 
             $stmt = $pdo->prepare($sql);
 			$stmt->bindParam(":poule", $poule);
@@ -141,7 +141,7 @@ class pouleInformationController
     {
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "SELECT 
@@ -183,7 +183,7 @@ class pouleInformationController
 	
 	private function endRound($poule, $matches)
 	{
-		$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+		$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		try
@@ -205,7 +205,7 @@ class pouleInformationController
 		catch(PDOException $e)
 		{
 			$pdo->rollBack();
-			Monolog::getInstance()->addAlert('Error updating matches, PDOException: ' . var_export($e, true));
+			Monolog::getInstance()->addAlert('Error ending round, PDOException: ' . var_export($e, true));
 		}
 		
 		return array("type" => "", "text" => "Failed to start a new round");

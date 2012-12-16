@@ -39,7 +39,7 @@ class CourtInformationController
 	{
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "SELECT 
@@ -83,7 +83,7 @@ class CourtInformationController
 	{
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "SELECT `court`.*
@@ -101,7 +101,7 @@ class CourtInformationController
         }
         catch(PDOException $e)
         {
-            Monolog::getInstance()->addAlert('Error selecting matches, PDOException: ' . var_export($e, true));
+            Monolog::getInstance()->addAlert('Error selecting available courts, PDOException: ' . var_export($e, true));
         }
 
         return array();  
@@ -111,7 +111,7 @@ class CourtInformationController
 	{
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "UPDATE 
@@ -136,7 +136,7 @@ class CourtInformationController
 	{
         try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "UPDATE 
@@ -174,7 +174,7 @@ class CourtInformationController
 		
 		try
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD);
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
             $sql = "UPDATE 
@@ -192,11 +192,11 @@ class CourtInformationController
 			$stmt->bindValue(":status", MATCH_STARTED);
             $stmt->execute();
 			
-			return array("type" => "alert-success", "text" => "Court " . $court[0]['number'] . " assigned to the match.");
+			return array("type" => "alert-success", "text" => "The match is assigned to court number ".$courts[0]['id']);
         }
         catch(PDOException $e)
         {
-            Monolog::getInstance()->addAlert('Error ending match, PDOException: ' . var_export($e, true));
+            Monolog::getInstance()->addAlert('Error starting match, PDOException: ' . var_export($e, true));
         }
 		
 		return array("type" => "", "text" => "Could not assign match to court");

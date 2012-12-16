@@ -22,16 +22,19 @@ class pageController{
                 $l_aPageCall["error"] = false;
                 $l_aPageCall["html"] = $controller->actionIndex();
             break;
+
             case "court-information":
 				$controller = new CourtInformationController();
                 $l_aPageCall["error"] = false;
                 $l_aPageCall["html"] = $controller->actionIndex();
             break;
+
             case "poule-information":
 				$controller = new pouleInformationController();
                 $l_aPageCall["error"] = false;
                 $l_aPageCall["html"] = $controller->actionIndex();
             break;
+            
         	default:
         		$p_aPage = $this->checkPageExists($p_aPage);
         		$l_aPageCall["html"] = file_get_contents(PAGE_DIR . $p_aPage[0] . '/' . $p_aPage[1] . '.html');                

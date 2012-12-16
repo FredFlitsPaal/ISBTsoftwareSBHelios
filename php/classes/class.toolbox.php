@@ -14,11 +14,11 @@ class ToolBox{
             case MATCH_STARTED: 
                 return '<button class="btn btn-small btn-info disabled">In progress...</button>';
             case MATCH_ENDED:
-                return '<button class="btn btn-small btn-warning disabled">Ended, awaiting score</button>';
+                return '<button class="btn btn-small btn-danger disabled">Ended, awaiting score</button>';
             case MATCH_NOT_YET_STARTED:
                 return '<button class="btn btn-small disabled">In cue to start</button>';
             case MATCH_FINISHED:
-                return '<button class="btn btn-small btn-error disabled">Ended</button>';
+                return '<button class="btn btn-small btn-success disabled">Ended</button>';
             case MATCH_PAUSED:
                 return '<button class="btn btn-small btn-warning disabled">Paused</button>';
             default:

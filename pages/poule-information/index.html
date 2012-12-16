@@ -105,7 +105,7 @@
 					</table>
 				</fieldset>
 				<fieldset>
-					<legend>Poule matches</legend>
+					<legend>Poule matches of the current round</legend>
 					<table class="table table-striped main-table matches-table poule">
 						<tr>
 							<th>
@@ -141,7 +141,7 @@
 									<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
 								</td>
 								<td class="print-hide">
-									<?php echo ToolBox::getCategoryLabel($match['category']) ?>
+									<?php echo ToolBox::getMatchStatusLabel($match['status']) ?>
 								</td>
 								<td>
 									<?php echo ToolBox::calculateMatchScore($match); ?>
@@ -173,7 +173,6 @@
 						</script>
 					</fieldset>
 				</form>
-				<p>Hier kan nog een menu komen, suggesties?</p>
 				<br />
 				<button class="span12 btn btn-inverse" data-toggle="modal" data-target="#print-poule-x">Print rankings</button>
 					<!-- Modal -->
@@ -201,7 +200,7 @@
 							<h3 id="startnextround">Start next round</h3>
 						</div>
 						<div class="modal-body">
-							<p>You're about to start a new round for <?php echo ToolBox::getCategoryLabel($poule['category']); ?>. If you do this the system will generate a new round and you won't be able to add or edit scores anymore. Then adding and editing of this round will only be possible by disposing future rounds.</p>
+							<p>You're about to start a new round for <?php echo ToolBox::getCategoryLabel($poule['category']); ?> If you proceed, the system will generate a new round and you won't be able to edit scores of the current round.</p>
 						</div>
 						<div class="modal-footer">
 							<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">No! That would cause a disaster.</button>
