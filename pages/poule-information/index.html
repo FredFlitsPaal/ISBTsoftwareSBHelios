@@ -172,9 +172,16 @@
 					</script>
 				</fieldset>
 				<br />
-				<button class="span12 btn btn-inverse" data-toggle="modal" data-target="#print-poule-x">Print rankings</button>
+				<button id="print_rankings" class="span12 btn btn-inverse">Print rankings</button>
+				<script type="text/javascript">
+					$('#print_rankings').click(function()
+					{
+						window.print();
+						return false;
+					});
+				</script>
 				<br /><br />
-				<button class="span12 btn btn-inverse">Print game notes</button>
+				<a href="pages/print/?poule=<?php echo $poule['id']; ?>" target="_blank"><button class="span12 btn btn-inverse">Print game notes</button></a>
 				<br /><br /><br />
 				<?php echo ToolBox::getStartNextRoundButton($poule['id']); ?>
 			</div>
@@ -183,19 +190,6 @@
 </div>
 
 <!--     Le Modals     -->
-<div id="print-poule-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="print-poule-x" aria-hidden="true">
-	<form method="post">
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="print-rankings">Print rankings</h3>
-	  </div>
-	  <div class="modal-body">
-		<a href="#print-poule-x" class="btn">Print rankings (<?php echo $poule['category_name'] . " " . $poule['category_level']; ?>)</a>
-		<a href="#print-allpoules" class="btn btn-inverse">Print all poules</a>
-	  </div>
-	</form>
-</div>
-
 <div id="startnextround-poule-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startnextround-poule-x" aria-hidden="true">
 	<form method="post">
 		<input type="hidden" name="startNextRound" value="1"/>

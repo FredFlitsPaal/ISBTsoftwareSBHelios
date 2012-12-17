@@ -137,7 +137,7 @@ class pouleInformationController
         return array();      
     }
 	
-    private function getMatches($poule)
+    public static function getMatches($poule)
     {
         try
         {
