@@ -196,16 +196,23 @@ class pouleInformationController
 				$this->updateTeamResults($pdo, $match['team2'], ToolBox::getTeamResults(2, $match));
 			}
 			
-			$this->startNextRound($pdo, $poule);
+			$success = $this->startNextRound($pdo, $poule);
 			
 			$pdo->commit();
 			
-			return array("type" => "alert-success", "text" => "New round started");
+			if($success == true)
+			{
+				return array("type" => "alert-success", "text" => "New round started");
+			}
+			else
+			{
+				return array("type" => "alert-danger", "text" => "New round started, but no new matches were generated because all different combinations of matches are already played...");
+			}
 		}
 		catch(PDOException $e)
 		{
-			$pdo->rollBack();
 			Monolog::getInstance()->addAlert('Error ending round, PDOException: ' . var_export($e, true));
+			$pdo->rollBack();
 		}
 		
 		return array("type" => "", "text" => "Failed to start a new round");
@@ -250,15 +257,19 @@ class pouleInformationController
 		$stmt->bindParam(":poule", $poule['id']);
 		$stmt->execute();
 		
-		$this->generateMatches($pdo, $poule);
+		$success = $this->generateMatches($pdo, $poule);
+
+		return $success;
 	}
 	
 	private function generateMatches($pdo, $poule)
 	{
 		//TODO: use the algoritm of https://github.com/FredFlitsPaal/SharpShuttle to generate these matches
-		
+
 		$teams = $this->getTeams($pdo, $poule);
 		$matches = array();
+		$alreadyPlayedMatches = $this->getAlreadyPlayedMatches($pdo, $poule);
+		$inThisRound = array();
 		
 		if(sizeof($teams) > 1)
 		{
@@ -266,17 +277,23 @@ class pouleInformationController
 			{
 				foreach($teams as $team2)
 				{
-					if(!in_array($team1['id'] . "-" . $team2['id'], $matches) && !in_array($team2['id'] . "-" . $team1['id'], $matches) && $team1['id'] != $team2['id'])
+					if(!in_array($team1['id'] . "-" . $team2['id'], $matches) && !in_array($team2['id'] . "-" . $team1['id'], $matches) && $team1['id'] != $team2['id'] && !in_array($team1['id'] . "-" . $team2['id'], $alreadyPlayedMatches) && !in_array($team2['id'] . "-" . $team1['id'], $alreadyPlayedMatches) && !in_array($team1['id'], $inThisRound) && !in_array($team2['id'], $inThisRound))
 					{
 						$matches[] = ($team1['id'] . "-" . $team2['id']);
+						$inThisRound[] = $team1['id'];
+						$inThisRound[] = $team2['id'];
 					}
 				}
 			}	
 		}
 		
-		if(sizeof($matches > 0))
+		if(count($matches) > 0)
 		{
 			$this->addMatches($pdo, $matches, $poule);
+			return true;
+		}else{
+			Monolog::getInstance()->addWarning('New round started, but no new matches were generated because all different combinations of matches are already played...');
+			return false;
 		}
 	}
 	
@@ -306,11 +323,41 @@ class pouleInformationController
 	{
 		$sql = "SELECT *
 				FROM `team`
-				WHERE `poule` = :poule";
+				WHERE `poule` = :poule
+				ORDER BY `matches_played` ASC";
 		$stmt = $pdo->prepare($sql);
 		$stmt->bindParam(":poule", $poule['id']);
 		$stmt->execute();
 		
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	private function getAlreadyPlayedMatches($pdo, $poule){
+		try
+        {
+            $sql = "SELECT `team1`, `team2`
+                    FROM `match` 
+                    INNER JOIN `team` `team1` ON(team1.id = match.team1) 
+                    INNER JOIN `poule` ON(poule.id = team1.poule)
+                    WHERE poule.id = :poule";
+
+            $stmt = $pdo->prepare($sql);
+			$stmt->bindParam(":poule", $poule['id']);
+            $stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            //bouw array om naar formaat $team1['id'] . "-" . $team2['id']
+            $alreadyPlayedMatches = array();
+            foreach ($result as $match)
+            {
+            	$alreadyPlayedMatches[] = $match["team1"].'-'.$match["team2"];
+            }
+
+            return $alreadyPlayedMatches;
+        }
+        catch(PDOException $e)
+        {
+            Monolog::getInstance()->addAlert('Error selecting already played matches, PDOException: ' . var_export($e, true));
+        }
 	}
 }
