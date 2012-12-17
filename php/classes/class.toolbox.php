@@ -302,7 +302,9 @@ class ToolBox{
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
 			// TODO: create one nice array with a query, use inner join?
-	    	$sql = "SELECT `team1`, `team2` FROM `match` WHERE `court` != 'NULL'";
+	    	$sql = "SELECT `team1`, `team2` 
+	    			FROM `match` 
+	    			WHERE `court` != 'NULL'";
 
 	    	$stmt = $pdo->prepare($sql);
 	    	$stmt->execute();
@@ -321,5 +323,50 @@ class ToolBox{
 	    {
 	    	Monolog::getInstance()->addAlert('Error selecting teams on courts, PDOException: ' . var_export($e, true));
 	    }
+	}
+
+	public static function getStartNextRoundButton($poule){
+		if(self::hasFinishedRound($poule) == true)
+		{
+			return '<button class="span12 btn btn-primary" data-toggle="modal" data-target="#startnextround-poule-x">Start next round</button>';
+		}
+		else
+		{
+			return '<button class="span12 btn btn-primary disabled" data-toggle="modal">Start next round</button>';
+		}
+	}
+
+	public static function hasFinishedRound($poule){
+		try
+        {
+            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+            $sql = "SELECT match.id
+                    FROM `match` 
+                    INNER JOIN `team` `team1` ON(team1.id = match.team1) 
+                    INNER JOIN `poule` ON(poule.id = team1.poule)
+                    WHERE poule.round = match.round
+					AND poule.id = :poule
+					AND `status` != '4'";
+
+            $stmt = $pdo->prepare($sql);
+			$stmt->bindParam(":poule", $poule);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e)
+        {
+            Monolog::getInstance()->addAlert('Error checking if all matches are done for the current round, PDOException: ' . var_export($e, true));
+        }
+
+        if(count($result) > 0)
+        {
+        	return false;
+        }
+        else
+        {
+        	return true;
+        }
 	}
 }

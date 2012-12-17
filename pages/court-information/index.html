@@ -315,7 +315,7 @@
 <?php endforeach; ?>
 
 <?php foreach($matches as $match): ?>
-	<?php if(!ToolBox::hasPostponedPlayers($match)): ?>
+	<?php if(!ToolBox::hasPostponedPlayers($match) && !ToolBox::hasDelayedPlayers($match)): ?>
 		<div id="startmatch-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startmatch-<?php echo $match['id'] ?>" aria-hidden="true">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

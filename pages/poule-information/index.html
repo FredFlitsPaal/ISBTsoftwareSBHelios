@@ -157,58 +157,59 @@
 		</div>
 		<div class="span2 well">
 			<div class="side-menu">
-				<form>
-					<fieldset>
+				<fieldset>
 					<label>Select poule:</label>
-						<select name="poule" class="span12 poule-select">
-							<?php foreach($poules as $pouleItem): ?>
-								<option value="<?php echo $pouleItem['id'] ?>" <?php echo ($poule['id'] == $pouleItem['id']) ? "selected='selected'" : "" ?>><?php echo $pouleItem['category_name'] . " " . $pouleItem['category_level'] ?></option>
-							<?php endforeach; ?>
-						</select>
-						<script type="text/javascript">
-							$('.side-menu select.poule-select').change(function() 
-							{
-								servePageWithData(window.location.hash.substring(1), $(this).serializeArray());
-							});
-						</script>
-					</fieldset>
-				</form>
+					<select name="poule" class="span12 poule-select">
+						<?php foreach($poules as $pouleItem): ?>
+							<option value="<?php echo $pouleItem['id'] ?>" <?php echo ($poule['id'] == $pouleItem['id']) ? "selected='selected'" : "" ?>><?php echo $pouleItem['category_name'] . " " . $pouleItem['category_level'] ?></option>
+						<?php endforeach; ?>
+					</select>
+					<script type="text/javascript">
+						$('.side-menu select.poule-select').change(function() 
+						{
+							servePageWithData(window.location.hash.substring(1), $(this).serializeArray());
+						});
+					</script>
+				</fieldset>
 				<br />
 				<button class="span12 btn btn-inverse" data-toggle="modal" data-target="#print-poule-x">Print rankings</button>
-					<!-- Modal -->
-					<div id="print-poule-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="print-poule-x" aria-hidden="true">
-					  <div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-						<h3 id="print-rankings">Print rankings</h3>
-					  </div>
-					  <div class="modal-body">
-						<a href="#print-poule-x" class="btn span6">Print rankings (<?php echo $poule['category_name'] . " " . $poule['category_level']; ?>)</a>
-						<a href="#print-allpoules" class="btn btn-inverse span6">Print all poules</a>
-					  </div>
-					</div>
 				<br /><br />
 				<button class="span12 btn btn-inverse">Print game notes</button>
 				<br /><br /><br />
-				<button class="span12 btn btn-primary" data-toggle="modal" data-target="#startnextround-poule-x">Start next round</button>
-				<!-- Modal -->
-				<div id="startnextround-poule-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startnextround-poule-x" aria-hidden="true">
-					<form method="post">
-						<input type="hidden" name="startNextRound" value="1"/>
-						<input type="hidden" name="poule" value="<?php echo $poule['id'] ?>" />
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-							<h3 id="startnextround">Start next round</h3>
-						</div>
-						<div class="modal-body">
-							<p>You're about to start a new round for <?php echo ToolBox::getCategoryLabel($poule['category']); ?> If you proceed, the system will generate a new round and you won't be able to edit scores of the current round.</p>
-						</div>
-						<div class="modal-footer">
-							<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">No! That would cause a disaster.</button>
-							<button class="btn btn-primary" type="submit" name="nextRound" value="1">Yes, relieve me with a new round!</button>
-						</div>
-					</form>
-				</div>
+				<?php echo ToolBox::getStartNextRoundButton($poule['id']); ?>
 			</div>
 		</div>
 	</div>
+</div>
+
+<!--     Le Modals     -->
+<div id="print-poule-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="print-poule-x" aria-hidden="true">
+	<form method="post">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="print-rankings">Print rankings</h3>
+	  </div>
+	  <div class="modal-body">
+		<a href="#print-poule-x" class="btn">Print rankings (<?php echo $poule['category_name'] . " " . $poule['category_level']; ?>)</a>
+		<a href="#print-allpoules" class="btn btn-inverse">Print all poules</a>
+	  </div>
+	</form>
+</div>
+
+<div id="startnextround-poule-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startnextround-poule-x" aria-hidden="true">
+	<form method="post">
+		<input type="hidden" name="startNextRound" value="1"/>
+		<input type="hidden" name="poule" value="<?php echo $poule['id'] ?>" />
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="startnextround">Start next round</h3>
+		</div>
+		<div class="modal-body">
+			<p>You're about to start a new round for <?php echo ToolBox::getCategoryLabel($poule['category']); ?> If you proceed, the system will generate a new round and you won't be able to edit scores of the current round.</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">No! That would cause a disaster.</button>
+			<button class="btn btn-primary" type="submit" name="nextRound" value="1">Yes, relieve me with a new round!</button>
+		</div>
+	</form>
 </div>

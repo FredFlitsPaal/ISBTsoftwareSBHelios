@@ -255,6 +255,8 @@ class pouleInformationController
 	
 	private function generateMatches($pdo, $poule)
 	{
+		//TODO: use the algoritm of https://github.com/FredFlitsPaal/SharpShuttle to generate these matches
+		
 		$teams = $this->getTeams($pdo, $poule);
 		$matches = array();
 		
