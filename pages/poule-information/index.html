@@ -2,12 +2,7 @@
 	<div class="row-fluid">
 		<div class="span10">
 			<div class="content">
-				<?php if(!empty($message)): ?>
-					<div class="alert <?php echo $message['type'] ?>">
-						<button type="button" class="close" data-dismiss="alert">×</button>
-						<?php echo $message['text'] ?>
-					</div>
-				<?php endif; ?>
+				<?php echo ToolBox::getMessage($message) ?>
 				<h4 style="text-align: center;"><?php echo $poule['category_name'] . " " . $poule['category_level']; ?></h4>
 				<fieldset>
 					<legend>Poule ranking</legend>

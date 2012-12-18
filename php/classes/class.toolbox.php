@@ -2,6 +2,18 @@
 
 class ToolBox{
 
+    public static function getMessage($message)
+    {
+    	if(!empty($message)) {
+			if($message['type'] == "alert-success") $message['title'] = "Well done!";
+			elseif($message['type'] == "alert-info") $message['title'] = "Heads up!";
+			elseif($message['type'] == "alert-danger") $message['title'] = "Oh snap!";
+			else $message['title'] = "Warning!";
+
+	    	return '<div class="alert ' . $message['type'] . '"><button type="button" class="close" data-dismiss="alert">×</button><b>' . $message['title'] . '</b> ' . $message['text'] .'</div>';
+    	}
+	}
+	    
     public static function getMatchStatusLabel($match)
     {
 		if(self::hasPostponedPlayers($match) && $match['status'] == MATCH_NOT_YET_STARTED)
