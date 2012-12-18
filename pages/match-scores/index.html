@@ -1,80 +1,84 @@
-<div class="row-fluid">
-	<div class="span12">
-		<?php if(!empty($message)): ?>
-			<div class="alert <?php echo $message['type'] ?>">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<?php echo $message['text'] ?>
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span12">
+			<div class="content">
+				<?php if(!empty($message)): ?>
+					<div class="alert <?php echo $message['type'] ?>">
+						<button type="button" class="close" data-dismiss="alert">×</button>
+						<?php echo $message['text'] ?>
+					</div>
+				<?php endif; ?>
+				<table class="table table-hover table-striped main-table matches-table">
+					<tr>
+						<th class="muted">
+							#
+						</th>
+						<th>
+							Team 1
+						</th>
+						<th>
+							Team 2
+						</th>
+						<th>
+							Poule
+						</th>
+						<th>
+							Round
+						</th>
+						<th>
+							Status
+						</th>
+						<th>
+							Score
+						</th>
+						<th>
+							Comments
+						</th>
+					</tr>
+					<?php foreach($matches as $match): ?>
+						<tr data-toggle="modal" data-target="#MatchResults-<?php echo $match['id'] ?>">
+							<td class="muted">
+								<?php echo $match['id']; ?>
+							</td>
+							<td>
+								<?php echo $match['team1_user1']; ?><br />
+								<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+							</td>
+							<td>
+								<?php echo $match['team2_user1']; ?><br />
+								<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+							</td>
+							<td>
+								<?php echo ToolBox::getCategoryLabel($match['category']) ?>
+							</td>
+							<td>
+								<?php echo $match['round']; ?>
+							</td>
+							<td>
+								<?php echo ToolBox::getMatchStatusLabel($match['status']) ?>
+							</td>
+							<td>
+								<?php echo ToolBox::calculateMatchScore($match); ?>
+							</td>
+							<td>
+								<?php echo $match['comment']; ?>
+							</td>
+						</tr>
+					<?php endforeach; ?>						
+				</table>
 			</div>
-		<?php endif; ?>
-		<table class="table table-hover table-striped main-table matches-table">
-			<tr>
-				<th class="muted">
-					#
-				</th>
-				<th>
-					Team 1
-				</th>
-				<th>
-					Team 2
-				</th>
-				<th>
-					Poule
-				</th>
-				<th>
-					Round
-				</th>
-				<th>
-					Status
-				</th>
-				<th>
-					Score
-				</th>
-				<th>
-					Comments
-				</th>
-			</tr>
-			<?php foreach($matches as $match): ?>
-				<tr data-toggle="modal" data-target="#MatchResults-<?php echo $match['id'] ?>">
-					<td class="muted">
-						<?php echo $match['id']; ?>
-					</td>
-					<td>
-						<?php echo $match['team1_user1']; ?><br />
-						<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
-					</td>
-					<td>
-						<?php echo $match['team2_user1']; ?><br />
-						<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
-					</td>
-					<td>
-						<?php echo ToolBox::getCategoryLabel($match['category']) ?>
-					</td>
-					<td>
-						<?php echo $match['round']; ?>
-					</td>
-					<td>
-						<?php echo ToolBox::getMatchStatusLabel($match['status']) ?>
-					</td>
-					<td>
-						<?php echo ToolBox::calculateMatchScore($match); ?>
-					</td>
-					<td>
-						<?php echo $match['comment']; ?>
-					</td>
-				</tr>
-			<?php endforeach; ?>						
-		</table>
+		</div>
+		<!--
+		<div class="span2 well">
+			<div class="side-menu">
+				<form>
+					<input class="span12" type="text" placeholder="Search…">
+				</form>
+				<p>Hier kan nog een menu komen, suggesties?</p>
+			</div>
+		</div>
+		-->
 	</div>
-	<!-- put some functionality here? :-)
-	<div class="span2 well">
-		<form>
-			<input class="span12" type="text" placeholder="Search…">
-		</form>
-		<p>Hier kan nog een menu komen, suggesties?</p>
-		<br>
-		<button class="span12 btn btn-primary" type="button">Start next round</button>
-	</div>
-	-->
 </div>
 
 <!--     Le Modals     -->
@@ -91,7 +95,7 @@
 					<table class="table">
 						<tr>
 							<th>match #<?php echo $match['id']; ?></th>
-							<th><button class="btn btn-small btn-warning disabled">Round <?php echo $match['round']; ?></button></th>
+							<th>Round <?php echo $match['round']; ?></th>
 							<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
 						</tr>
 						<tr>
