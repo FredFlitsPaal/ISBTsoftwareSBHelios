@@ -1,0 +1,160 @@
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span2"></div>
+		<div class="span8">
+			<div class="content">
+				<?php 
+					if(!empty($message))
+					{
+						echo ToolBox::getMessage($message);
+					}
+				?>
+				<div class="bs-docs-example">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>name</th>
+                  <th>club</th>
+                  <th>postponed</th>
+                  <th>email address</th>
+                  <th>veggie?</th>
+                  <th>arrives on firday?</th>
+                  <th>diner on sunday?</th>
+                  <th>change state</th>
+                </tr>
+              </thead>
+              <tbody>
+              	<?php foreach($participants as $participant): ?>
+                <tr>
+                  <td><?php echo $participant['name'] ?></td>
+                  <td><?php echo $participant['club'] ?></td>
+                  <td><?php
+
+                   if($participant['postponed'] == 1)
+                   {
+                   		$array = array();
+                   		echo ToolBox::getMatchStatusLabel($array, true);
+                   }else
+                   {
+                   	echo '<button class="btn btn-small disabled">ready to go!</button>';
+                   }
+                   
+                   ?></td>
+                  <td><?php echo $participant['email'] ?></td>
+                  <td><?php
+
+                   if($participant['veggie'] == 1)
+                   {
+                   		echo '<span class="badge badge-success">yes</span>';
+                   }else{
+                   		echo '<span class="badge badge-important">no</span>';
+                   }
+                   
+                   ?></td>
+                   <td><?php
+                   if($participant['arrival_on_friday'] == 1)
+                   {
+                   		echo '<span class="badge badge-success">yes</span>';
+                   }else{
+                   		echo '<span class="badge badge-important">no</span>';
+                   }
+                   
+                   ?></td>
+                   <td><?php
+                   if($participant['diner_on_sunday'] == 1)
+                   {
+                   		echo '<span class="badge badge-success">yes</span>';
+                   }else{
+                   		echo '<span class="badge badge-important">no</span>';
+                   }
+                   ?></td>
+                   <td><?php
+
+                   if($participant['postponed'] == 1)
+                   {
+                   		echo '<button class="btn btn-small btn-success">ready to play!</button>';
+                   }else
+                   {
+                   	echo '<button class="btn btn-small btn-danger">postpone!</button>';
+                   }
+                   
+                   ?></td>
+                </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
+			</div>
+		</div>
+		<!--
+		<div class="span2 well">
+			<div class="side-menu">
+				<form>
+					<input class="span12" type="text" placeholder="Search…">
+				</form>
+				<p>Hier kan nog een menu komen, suggesties?</p>
+			</div>
+		</div>
+		-->
+	</div>
+</div>
+
+<!--     Le Modals     -->
+<?php foreach($matches as $match): ?>
+	<?php if($match['status'] > 2): ?>
+		<div id="MatchResults-<?php echo $match['id'] ?>" class="modal hide fade endmatch" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+			<form class="form-inline" method="post">
+				<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 id="AddMatchResults">Add match results</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<tr>
+							<th>match #<?php echo $match['id']; ?></th>
+							<th>Round <?php echo $match['round']; ?></th>
+							<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
+						</tr>
+						<tr>
+							<td>
+								<?php echo $match['team1_user1']; ?><br />
+								<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+							</td>
+							<td>vs</td>
+							<td>
+								<?php echo $match['team2_user1']; ?><br />
+								<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+							</td>
+						</tr>
+					</table>
+
+					<label><b>Results</b></label><br />
+					<table class="table modal-table-results">
+						<tr>
+							<td>
+								<div class="input-prepend">
+									<span class="add-on">1<sup>st</sup> set</span><input class="input-small set-1" name="set-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1) ?>" placeholder="__ - __" data-mask="99-99">
+								</div>
+							</td>
+							<td>
+								<div class="input-prepend">
+									<span class="add-on">2<sup>nd</sup> set</span><input class="input-small" name="set-2"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2) ?>"  placeholder="__ - __" data-mask="99-99">
+								</div>
+							</td>
+							<td>
+								<div class="input-prepend">
+									<span class="add-on">3<sup>th</sup> set</span><input class="input-small" name="set-3"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 3) ?>"  placeholder="__ - __" data-mask="99-99">
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal">Close</button>
+					<button class="btn btn-primary" type="submit">Save changes</button>
+				</div>
+			</form>
+		</div>
+	<?php endif; ?>
+<?php endforeach; ?>

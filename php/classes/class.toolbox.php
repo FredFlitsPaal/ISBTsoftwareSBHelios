@@ -14,8 +14,13 @@ class ToolBox{
     	}
 	}
 	    
-    public static function getMatchStatusLabel($match)
+    public static function getMatchStatusLabel($match, $overrule_by_participants = false)
     {
+    	if($overrule_by_participants == true)
+    	{
+    		return '<button class="btn btn-small btn-danger disabled">Postponed</button>';
+    	}
+
 		if(self::hasPostponedPlayers($match) && $match['status'] == MATCH_NOT_YET_STARTED)
 		{
 			return '<button class="btn btn-small btn-danger disabled">Postponed</button>';

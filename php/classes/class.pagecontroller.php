@@ -34,6 +34,12 @@ class pageController{
                 $l_aPageCall["error"] = false;
                 $l_aPageCall["html"] = $controller->actionIndex();
             break;
+
+            case "participants":
+                $participants = new ParticipantController();
+                $l_aPageCall["error"] = false;
+                $l_aPageCall["html"] = $participants->actionIndex();
+            break;
             
         	default:
         		$p_aPage = $this->checkPageExists($p_aPage);
