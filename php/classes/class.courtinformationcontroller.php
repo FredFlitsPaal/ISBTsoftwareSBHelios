@@ -27,7 +27,8 @@ class CourtInformationController
 			$message = $this->endMatch($_POST['match-id']);
 		}
 		
-		$matches = $this->getMatches();
+		$matchesOnCourt = $this->getMatches('matches_on_court');
+		$UpcomingMatches = $this->getMatches('upcoming_matches');
 		$availableCourts = $this->getAvaiableCourts();
 		
         include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "court-information" . DIRECTORY_SEPARATOR . "index.html");
@@ -35,8 +36,23 @@ class CourtInformationController
 		return ob_get_clean();
     }
 	
-	private function getMatches()
+	private function getMatches($option = null)
 	{
+		if($option == null)
+		{
+			$order_by = '';
+			Monolog::getInstance()->addInfo('no option given, add option');
+		}
+		elseif($option == 'upcoming_matches')
+		{
+			$order_by = ' ORDER BY `match`.id ASC';
+		}
+		elseif($option == 'matches_on_court')
+		{
+			// = court information (default in the past)
+			$order_by = ' AND `match`.court != \'\' ORDER BY `match`.court ASC';
+		}
+
         try
         {
             $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
@@ -64,8 +80,8 @@ class CourtInformationController
                     INNER JOIN `poule` ON(poule.id = team1.poule)
                     INNER JOIN `category` ON(poule.category = category.id)
 					LEFT JOIN `court` ON(`match`.court = `court`.id)
-                    WHERE poule.round = match.round
-                    ORDER BY `match`.court ASC";
+                    WHERE poule.round = match.round";
+            $sql .= $order_by;
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute();

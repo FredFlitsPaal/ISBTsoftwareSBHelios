@@ -43,7 +43,7 @@
 								&nbsp;
 							</th>
 						</tr>
-						<?php foreach($matches as $match): ?>
+						<?php foreach($matchesOnCourt as $match): ?>
 							<?php if($match['status'] == MATCH_STARTED || $match['status'] == MATCH_PAUSED): ?>
 								<tr data-toggle="modal" data-target="#MatchResults-1">
 									<td>
@@ -119,7 +119,7 @@
 								&nbsp;
 							</th>
 						</tr>
-						<?php foreach($matches as $match): ?>
+						<?php foreach($UpcomingMatches as $match): ?>
 							<?php if($match['status'] == MATCH_NOT_YET_STARTED): ?>
 								<tr>
 									<td class="muted">
@@ -169,7 +169,7 @@
 </div>
 
 <!--     Le Modals     -->
-<?php foreach($matches as $match): ?>
+<?php foreach($matchesOnCourt as $match): ?>
 	<?php if(!empty($match['court'])): ?>
 		<div id="endmatch-<?php echo $match['id']; ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-header">
@@ -210,7 +210,7 @@
 	<?php endif; ?>
 <?php endforeach; ?>
 
-<?php foreach($matches as $match): ?>
+<?php foreach($UpcomingMatches as $match): ?>
 	<?php if(ToolBox::hasPostponedPlayers($match)): ?>
 		<div id="startpostponed-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startpostponed-<?php echo $match['id'] ?>" aria-hidden="true">
 			<div class="modal-header">
@@ -262,7 +262,7 @@
 	<?php endif; ?>
 <?php endforeach; ?>
 
-<?php foreach($matches as $match): ?>
+<?php foreach($UpcomingMatches as $match): ?>
 	<?php if(ToolBox::hasDelayedPlayers($match)): ?>
 		<div id="startdelayed-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startdelayed-<?php echo $match['id'] ?>" aria-hidden="true">
 			<div class="modal-header">
@@ -314,7 +314,7 @@
 	<?php endif; ?>
 <?php endforeach; ?>
 
-<?php foreach($matches as $match): ?>
+<?php foreach($UpcomingMatches as $match): ?>
 	<?php if(!ToolBox::hasPostponedPlayers($match) && !ToolBox::hasDelayedPlayers($match)): ?>
 		<div id="startmatch-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startmatch-<?php echo $match['id'] ?>" aria-hidden="true">
 			<div class="modal-header">

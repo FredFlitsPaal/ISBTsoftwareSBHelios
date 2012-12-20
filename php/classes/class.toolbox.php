@@ -40,7 +40,7 @@ class ToolBox{
             case MATCH_ENDED:
                 return '<button class="btn btn-small btn-danger disabled">Ended, awaiting score</button>';
             case MATCH_NOT_YET_STARTED:
-                return '<button class="btn btn-small disabled">In cue to start</button>';
+                return '<button class="btn btn-small disabled">In queue to start</button>';
             case MATCH_FINISHED:
                 return '<button class="btn btn-small btn-success disabled">Ended</button>';
             case MATCH_PAUSED:
