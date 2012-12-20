@@ -71,10 +71,10 @@
 
                    if($participant['postponed'] == 1)
                    {
-                   		echo '<button class="btn btn-small btn-success">ready to play!</button>';
+                   		echo '<a href="#postponed-'.$participant['id'].'" role="button" class="btn btn-small btn-success" data-toggle="modal">ready</a>';
                    }else
                    {
-                   	echo '<button class="btn btn-small btn-danger">postpone!</button>';
+                   		echo '<a href="#postponed-'.$participant['id'].'" role="button" class="btn btn-small btn-danger" data-toggle="modal">postpone</a>';
                    }
                    
                    ?></td>
@@ -99,59 +99,46 @@
 </div>
 
 <!--     Le Modals     -->
-<?php foreach($matches as $match): ?>
-	<?php if($match['status'] > 2): ?>
-		<div id="MatchResults-<?php echo $match['id'] ?>" class="modal hide fade endmatch" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+<?php foreach($participants as $participant): ?>
+	<?php if($participant['postponed'] < 1): ?>
+		<div id="postponed-<?php echo $participant['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="postponed" aria-hidden="true">
 			<form class="form-inline" method="post">
-				<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+				<input type="hidden" name="player-id" value="<?php echo $participant['id'] ?>" />
+				<input type="hidden" name="postpone" value="true" />
+				<input type="hidden" name="name" value="<?php echo $participant['name'] ?>" />
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h3 id="AddMatchResults">Add match results</h3>
+					<h3 id="postponed">Postpone player</h3>
 				</div>
 				<div class="modal-body">
-					<table class="table">
-						<tr>
-							<th>match #<?php echo $match['id']; ?></th>
-							<th>Round <?php echo $match['round']; ?></th>
-							<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
-						</tr>
-						<tr>
-							<td>
-								<?php echo $match['team1_user1']; ?><br />
-								<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
-							</td>
-							<td>vs</td>
-							<td>
-								<?php echo $match['team2_user1']; ?><br />
-								<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
-							</td>
-						</tr>
-					</table>
-
-					<label><b>Results</b></label><br />
-					<table class="table modal-table-results">
-						<tr>
-							<td>
-								<div class="input-prepend">
-									<span class="add-on">1<sup>st</sup> set</span><input class="input-small set-1" name="set-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1) ?>" placeholder="__ - __" data-mask="99-99">
-								</div>
-							</td>
-							<td>
-								<div class="input-prepend">
-									<span class="add-on">2<sup>nd</sup> set</span><input class="input-small" name="set-2"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2) ?>"  placeholder="__ - __" data-mask="99-99">
-								</div>
-							</td>
-							<td>
-								<div class="input-prepend">
-									<span class="add-on">3<sup>th</sup> set</span><input class="input-small" name="set-3"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 3) ?>"  placeholder="__ - __" data-mask="99-99">
-								</div>
-							</td>
-						</tr>
-					</table>
+					<p>Are you sure you want to postpone this player? Don't postpone a player for a few minutes, postpone players who are not available for more more than 5 minutes only! Otherwise there will be to many unfinshed poules during the tournament and this can cause a lot of empty courts! Mmmkay?</p>
 				</div>
 				<div class="modal-footer">
-					<button class="btn" data-dismiss="modal">Close</button>
-					<button class="btn btn-primary" type="submit">Save changes</button>
+					<button class="btn" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-danger" type="submit">Postpone player</button>
+				</div>
+			</form>
+		</div>
+	<?php endif; ?>
+<?php endforeach; ?>
+
+<?php foreach($participants as $participant): ?>
+	<?php if($participant['postponed'] > 0): ?>
+		<div id="postponed-<?php echo $participant['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="postponed" aria-hidden="true">
+			<form class="form-inline" method="post">
+				<input type="hidden" name="player-id" value="<?php echo $participant['id'] ?>" />
+				<input type="hidden" name="postpone" value="false" />
+				<input type="hidden" name="name" value="<?php echo $participant['name'] ?>" />
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 id="postponed">Player ready</h3>
+				</div>
+				<div class="modal-body">
+					<p>Great news :-)</p>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-success" type="submit">Player ready</button>
 				</div>
 			</form>
 		</div>

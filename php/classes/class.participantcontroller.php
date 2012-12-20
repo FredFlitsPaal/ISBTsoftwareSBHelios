@@ -27,6 +27,11 @@ class ParticipantController
 			$message = $this->endMatch($_POST['match-id']);
 		}
 		
+		if(isset($_POST['player-id']) == true && isset($_POST['postpone']) == true)
+		{
+			$message = $this->changeState();
+		}
+
 		$participants = $this->getParticipants();
 
         include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "participants" . DIRECTORY_SEPARATOR . "index.html");
@@ -50,9 +55,49 @@ class ParticipantController
         }
         catch(PDOException $e)
         {
-            Monolog::getInstance()->addAlert('Error selecting matches, PDOException: ' . var_export($e, true));
+            Monolog::getInstance()->addAlert('Selecting participants went wrong, PDOException: ' . var_export($e, true));
         }
 
         return array();
+	}
+
+	private function changeState()
+	{
+		if(is_numeric($_POST['player-id']) == true && isset($_POST['postpone']) == true)
+		{
+			if($_POST['postpone'] == 'true'){
+				$postponed = 1;
+			}else{
+				$postponed = 0;
+			}
+
+			try
+	        {
+	            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				
+	            $sql = "UPDATE `user` SET `postponed` = :postponed WHERE `id` = :id LIMIT 1";
+
+	            $stmt = $pdo->prepare($sql);
+	            $stmt->bindParam(":id", $_POST['player-id'], PDO::PARAM_INT);
+	            $stmt->bindParam(":postponed", $postponed);
+	            $stmt->execute();
+	        }
+	        catch(PDOException $e)
+	        {
+	            Monolog::getInstance()->addAlert('updating postponed state went wrong, PDOException: ' . var_export($e, true));
+	            return array("type" => "alert-danger", "text" => "Something went wrong, try again...");			
+	        }
+		}
+		else
+		{
+			return array("type" => "alert-danger", "text" => "Something went wrong, try again...");			
+		}
+
+		if($_POST['postpone'] == 'true'){
+			return array("type" => "alert-success", "text" => $_POST['name']." is now postponed!");
+		}else{
+			return array("type" => "alert-success", "text" => $_POST['name']." is now ready!");
+		}
 	}
 }
