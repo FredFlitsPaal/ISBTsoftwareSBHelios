@@ -79,11 +79,15 @@ $(document).ready(function() {
 		return false;
 	});
 /*
-    //load subpage
-    $("div#content-tab a").live("click", function(){
-        anchor = $(this).attr('href');
-        servePage(anchor.substring(1, anchor.length));
-    });
+	$(".matchresults").live('shown', function()
+	{
+		modal = this.id;
+		//console.log($('input:text:visible:first', this));
+		//console.log(this.id);
+		//$('#' + modal + ' .focushere').focus();
+		$('#' + modal + ' .focushere').css('background-color', 'red');
+		//$('input:text:visible:first', this).css('background-color', 'red');
+	});
 */
 });
 

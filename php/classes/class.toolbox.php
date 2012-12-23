@@ -148,14 +148,14 @@ class ToolBox{
         return $team1Score . " - " . $team2Score;
     }
 	
-	public static function getScore($match, $set)
+	public static function getScore($match, $set, $team)
 	{
-		if(empty($match['team1_set' . $set . '_score']) || empty($match['team2_set' . $set . '_score']))
+		if($match['team' . $team . '_set' . $set . '_score'] == '')
 		{
 			return "";
 		}
 		
-		return $match['team1_set' . $set . '_score'] . "-" . $match['team2_set' . $set . '_score'];
+		return $match['team' . $team . '_set' . $set . '_score'];
 	}
 	
 	public static function getTeamResults($team, $match)

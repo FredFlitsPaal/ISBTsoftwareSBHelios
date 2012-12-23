@@ -53,23 +53,18 @@ class matchScoreController {
 	private function updateScore()
 	{
 		//at least two sets should be filled with scores, otherwise somebody did something invalid
-		if(empty($_POST['set-1']) == false && empty($_POST['set-2']) == false){
+		if($_POST['set-1-1'] != '' && $_POST['set-1-2'] != '' && $_POST['set-2-1'] != '' && $_POST['set-2-2'] != '')
+		{
 
 	        try
 	        {
 	            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-				list($set1Team1, $set1Team2) = explode("-", $_POST['set-1']);
-				list($set2Team1, $set2Team2) = explode("-", $_POST['set-2']);
-				
-				if(empty($_POST['set-3']) == false){
-					list($set3Team1, $set3Team2) = explode("-", $_POST['set-3']);
-				}else{
-					$set3Team1 = 0;
-					$set3Team2 = 0;
-				}
-				
+				//fixed values
+				$set3Team1 = 0;
+				$set3Team2 = 0;
+
 	            $sql = "UPDATE `match`
 						SET 
 							`team1_set1_score` = :team1_set1_score,
@@ -84,13 +79,13 @@ class matchScoreController {
 							`id` = :match_id";
 
 	            $stmt = $pdo->prepare($sql);
-				$stmt->bindParam(":team1_set1_score", $set1Team1);
-				$stmt->bindParam(":team1_set2_score", $set2Team1);
+				$stmt->bindParam(":team1_set1_score", $_POST['set-1-1'], PDO::PARAM_INT);
+				$stmt->bindParam(":team1_set2_score", $_POST['set-2-1'], PDO::PARAM_INT);
 				$stmt->bindParam(":team1_set3_score", $set3Team1);
-				$stmt->bindParam(":team2_set1_score", $set1Team2);
-				$stmt->bindParam(":team2_set2_score", $set2Team2);
+				$stmt->bindParam(":team2_set1_score", $_POST['set-1-2'], PDO::PARAM_INT);
+				$stmt->bindParam(":team2_set2_score", $_POST['set-2-2'], PDO::PARAM_INT);
 				$stmt->bindParam(":team2_set3_score", $set3Team2);
-				$stmt->bindParam(":match_id", $_POST['match-id']);
+				$stmt->bindParam(":match_id", $_POST['match-id'], PDO::PARAM_INT);
 	            $stmt->execute();
 				
 				return array("type" => "alert-success", "text" => "Match results saved.");
@@ -100,7 +95,11 @@ class matchScoreController {
 	            Monolog::getInstance()->addAlert('Error updating score, PDOException: ' . var_export($e, true));
 	        }
 			
-			return array("type" => "", "text" => "Failed to save match results");
+			return array("type" => "alert-error", "text" => "Failed to save match results");
+		}
+		else
+		{
+			return array("type" => "alert-info", "text" => "Invalid match results, at least two sets must be submitted");
 		}
 	}
 }

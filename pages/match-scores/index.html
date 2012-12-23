@@ -84,7 +84,7 @@
 <!--     Le Modals     -->
 <?php foreach($matches as $match): ?>
 	<?php if($match['status'] > 2): ?>
-		<div id="MatchResults-<?php echo $match['id'] ?>" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+		<div id="MatchResults-<?php echo $match['id'] ?>" class="modal hide fade matchresults" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
 			<form class="form-inline" method="post">
 				<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
 				<div class="modal-header">
@@ -116,17 +116,18 @@
 						<tr>
 							<td>
 								<div class="input-prepend">
-									<span class="add-on">1<sup>st</sup> set</span><input class="input-small" name="set-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1) ?>" placeholder="__ - __" data-mask="99-99">
+									<span class="add-on">1<sup>st</sup> set</span>
+									<input class="input-ultramini focushere" name="set-1-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1, 1) ?>" placeholder="__">
+									<span class="add-on"> - </span>
+									<input class="input-ultramini" name="set-1-2" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1, 2) ?>" placeholder="__">
 								</div>
 							</td>
 							<td>
 								<div class="input-prepend">
-									<span class="add-on">2<sup>nd</sup> set</span><input class="input-small" name="set-2"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2) ?>"  placeholder="__ - __" data-mask="99-99">
-								</div>
-							</td>
-							<td>
-								<div class="input-prepend">
-									<span class="add-on">3<sup>th</sup> set</span><input class="input-small" name="set-3"  id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 3) ?>"  placeholder="__ - __" data-mask="99-99">
+									<span class="add-on">2<sup>nd</sup> set</span>
+									<input class="input-ultramini" name="set-2-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2, 1) ?>" placeholder="__">
+									<span class="add-on"> - </span>
+									<input class="input-ultramini" name="set-2-2" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2, 2) ?>" placeholder="__">
 								</div>
 							</td>
 						</tr>
