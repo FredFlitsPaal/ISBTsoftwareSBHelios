@@ -31,9 +31,6 @@
 						<th>
 							Score
 						</th>
-						<th>
-							Comments
-						</th>
 					</tr>
 					<?php foreach($matches as $match): ?>
 						<tr data-toggle="modal" data-target="#MatchResults-<?php echo $match['id'] ?>">
@@ -59,9 +56,6 @@
 							</td>
 							<td>
 								<?php echo ToolBox::calculateMatchScore($match); ?>
-							</td>
-							<td>
-								<?php echo $match['comment']; ?>
 							</td>
 						</tr>
 					<?php endforeach; ?>						

@@ -36,12 +36,7 @@
 							<th>
 								Status
 							</th>
-							<th>
-								Comments
-							</th>
-							<th>
-								&nbsp;
-							</th>
+							<th></th>
 						</tr>
 						<?php foreach($matchesOnCourt as $match): ?>
 							<?php if($match['status'] == MATCH_STARTED || $match['status'] == MATCH_PAUSED): ?>
@@ -78,9 +73,6 @@
 											<span class="<?php echo ($paused) ? 'icon-play icon-white' : 'icon-pause' ?>"></span>
 										</a>
 										<?php echo ToolBox::getMatchStatusLabel($match) ?>
-									</td>
-									<td>
-										<?php echo $match['comment'] ?>
 									</td>
 									<td>
 										<button class="btn btn-small btn-info" data-toggle="modal" data-target="#endmatch-<?php echo $match['id'] ?>"><span class="icon-share icon-white"></span></button>
