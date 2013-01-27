@@ -9,64 +9,24 @@
 					}
 				?>
 				<div class="bs-docs-example">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover main-table">
               <thead>
                 <tr>
-                  <th>name</th>
-                  <th>club</th>
-                  <th>postponed</th>
-                  <th>email address</th>
-                  <th>veggie?</th>
-                  <th>arrives on firday?</th>
-                  <th>diner on sunday?</th>
-                  <th>change state</th>
+                  <th>Name</th>
+                  <th>Email address</th>
+                  <th>Club</th>
+                  <th>Status</th>
+                  <th class="align-center">Vegetarian</th>
+                  <th class="align-center">Arrival on friday?</th>
+                  <th class="align-center">Diner on sunday?</th>
                 </tr>
               </thead>
               <tbody>
               	<?php foreach($participants as $participant): ?>
                 <tr>
                   <td><?php echo $participant['name'] ?></td>
-                  <td><?php echo $participant['club'] ?></td>
-                  <td><?php
-
-                   if($participant['postponed'] == 1)
-                   {
-                   		$array = array();
-                   		echo ToolBox::getMatchStatusLabel($array, true);
-                   }else
-                   {
-                   	echo '<button class="btn btn-small disabled">ready to go!</button>';
-                   }
-                   
-                   ?></td>
                   <td><?php echo $participant['email'] ?></td>
-                  <td><?php
-
-                   if($participant['veggie'] == 1)
-                   {
-                   		echo '<span class="badge badge-success">yes</span>';
-                   }else{
-                   		echo '<span class="badge badge-important">no</span>';
-                   }
-                   
-                   ?></td>
-                   <td><?php
-                   if($participant['arrival_on_friday'] == 1)
-                   {
-                   		echo '<span class="badge badge-success">yes</span>';
-                   }else{
-                   		echo '<span class="badge badge-important">no</span>';
-                   }
-                   
-                   ?></td>
-                   <td><?php
-                   if($participant['diner_on_sunday'] == 1)
-                   {
-                   		echo '<span class="badge badge-success">yes</span>';
-                   }else{
-                   		echo '<span class="badge badge-important">no</span>';
-                   }
-                   ?></td>
+                  <td><?php echo $participant['club'] ?></td>
                    <td><?php
 
                    if($participant['postponed'] == 1)
@@ -77,6 +37,33 @@
                    		echo '<a href="#postponed-'.$participant['id'].'" role="button" class="btn btn-small btn-danger" data-toggle="modal">postpone</a>';
                    }
                    
+                   ?></td>
+                  <td class="align-center"><?php
+
+                   if($participant['veggie'] == 1)
+                   {
+                   		echo '<span class="badge badge-success">yes</span>';
+                   }else{
+                   		echo '<span class="badge badge-important">no</span>';
+                   }
+                   
+                   ?></td>
+                   <td class="align-center"><?php
+                   if($participant['arrival_on_friday'] == 1)
+                   {
+                   		echo '<span class="badge badge-success">yes</span>';
+                   }else{
+                   		echo '<span class="badge badge-important">no</span>';
+                   }
+                   
+                   ?></td>
+                   <td class="align-center"><?php
+                   if($participant['diner_on_sunday'] == 1)
+                   {
+                   		echo '<span class="badge badge-success">yes</span>';
+                   }else{
+                   		echo '<span class="badge badge-important">no</span>';
+                   }
                    ?></td>
                 </tr>
                 <?php endforeach; ?>
