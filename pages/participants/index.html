@@ -29,12 +29,12 @@
                   <td><?php echo $participant['club'] ?></td>
                    <td><?php
 
-                   if($participant['postponed'] == 1)
+                   if($participant['postponed'] == 0)
                    {
-                   		echo '<a href="#postponed-'.$participant['id'].'" role="button" class="btn btn-small btn-success" data-toggle="modal">ready</a>';
+                   		echo '<a href="#postponed-'.$participant['id'].'" role="button" class="btn btn-small btn-success" data-toggle="modal">Ready</a>';
                    }else
                    {
-                   		echo '<a href="#postponed-'.$participant['id'].'" role="button" class="btn btn-small btn-danger" data-toggle="modal">postpone</a>';
+                   		echo '<a href="#postponed-'.$participant['id'].'" role="button" class="btn btn-small btn-danger" data-toggle="modal">Postponed</a>';
                    }
                    
                    ?></td>
