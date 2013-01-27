@@ -41,7 +41,7 @@ class ToolBox{
         switch($match['status'])
         {
             case MATCH_STARTED: 
-                return '<button class="btn btn-small btn-info disabled">In progress...</button>';
+                return '<button class="btn btn-small btn-info disabled">In progress on court <b>'.$match['court'].'</b></button>';
             case MATCH_ENDED:
                 return '<button class="btn btn-small btn-danger disabled">Ended, awaiting score</button>';
             case MATCH_NOT_YET_STARTED:
