@@ -37,13 +37,15 @@
 							<td class="muted">
 								<?php echo $match['id']; ?>
 							</td>
-							<td>
-								<?php echo $match['team1_user1']; ?><br />
-								<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+							<td class="team">
+									<div><?php echo $match['team1_user1']; ?></div>
+									<div>&nbsp;+&nbsp;</div>
+									<div><?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?></div>
 							</td>
-							<td>
-								<?php echo $match['team2_user1']; ?><br />
-								<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+							<td class="team">
+								<div><?php echo $match['team2_user1']; ?></div>
+								<div>&nbsp;+&nbsp;</div>
+								<div><?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?></div>
 							</td>
 							<td>
 								<?php echo ToolBox::getCategoryLabel($match['category']) ?>

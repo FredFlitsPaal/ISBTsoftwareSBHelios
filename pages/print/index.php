@@ -41,43 +41,47 @@
 		<div class="game-notes">
 			<?php foreach($matches as $match): ?>
 			<table class="table table-bordered">
-				<tr>
-					<th rowspan="2"><h5>Court:</h5></th>
-					<th colspan="2">Match number #<?php echo $match['id']; ?></th>
-					<th colspan="2"><button class="btn btn-small btn-warning disabled"> Round <?php echo $match['round']; ?></button></th>
-					<th colspan="2"><?php echo Toolbox::getCategoryLabel($match['category']); ?></th>
-				</tr>
-				<tr>
-					<td colspan="3"><?php echo $match['team1_user1']?>  +  <?php echo $match['team1_user2']?></td>
-					<td colspan="3"><?php echo $match['team2_user1']?>  +  <?php echo $match['team2_user2']?></td>
-				</tr>
-				<tr>
-					<td>
-						1<sup>st</sup> set
-					</td>
-					<td colspan="3">
-					</td>
-					<td colspan="3">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						2<sup>nd</sup> set
-					</td>
-					<td colspan="3">
-					</td>
-					<td colspan="3">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						3<sup>th</sup> set
-					</td>
-					<td colspan="3">
-					</td>
-					<td colspan="3">
-					</td>
-				</tr>
+				<thead>
+					<tr>
+						<td rowspan="2">Court:</td>
+						<td colspan="1" class="number">#<?php echo $match['id']; ?></td>
+						<td colspan="2" class="round">Round <?php echo $match['round']; ?></td>
+						<td colspan="3"><div><?php echo Toolbox::getCategoryLabel($match['category']); ?></div></td>
+					</tr>
+					<tr>
+						<th colspan="3" class="team"><div><?php echo $match['team1_user1']?></div><div><?php echo $match['team1_user2']?></div></th>
+						<th colspan="3" class="team"><div><?php echo $match['team2_user1']?></div><div><?php echo $match['team2_user2']?></div></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							1<sup>st</sup> set
+						</td>
+						<td colspan="3">
+						</td>
+						<td colspan="3">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							2<sup>nd</sup> set
+						</td>
+						<td colspan="3">
+						</td>
+						<td colspan="3">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							3<sup>th</sup> set
+						</td>
+						<td colspan="3">
+						</td>
+						<td colspan="3">
+						</td>
+					</tr>
+				</tbody>
 			</table>
 			<?php endforeach; ?>
 		</div>
