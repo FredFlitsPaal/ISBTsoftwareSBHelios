@@ -386,4 +386,15 @@ class ToolBox{
         	return true;
         }
 	}
+	
+	public static function getCheckedStatusPlayer($sPlayer, $aMatch)
+	{
+		$aPostponedPlayers = self::getPostponedPlayers($aMatch);
+		
+		if(is_bool(array_search($sPlayer, $aPostponedPlayers))) {
+			return $sPlayer;
+		} else {
+		  return "<span class=\"red\"><b>" . $sPlayer . "</b></span>";
+		} 
+	}
 }
