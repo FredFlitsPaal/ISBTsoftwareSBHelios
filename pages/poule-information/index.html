@@ -108,8 +108,8 @@
 					<legend>Poule matches of the current round</legend>
 					<table class="table table-striped main-table matches-table poule">
 						<tr>
-							<th>
-								#
+							<th class="muted">
+								Match #
 							</th>
 							<th>
 								Team 1
@@ -122,9 +122,6 @@
 							</th>
 							<th>
 								Score
-							</th>
-							<th class="print-hide carrousels-hide">
-								Comments
 							</th>
 						</tr>
 						<?php foreach($matches as $match): ?>
@@ -145,9 +142,6 @@
 								</td>
 								<td>
 									<?php echo ToolBox::calculateMatchScore($match); ?>
-								</td>
-								<td class="print-hide carrousels-hide">
-									<?php echo $match['comment']; ?>
 								</td>
 							</tr>
 						<?php endforeach; ?>
