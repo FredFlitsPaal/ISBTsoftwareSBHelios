@@ -46,7 +46,7 @@ class ParticipantController
             $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-            $sql = "SELECT * FROM `user`";
+            $sql = "SELECT * FROM `user` ORDER BY `name`";
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute();

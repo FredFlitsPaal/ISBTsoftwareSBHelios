@@ -103,4 +103,10 @@ class matchScoreController {
 			return array("type" => "alert-info", "text" => "Invalid match results, at least two sets must be submitted");
 		}
 	}
+	
+	static public function remoteUpdateScore()
+	{
+		$oMatchScores = new matchScoreController();
+		$oMatchScores->updateScore();
+	}
 }

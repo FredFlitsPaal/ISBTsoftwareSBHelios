@@ -199,11 +199,11 @@
 			<h3 id="startnextround">Start next round</h3>
 		</div>
 		<div class="modal-body">
-			<p>You're about to start a new round for <?php echo ToolBox::getCategoryLabel($poule['category']); ?> If you proceed, the system will generate a new round and you won't be able to edit scores of the current round.</p>
+			<p>You're about to start a new round for <?php echo ToolBox::getCategoryLabel($poule['category']); ?> If you proceed, the system will generate a new round and you will nog be able to edit scores of the current round anymore.</p>
 		</div>
 		<div class="modal-footer">
-			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">No! That would cause a disaster.</button>
-			<button class="btn btn-primary" type="submit" name="nextRound" value="1">Yes, relieve me with a new round!</button>
+			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button class="btn btn-primary" type="submit" name="nextRound" value="1">Start next round</button>
 		</div>
 	</form>
 </div>
