@@ -25,19 +25,17 @@ class ToolBox{
 		{
 			return '<button class="btn btn-small btn-danger disabled">Postponed</button>';
 		}
-
-		$delayed = self::getDelayedPlayers($match);
-		if(count($delayed) > 0 && $match['status'] == MATCH_NOT_YET_STARTED){
-
-			if(count($delayed) > 1){
-				$player = 'several players';
-			}elseif(count($delayed) > 0){
-				$player = $delayed[0];
-			}
+		
+		// TODO: Clean dirty code of delayed players
+		if(self::hasDelayedPlayers($match) && $match['status'] == MATCH_NOT_YET_STARTED){
+			$delayed = self::getDelayedPlayers($match);
+			
+			if(count($delayed) > 1) $player = 'several players';
+			elseif(count($delayed) > 0) $player = $delayed[0];
 
 			return '<button class="btn btn-small btn-warning disabled">Delayed, <b>'.$player.'</b> already on a court</button>';
 		}
-		
+				
         switch($match['status'])
         {
             case MATCH_STARTED: 
@@ -284,7 +282,7 @@ class ToolBox{
 		return count(self::getDelayedPlayers($match)) > 0;
 	}
 
-	public static function getDelayedPlayers($match){
+	public static function getDelayedTeams($match){
 		// TODO: test this for teams with only one player
 		// TODO: optimize this dirty piece of code
 
@@ -312,13 +310,28 @@ class ToolBox{
 		return $delayed;
 	}
 
+	public static function getDelayedPlayers($match){
+		// TODO: test this for teams with only one player
+		// TODO: optimize this dirty piece of code
+
+		//check for delayed teams
+		$playersOnCourts = self::getPlayersOnCourts();
+		
+		$delayed = array();
+		if(in_array($match['team1_user1'], $playersOnCourts) == true) $delayed[] = $match['team1_user1'];
+		if(in_array($match['team1_user2'], $playersOnCourts) == true) $delayed[] = $match['team1_user2'];
+		if(in_array($match['team2_user1'], $playersOnCourts) == true) $delayed[] = $match['team2_user1'];
+		if(in_array($match['team2_user2'], $playersOnCourts) == true) $delayed[] = $match['team2_user2'];
+
+		return $delayed;
+	}
+
 	public static function getTeamsOnCourts(){
 		try
     	{
 	    	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-			// TODO: create one nice array with a query, use inner join?
 	    	$sql = "SELECT `team1`, `team2` 
 	    			FROM `match` 
 	    			WHERE `court` != 'NULL'";
@@ -335,6 +348,47 @@ class ToolBox{
 	    	}
 	    	
 	    	return $allTeams;
+	    }
+	    catch(PDOException $e)
+	    {
+	    	Monolog::getInstance()->addAlert('Error selecting teams on courts, PDOException: ' . var_export($e, true));
+	    }
+	}
+	
+	public static function getPlayersOnCourts(){
+		try
+    	{
+	    	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+            $sql = "SELECT 
+						`user1`.name as `team1_user1`,
+						`user2`.name `team1_user2`,
+						`user3`.name as `team2_user1`,
+						`user4`.name as `team2_user2`
+                    FROM `match` 
+                    INNER JOIN `team` `team1` ON(team1.id = match.team1) 
+                    INNER JOIN `team` `team2` ON(team2.id = match.team2) 
+                    INNER JOIN `user` `user1` ON(team1.user1 = user1.id) 
+                    LEFT JOIN `user` `user2` ON(team1.user2 = user2.id) 
+                    INNER JOIN `user` `user3` ON(team2.user1 = user3.id) 
+                    LEFT JOIN `user` `user4` ON(team2.user2 = user4.id)
+                    WHERE `court` != 'NULL'";
+
+	    	$stmt = $pdo->prepare($sql);
+	    	$stmt->execute();
+
+	    	$playersOnCourts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+	    	$allPlayers = array();
+	    	foreach ($playersOnCourts as $player) {
+	    		$allPlayers[] = $player['team1_user1'];
+	    		$allPlayers[] = $player['team1_user2'];
+	    		$allPlayers[] = $player['team2_user1'];
+	    		$allPlayers[] = $player['team2_user2'];
+	    	}
+	    	
+	    	return $allPlayers;
 	    }
 	    catch(PDOException $e)
 	    {
@@ -390,11 +444,14 @@ class ToolBox{
 	public static function getCheckedStatusPlayer($sPlayer, $aMatch)
 	{
 		$aPostponedPlayers = self::getPostponedPlayers($aMatch);
+		$aDelayedPlayers = self::getDelayedPlayers($aMatch);
 		
-		if(is_bool(array_search($sPlayer, $aPostponedPlayers))) {
-			return $sPlayer;
-		} else {
+		if(!is_bool(array_search($sPlayer, $aPostponedPlayers))) {
 		  return "<span class=\"red\"><b>" . $sPlayer . "</b></span>";
+		} elseif(!is_bool(array_search($sPlayer, $aDelayedPlayers))) {
+		  return "<span class=\"yellow\"><b>" . $sPlayer . "</b></span>";
+		} else {
+			return $sPlayer;
 		} 
 	}
 }

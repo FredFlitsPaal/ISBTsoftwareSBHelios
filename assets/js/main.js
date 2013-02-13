@@ -95,7 +95,7 @@ $(document).ready(function() {
 			}
 		});
 		
-		// Input fields max 2 integers, if 1 int add 0
+		// Input fields max 2 integers, if 1 int add 0 befor inputdata
 		$(this).find("input").attr("maxlength", "2");
 		$(this).find("input").change(function() {
 			var data = $(this).val();
