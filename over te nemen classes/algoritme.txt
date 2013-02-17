@@ -1,0 +1,35 @@
+
+GenerateNextRound
+	- validate input
+	- voeg evt. een bye team in
+	- zet alle mogelijke wedstrijden in de graph, vul de graph
+	- if bye team
+		- Verwijder alle al gespeelde wedstrijden met byeteams
+		- Bepaal vanaf welke index alle volgende teams bye zijn.
+	- GenerateNextMatches()
+	- Verwijder het bye team en geef aan welk team niet speelt.
+
+GenerateNextMatches
+	- initialiseer variabelen
+	- begin met het matchen van teams - foreach team
+		- als nog niet ingedeeld en er zijn meerdere mogelijkheden dan;
+			- recurseMatch()
+
+	- als array met beste match voor volgende ronde leeg blijft dan;
+		-
+
+
+recurseMatch
+	- check for legal choice
+		- true; evaluatePenalty
+		- false; evaluatePenalty; geef een extra hoge penalty
+	- Return als er geen betere score mogelijk is.
+	- als de score wel beter is;
+		- voeg wedstrijd toe aan gegenereerde wedstrijden
+		- verwijder wedstrijd uit array met alle mogelijke wedstrijden
+		- zet matched up van tegenstander op true
+
+	- if; nog maar 3 rondes te spelen.
+	- Onderste knoop van de boom.
+	Alle teams zijn gekoppeld aan een tegenstander
+	- checken op oneven eilandjes, als die er zijn, geef deathpenalty
