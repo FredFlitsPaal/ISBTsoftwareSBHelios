@@ -1,11 +1,21 @@
 <?php
 
+include("Algorithms (met Match & Team arrays).php");
+
+
 const('ISBT_DSN', '');
 const('ISBT_USER', '');
 const('ISBT_PWD', '');
 
 class Example
 {
+	public function Example()
+	{
+
+print_r(Algorithms::GenerateLadder(array(), 1, array(), false));
+
+	}
+
 	private function getTeams($poule)
 	{
         $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
@@ -21,7 +31,7 @@ class Example
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);    
 	}
 	
-    public static function getMatches($poule)
+    public function getMatches($poule)
     {
         $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -54,4 +64,6 @@ class Example
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
 }

@@ -15,10 +15,10 @@ class Algorithms
 	/// <param name="$aInputPlayedgames">De wedstrijden die al gespeeld zijn in de voorgaande rondes</param>
 	/// <param name="$aTeamNotPlaying">Het team dat niet ingeeld is, of null als deze niet bestaat.</param>
 	/// <returns>De best mogelijke lijst van wedstrijden voor deze ronde of null bij een ongeldige invoer.</returns>
-	public static function GenerateLadder(array $aInputTeams, int $iRound, array $aInputPlayedgames, $aTeamNotPlaying)
+	public static function GenerateLadder(array $aInputTeams, $iRound, array $aInputPlayedgames, $aTeamNotPlaying)
 	{
 		//Controleer data
-		if (!$this->VerifyLadderData($aInputTeams, $aInputPlayedgames, $iRound))
+		if (!self::VerifyLadderData($aInputTeams, $aInputPlayedgames, $iRound))
 		{
 			$aTeamNotPlaying = null;
 			//Logger.Write("Algoritmes", string.Format("Ongeldige ladder invoer van ronde {0}, met {1} $aTeams en {2} gespeelde wedstrijden.", $iRound, $aInputTeams.Count, $aInputPlayedgames.Count));
@@ -161,7 +161,7 @@ class Algorithms
 	/// <param name="$aPlayedmatches">De gespeelde westrijden.</param>
 	/// <param name="$iRound">Het rondenummer.</param>
 	/// <returns>Een boolean die de correctheid vand e data aangeeft.</returns>
-	public static function VerifyLadderData(array $aTeams, array $aPlayedMatches, int $iRound)
+	public static function VerifyLadderData(array $aTeams, array $aPlayedMatches, $iRound)
 	{
 		//Rond af naar volgende even waarde.
 		$iTeamAmountToCheck = count($aTeams) + (count($aTeams) & 1);
