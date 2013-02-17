@@ -70,7 +70,7 @@ $(document).ready(function() {
 	$("form").live('submit', function()
 	{
 		var anchor = getAnchor();
-		
+
 		servePageWithData(anchor, $(this).serializeArray());
 		
 		// Fix to hide the grey overlay
@@ -78,17 +78,50 @@ $(document).ready(function() {
 		
 		return false;
 	});
-/*
-	$(".matchresults").live('shown', function()
+	
+	// Focus first input & submit matchscores modal form with enter key
+	$(document).on("shown", ".matchresults", function()
 	{
-		modal = this.id;
-		//console.log($('input:text:visible:first', this));
-		//console.log(this.id);
-		//$('#' + modal + ' .focushere').focus();
-		$('#' + modal + ' .focushere').css('background-color', 'red');
-		//$('input:text:visible:first', this).css('background-color', 'red');
+		var modalId = $(this).attr("id");
+
+		// Focus on first input in matchscores modal
+		$("#" + modalId).find(".focushere").focus();
+
+		// Submit matchscores modal form with enter key
+		$(this).find("input").keypress(function (e) {
+			if (e.which == 13) {
+				$("#" + modalId + " form").submit();
+				return false;
+			}
+		});
+		
+		// Input fields max 2 integers, if 1 int add 0 befor inputdata
+		$(this).find("input").attr("maxlength", "2");
+		$(this).find("input").change(function() {
+			var data = $(this).val();
+			
+			if($.isNumeric(data)) {
+				if(data.length == 1) {
+					data = 0 + data;
+				}
+				$(this).val(data);
+			} else {
+				$(this).val('');
+			}
+		});
 	});
-*/
+
+	// Show over modal to addShow
+	$(document).on("click", "button[data-toggle=over-modal]", function(e) {
+		e.preventDefault();
+		
+		var newModalId = $(this).attr("data-target");
+		var oldModalId = $(this).parents(".modal").attr("id");
+		
+		// Show over-modal
+		$(newModalId).modal("show");
+		$("#" + oldModalId).modal("hide");
+	});
 });
 
 //call for page

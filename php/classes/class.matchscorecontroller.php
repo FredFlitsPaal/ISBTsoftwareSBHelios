@@ -36,7 +36,7 @@ class matchScoreController {
                     INNER JOIN `poule` ON(poule.id = team1.poule)
                     INNER JOIN `category` ON (poule.category = category.id)
                     WHERE poule.round = match.round
-                    ORDER BY `status` = '4', `status` = '1', `status` = '2', `status` = '0', `status` = '3', `id` ASC";
+                    ORDER BY `status` = '4', `status` = '1', `status` = '2', `status` = '0', `status` = '3', `end_time` ASC";
 
             $stmt = $pdo->prepare($sql);
             $stmt->execute();
@@ -102,5 +102,11 @@ class matchScoreController {
 		{
 			return array("type" => "alert-info", "text" => "Invalid match results, at least two sets must be submitted");
 		}
+	}
+	
+	static public function remoteUpdateScore()
+	{
+		$oMatchScores = new matchScoreController();
+		$oMatchScores->updateScore();
 	}
 }

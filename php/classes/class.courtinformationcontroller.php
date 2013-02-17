@@ -24,9 +24,9 @@ class CourtInformationController
 		
 		if(!empty($_POST['action']) && $_POST['action'] == "end-match")
 		{
-			$message = $this->endMatch($_POST['match-id']);
+			$message = $this->endMatch($_POST['match-id'], $_POST['addScore']);
 		}
-		
+				
 		$matchesOnCourt = $this->getMatches('matches_on_court');
 		$UpcomingMatches = $this->getMatches('upcoming_matches');
 		$availableCourts = $this->getAvaiableCourts();
@@ -149,7 +149,7 @@ class CourtInformationController
         }
 	}
 	
-	private function endMatch($match)
+	private function endMatch($match, $addScore = false)
 	{
         try
         {
@@ -167,8 +167,14 @@ class CourtInformationController
 
             $stmt = $pdo->prepare($sql);
 			$stmt->bindParam(":id", $match);
-			$stmt->bindValue(":status", MATCH_ENDED);
+			
+			if($addScore == true) $stmt->bindValue(":status", MATCH_FINISHED);
+			else $stmt->bindValue(":status", MATCH_ENDED);
+            
             $stmt->execute();
+            
+            // Set scores if meant to
+            if($addScore == true) matchScoreController::remoteUpdateScore();
 			
 			return array("type" => "alert-success", "text" => "Match ended");
         }

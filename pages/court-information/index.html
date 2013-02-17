@@ -193,11 +193,70 @@
 					<input type="hidden" name="action" value="end-match" />
 					<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
 					
-					<button class="btn" data-dismiss="modal">Of course not, you idiot...</button>
-					<button class="btn btn-primary" type="submit">Yes please.</button>
+					<button class="btn" data-dismiss="modal">No, cancel</button>
+					<button class="btn btn-primary" type="submit">Yes, do so</button>
+					<button class="btn btn-info" data-toggle="over-modal" data-target="#MatchResults-<?php echo $match['id'] ?>">Yes & add score</button>
 				</form>
 			</div>
 		</div>
+		
+		<div id="MatchResults-<?php echo $match['id'] ?>" class="modal hide fade matchresults" tabindex="-1" role="dialog" aria-labelledby="AddMatchResults" aria-hidden="true">
+			<form class="form-inline" method="post">
+				<input type="hidden" name="action" value="end-match" />
+				<input type="hidden" name="addScore" value="true" />
+				<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 id="AddMatchResults">Add match results</h3>
+				</div>
+				<div class="modal-body">
+					<table class="table">
+						<tr>
+							<th>match #<?php echo $match['id']; ?></th>
+							<th>Round <?php echo $match['round']; ?></th>
+							<th><?php echo ToolBox::getCategoryLabel($match['category']) ?></th>
+						</tr>
+						<tr>
+							<td>
+								<?php echo $match['team1_user1']; ?><br />
+								<?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?>
+							</td>
+							<td>vs</td>
+							<td>
+								<?php echo $match['team2_user1']; ?><br />
+								<?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?>
+							</td>
+						</tr>
+					</table>
+
+					<label><b>Results</b></label><br />
+					<table class="table modal-table-results">
+						<tr>
+							<td>
+								<div class="input-prepend">
+									<span class="add-on">1<sup>st</sup> set</span>
+									<input class="input-ultramini focushere" name="set-1-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1, 1) ?>" placeholder="__">
+									<span class="add-on"> - </span>
+									<input class="input-ultramini" name="set-1-2" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 1, 2) ?>" placeholder="__">
+								</div>
+							</td>
+							<td>
+								<div class="input-prepend">
+									<span class="add-on">2<sup>nd</sup> set</span>
+									<input class="input-ultramini" name="set-2-1" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2, 1) ?>" placeholder="__">
+									<span class="add-on"> - </span>
+									<input class="input-ultramini" name="set-2-2" id="prependedInput" size="16" type="text" value="<?php echo ToolBox::getScore($match, 2, 2) ?>" placeholder="__">
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button class="btn" data-dismiss="modal">Close</button>
+					<button class="btn btn-primary" type="submit">Save changes</button>
+				</div>
+			</form>
+		</div>		
 	<?php endif; ?>
 <?php endforeach; ?>
 
@@ -245,8 +304,8 @@
 					<input type="hidden" name="action" value="start-match" />
 					<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
 					
-					<button class="btn" data-dismiss="modal">No, I just pushed a wrong button.</button>
-					<button class="btn btn-primary" type="submit">Yes offcourse, I am in charge here!</button>
+					<button class="btn" data-dismiss="modal">No, cancel</button>
+					<button class="btn btn-primary" type="submit">Yes, do so</button>
 				</form>
 			</div>
 		</div>
@@ -297,8 +356,8 @@
 					<input type="hidden" name="action" value="start-match" />
 					<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
 					
-					<button class="btn" data-dismiss="modal">Nope, sorry.</button>
-					<button class="btn btn-primary" type="submit">Yes, just obey stupid machine.</button>
+					<button class="btn" data-dismiss="modal">No, cancel</button>
+					<button class="btn btn-primary" type="submit">Yes, do so</button>
 				</form>
 			</div>
 		</div>
@@ -338,8 +397,8 @@
 					<input type="hidden" name="action" value="start-match" />
 					<input type="hidden" name="match-id" value="<?php echo $match['id'] ?>" />
 					
-					<button class="btn" data-dismiss="modal">NO</button>
-					<button class="btn btn-primary" type="submit">YES</button>
+					<button class="btn" data-dismiss="modal">No, cancel</button>
+					<button class="btn btn-primary" type="submit">Yes, do so</button>
 				</form>
 			</div>
 		</div>
