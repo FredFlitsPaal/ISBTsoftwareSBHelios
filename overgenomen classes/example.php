@@ -1,19 +1,25 @@
 <?php
 
 include("Algorithms (met Match & Team arrays).php");
+include("Graph.php");
+include("Graph32.php");
+include("Ladder.php");
 
 
-const('ISBT_DSN', '');
-const('ISBT_USER', '');
-const('ISBT_PWD', '');
+
+//PDO credentials isbt db
+define('ISBT_DSN', 'mysql:dbname=isbt;host=127.0.0.1');
+define('ISBT_USER', 'isbt');
+define('ISBT_PWD', 'wrAn6wrEhedr');
 
 class Example
 {
 	public function Example()
 	{
+		//print_r($this->getMatches(1));
 
-print_r(Algorithms::GenerateLadder(array(), 1, array(), false));
-
+		print_r(Algorithms::GenerateLadder($this->getTeams(1), 1, $this->getMatches(1), null));
+		//print_r(Algorithms::GenerateLadder($this->getTeams(1), 1, array(), null));
 	}
 
 	private function getTeams($poule)
@@ -25,7 +31,7 @@ print_r(Algorithms::GenerateLadder(array(), 1, array(), false));
 				FROM `team`
 				WHERE `poule` = :poule";
 		$stmt = $pdo->prepare($sql);
-		$stmt->bindParam(":poule", $poule['id']);
+		$stmt->bindParam(":poule", $poule);
 		$stmt->execute();
 	
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);    
@@ -64,6 +70,5 @@ print_r(Algorithms::GenerateLadder(array(), 1, array(), false));
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
 }
+new Example();

@@ -9,29 +9,29 @@ class Ladder
 	/// <summary>
 	/// De beste tot nu toe gevonden matching
 	/// </summary>
-	$bestMatching;
+	public $bestMatching;
 	/// <summary>
 	/// De penalty die hoort bij de beste tot nu toe gevonden matching
 	/// </summary>
-	int $minPenalty;
+	public $minPenalty;
 
 	/// <summary>
 	/// De ronde waar in gespeeld wordt
 	/// </summary>
-	int $round;
+	public $round;
 	/// <summary>
 	/// Alle teams
 	/// </summary>
-	$teams;
+	public $teams;
 	/// <summary>
 	/// De index vanaf waar de inactieve teams in de teams lijst staan
 	/// </summary>
-	int $inactiveindex;
+	public $inactiveindex;
 
 	/// <summary>
 	/// Negeer de spelergraaf als er toch een deadlock optreedt
 	/// </summary>
-	$ignoreGraph = false;
+	public $ignoreGraph = false;
 
 	/// <summary>
 	/// Genereert, gegeven een lijst van teams en een ronde nummer, de best mogelijke combinatie van wedstrijden
@@ -43,17 +43,16 @@ class Ladder
 	/// <param name="round">Het ronde nummer</param>
 	/// <param name="inactiveindex"> </param>
 	/// <returns>De best mogelijke lijst van wedstrijden voor deze ronde</returns>
-	public function GenerateLadder($teams, $possibilities, int $round, int $inactiveindex)
+	public function GenerateLadder($teams, $possibilities, $round, $inactiveindex)
 	{
-
 		//initialiseer variabelen
 		$ignoreGraph = false;
-		$bestMatching = null;
-		$minPenalty = PHP_INT_MAX;
+		$this->bestMatching = null;
+		$this->minPenalty = PHP_INT_MAX;
 		$this->round = $round;
 		$this->teams = $teams;
-		$generatedMatches = new Array();
-		$matchedup = new Array();
+		$generatedMatches = Array();
+		$matchedup = Array();
 		$matchedup[0] = true;
 		$this->inactiveindex = $inactiveindex;
 
@@ -67,8 +66,10 @@ class Ladder
 				$this->recurseMatch(0, $matchedup, $possibilities, $generatedMatches, 0, 0, $i, true);
 			}
 		}
+		echo "bla".PHP_EOL;
+		print_r($this->bestMatching);
 
-		if ($bestMatching == null)
+		if ($this->bestMatching == null)
 		{
 			//Logger.Write("Algoritmes", string.Format("Ladderalgoritme heeft geen correcte uitvoer in ronde {0} met {1} teams en graaf {2}.", round, count($this->teams), possibilities.ToQuickSave()));
 			$ignoreGraph = true;
@@ -99,7 +100,7 @@ class Ladder
 	/// <param name="first">Het eerste team dat aan een tegenstander gekoppeld wordt</param>
 	/// <param name="matchWith"> Het team waar het eerste team mee gekoppeld wordt </param>
 	/// <param name="legalchoice"> Is dit een geldige matching</param>
-	private function recurseMatch(int $penalty, $matchedUp, $possibilities, $generatedMatches, int $depth, int $first, int $matchWith, $legalchoice)
+	private function recurseMatch($penalty, $matchedUp, $possibilities, $generatedMatches, $depth, $first, 	$matchWith, $legalchoice)
 	{
 		//Return als er geen betere score mogelijk is.
 		if ($legalchoice)
@@ -187,7 +188,7 @@ class Ladder
 				{
 					$this->recurseMatch($penalty, $matchedUp, $possibilities, $generatedMatches, $depth + 1, $newFirst, $i, true);
 				}
-				else if (!$matchedUp[$i] && ($ignoreGraph || $possibilities->GetEdge($newFirst, $i))
+				else if (!$matchedUp[$i] && ($ignoreGraph || $possibilities->GetEdge($newFirst, $i)))
 				{
 					$this->recurseMatch($penalty, $matchedUp, $possibilities, $generatedMatches, $depth + 1, $newFirst, $i, false);
 				}

@@ -20,11 +20,12 @@ class Algorithms
 		//Controleer data
 		if (!self::VerifyLadderData($aInputTeams, $aInputPlayedgames, $iRound))
 		{
+			echo 'shit man';
 			$aTeamNotPlaying = null;
 			//Logger.Write("Algoritmes", string.Format("Ongeldige ladder invoer van ronde {0}, met {1} $aTeams en {2} gespeelde wedstrijden.", $iRound, $aInputTeams.Count, $aInputPlayedgames.Count));
 			return null;
 		}
-
+		echo 'hier!'.PHP_EOL;
 		$aTeams = $aInputTeams;
 		$aPlayedGames = $aInputPlayedgames;
 
@@ -43,7 +44,7 @@ class Algorithms
 
 		foreach ($aPlayedGames as $aPlayedMatch)
 		{
-			$oPossibilities->RemoveUndirectedEdge($this->indexOfTeam($aTeams, $aPlayedMatch["team1"]), $this->indexOfTeam($aTeams, $oPlayedMatch["team2"]));
+			$oPossibilities->RemoveUndirectedEdge(self::indexOfTeam($aTeams, $aPlayedMatch["team1"]), self::indexOfTeam($aTeams, $aPlayedMatch["team2"]));
 		}
 
 		//Een team kan niet tegen zichzelf spelen.
@@ -57,12 +58,12 @@ class Algorithms
 		{
 			foreach ($aTeams as $aTeam)
 			{
-				$iTeamIndex = $this->indexOfTeam($aTeams, $aTeam);
+				$iTeamIndex = self::indexOfTeam($aTeams, $aTeam);
 				$iPlayedmatches = 0;
 
 				//Tel het aantal gespeelde matches, inclusief tegen inactieve teams
 				foreach ($aPlayedGames as $aMatch)
-					if ($aMatch["team1"] == $oTeam["id"] || $aMatch["team2"] == $oTeam["id"])
+					if ($aMatch["team1"] == $aTeam["id"] || $aMatch["team2"] == $aTeam["id"])
 						$iPlayedmatches++;
 
 				if ($iPlayedmatches != $iRound - 1)
@@ -124,7 +125,7 @@ class Algorithms
 			}
 
 // !!!!!!!!!!!!!!!! MOET GECONTROLEERD WORDEN -- Kijken of het overeenkomt met het Ladder object..
-			$iKeyToRemove = array_search($aResult, $aToRemove);
+			$iKeyToRemove = array_search($aToRemove, $aResult);
 			unset($aResult[$iKeyToRemove]);
 			// $aResult->Remove($aToRemove["id"]);
 			
@@ -146,7 +147,7 @@ class Algorithms
 	{
 		for ($i = 0; $i < count($aTeams); $i++)
 		{
-			if ($aTeams[$i]["id"] == $oTeamToCheck["id"])
+			if ($aTeams[$i]["id"] == $aTeamToCheck["id"])
 				return $i;
 		}
 
@@ -169,10 +170,11 @@ class Algorithms
 		if ($iRound < 1 || $iRound > $iTeamAmountToCheck - 1)
 			return false;
 
+		//var_dump($aPlayedmatches);
         //Er komen teams voor in de gespeelde wedstrijden die niet bestaan
-        foreach ($aPlayedmatches as $aPlayedMatch )
+        foreach ($aPlayedMatches as $aPlayedMatch )
         {
-            if ($this->indexOfTeam($aTeams,$aPlayedMatch["team1"]) == -1 || $this->indexOfTeam($aTeams,$oPlayedMatch["team2"]) == -1)
+            if (self::indexOfTeam($aTeams,$aPlayedMatch["team1"]) == -1 || self::indexOfTeam($aTeams,$aPlayedMatch["team2"]) == -1)
                 return false;
         }
 

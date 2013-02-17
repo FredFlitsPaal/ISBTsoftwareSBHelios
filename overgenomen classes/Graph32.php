@@ -1,6 +1,4 @@
 ﻿<?php
-	include("Graph.php");
-
 	/// <summary>
 	/// Een geoptimaliseerde graaf implementatie die maximaal 32 knopen bevat
 	/// </summary>
