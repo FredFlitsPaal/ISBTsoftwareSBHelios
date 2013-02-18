@@ -163,7 +163,9 @@
                         $res = $this->LeadsToUnevenSubgraph();
                         $this->AddUndirectedEdge($i, $j);
                         if ($res)
+                        {
                             return true;
+                        }
                     }
                 }
             }
@@ -189,9 +191,10 @@
 
 			// TODO Omzetten
 			//BitArray colours = new BitArray($this->GetCount());
+			$colours = array();
 			for ($i = 0; $i < $this->GetCount(); $i++)
 			{
-				if (!$colours[i])
+				if (!$colours[$i])
 				{
 					$subGraphs[] = $this->DFS($i, $colours);
 				}
@@ -221,7 +224,7 @@
 				for ($i = 0; $i < $this->GetCount(); $i++)
 				{
 					// TODO Omzetten
-					//if (this[$i, $node] && !$colours[$i])
+					if ($this->getEdge($i, $node) && !$colours[$i])
 					{
 						array_push($stack, $i);
 						$colours[$i] = true;

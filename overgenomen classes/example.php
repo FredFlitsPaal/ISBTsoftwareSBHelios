@@ -17,8 +17,7 @@ class Example
 	public function Example()
 	{
 		//print_r($this->getMatches(1));
-
-		print_r(Algorithms::GenerateLadder($this->getTeams(1), 1, $this->getMatches(1), null));
+		print_r(Algorithms::GenerateLadder($this->getTeams(1), 2, $this->getMatches(1), null));
 		//print_r(Algorithms::GenerateLadder($this->getTeams(1), 1, array(), null));
 	}
 

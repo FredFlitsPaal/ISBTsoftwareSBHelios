@@ -51,7 +51,7 @@ class Algorithms
 		{
 			$oPossibilities->RemoveUndirectedEdge($i, $i);
 		}
-
+		
 		//Verwijder alle al gespeelde wedstrijden met bye$aTeams
 		if ($bHasBye)
 		{

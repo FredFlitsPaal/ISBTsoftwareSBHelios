@@ -21,10 +21,10 @@
 			}
 
 			$this->data = array();
-			for($i = 0; $i < 64; $i++)
-			{
-				$this->data[$i] = 0;
-			}
+//			for($i = 0; $i < 64; $i++)
+//			{
+//				$this->data[$i] = 0;
+//			}
 		}
 
 		/// <summary>
@@ -136,8 +136,10 @@
 		/// </summary>
 		public function Fill()
 		{
-			for ($i = 0; $i < sizeof($this->data); $i++)
+			for ($i = 0; $i < 64; $i++)
+			{
 				$this->data[$i] = PHP_INT_MAX;
+			}
 		}
 
 		/// <summary>

@@ -87,7 +87,7 @@ class Ladder
 			}
 		}
 
-		return $bestMatching;
+		return $this->bestMatching;
 	}
 
 	/// <summary>
@@ -126,7 +126,8 @@ class Ladder
 
 		//Onderste knoop van de boom.
 		//Alle teams zijn gekoppeld aan een tegenstander
-		if ($depth == (count($this->teams) - 1) / 2)
+		//if ($depth == (count($this->teams) - 1) / 2)
+		if ($depth == floor((count($this->teams) - 1) / 2)) // CHECK Floor is vereist in verband met verschil met gehele en kommagetallen in C# en PHP
 		{
 			//Kijk naar deadlock situaties
 			if ($this->round < count($this->teams) - 2)
@@ -189,7 +190,7 @@ class Ladder
 				{
 					$this->recurseMatch($penalty, $matchedUp, $possibilities, $generatedMatches, $depth + 1, $newFirst, $i, true);
 				}
-				else if (!$matchedUp[$i] && ($ignoreGraph || $possibilities->GetEdge($newFirst, $i)))
+				else if (!$matchedUp[$i] && ($this->ignoreGraph || $possibilities->GetEdge($newFirst, $i)))
 				{
 					$this->recurseMatch($penalty, $matchedUp, $possibilities, $generatedMatches, $depth + 1, $newFirst, $i, false);
 				}
