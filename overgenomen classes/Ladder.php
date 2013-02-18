@@ -221,12 +221,12 @@ class Ladder
 	{
 		//Als de wedstrijd tussen een bye-team en een non-actief team is
 		//is de penalty 0
-		if ($index1 >= $inactiveindex)
+		if ($index1 >= $this->inactiveindex)
 		{
 			//Console.WriteLine("Penalty tussen bye en nonactief op 0 gezet");
 			return 0;
 		}
-		if ($index2 >= $inactiveindex)
+		if ($index2 >= $this->inactiveindex)
 			return 8 * ($index1 - $index2) * ($index1 - $index2) * 256 / ($index1 + 1);
 		return ($index1 - $index2) * ($index1 - $index2) * 256 / ($index1 + 1);
 	}
