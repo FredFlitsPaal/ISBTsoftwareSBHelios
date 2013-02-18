@@ -53,9 +53,12 @@ class Ladder
 		$this->teams = $teams;
 		$generatedMatches = Array();
 		$matchedup = Array();
+		for($i = 0; $i < count($teams); $i++)
+		{
+			$matchedup[$i] = false;
+		}
 		$matchedup[0] = true;
 		$this->inactiveindex = $inactiveindex;
-
 
 		//begin met het matchen van teams
 		$teamsTotal = count($teams);
@@ -66,8 +69,6 @@ class Ladder
 				$this->recurseMatch(0, $matchedup, $possibilities, $generatedMatches, 0, 0, $i, true);
 			}
 		}
-		echo "bla".PHP_EOL;
-		print_r($this->bestMatching);
 
 		if ($this->bestMatching == null)
 		{

@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL);
 include("Algorithms (met Match & Team arrays).php");
 include("Graph.php");
 include("Graph32.php");

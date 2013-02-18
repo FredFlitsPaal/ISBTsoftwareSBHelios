@@ -20,12 +20,11 @@ class Algorithms
 		//Controleer data
 		if (!self::VerifyLadderData($aInputTeams, $aInputPlayedgames, $iRound))
 		{
-			echo 'shit man';
 			$aTeamNotPlaying = null;
 			//Logger.Write("Algoritmes", string.Format("Ongeldige ladder invoer van ronde {0}, met {1} $aTeams en {2} gespeelde wedstrijden.", $iRound, $aInputTeams.Count, $aInputPlayedgames.Count));
 			return null;
 		}
-		echo 'hier!'.PHP_EOL;
+		
 		$aTeams = $aInputTeams;
 		$aPlayedGames = $aInputPlayedgames;
 
@@ -34,7 +33,7 @@ class Algorithms
 
 		if ((count($aTeams) & 1) != 0)
 		{
-			$aTeams[] = array("id" => -1);
+			$aTeams[] = array("id" => "-1", "IsInOperative" => "0");
 			$bHasBye = true;
 		}
 
@@ -143,14 +142,15 @@ class Algorithms
 	/// <param name="$aTeams">De array van teams om in te zoeken.</param>
 	/// <param name="$oTeamToCheck">Het team om de index van te zoeken.</param>
 	/// <returns>De index van het team, of -1 bij niet gevonden.</returns>
-	public static function indexOfTeam(array $aTeams, $aTeamToCheck)
+	public static function indexOfTeam(array $aTeams, $iTeamToCheck)
 	{
 		for ($i = 0; $i < count($aTeams); $i++)
 		{
-			if ($aTeams[$i]["id"] == $aTeamToCheck["id"])
+			if ($aTeams[$i]["id"] == $iTeamToCheck)
+			{
 				return $i;
+			}
 		}
-
 		return -1;
 	}
 
@@ -168,14 +168,18 @@ class Algorithms
 		$iTeamAmountToCheck = count($aTeams) + (count($aTeams) & 1);
         //Ongeldig rondenummer
 		if ($iRound < 1 || $iRound > $iTeamAmountToCheck - 1)
+		{
 			return false;
+		}
 
 		//var_dump($aPlayedmatches);
         //Er komen teams voor in de gespeelde wedstrijden die niet bestaan
         foreach ($aPlayedMatches as $aPlayedMatch )
         {
             if (self::indexOfTeam($aTeams,$aPlayedMatch["team1"]) == -1 || self::indexOfTeam($aTeams,$aPlayedMatch["team2"]) == -1)
-                return false;
+            {
+            	return false;
+            }
         }
 
 	    return true;
