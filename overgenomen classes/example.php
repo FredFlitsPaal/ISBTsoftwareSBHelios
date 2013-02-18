@@ -16,9 +16,13 @@ class Example
 {
 	public function Example()
 	{
-		//print_r($this->getMatches(1));
+		//print_r($this->getTeams(1));exit;
 		print_r(Algorithms::GenerateLadder($this->getTeams(1), 2, $this->getMatches(1), null));
 		//print_r(Algorithms::GenerateLadder($this->getTeams(1), 1, array(), null));
+
+		//TODO
+		// - aan het eind moeten de juiste id's nog terug gerekend worden... m.b.v. de getTeams array
+		// - wanneer er gerekend wordt met een poule met een oneven aantal teams dan gaat het mis, dit komt denk ik doordat er gewerkt wordt met een id van -1 voor een bye team...
 	}
 
 	private function getTeams($poule)
