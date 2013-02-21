@@ -15,19 +15,8 @@ class Algorithms
 	/// <param name="$aInputPlayedgames">De wedstrijden die al gespeeld zijn in de voorgaande rondes</param>
 	/// <param name="$aTeamNotPlaying">Het team dat niet ingeeld is, of null als deze niet bestaat.</param>
 	/// <returns>De best mogelijke lijst van wedstrijden voor deze ronde of null bij een ongeldige invoer.</returns>
-	public static function GenerateLadder(array $aInputTeams, $iRound, array $aInputPlayedgames, $aTeamNotPlaying)
+	public static function GenerateLadder(array $aTeams, $iRound, array $aPlayedGames/*, $aTeamNotPlaying*/)
 	{
-		//Controleer data
-		if (!self::VerifyLadderData($aInputTeams, $aInputPlayedgames, $iRound))
-		{
-			$aTeamNotPlaying = null;
-			//Logger.Write("Algoritmes", string.Format("Ongeldige ladder invoer van ronde {0}, met {1} $aTeams en {2} gespeelde wedstrijden.", $iRound, $aInputTeams.Count, $aInputPlayedgames.Count));
-			return null;
-		}
-		
-		$aTeams = $aInputTeams;
-		$aPlayedGames = $aInputPlayedgames;
-
 		//Voeg een mogelijk ByeTeam toe.
 		$bHasBye = false;
 
@@ -35,6 +24,15 @@ class Algorithms
 		{
 			$aTeams[] = array("id" => "-1", "IsInOperative" => "0");
 			$bHasBye = true;
+		}
+
+		//Controleer data
+		if (!self::VerifyLadderData($aTeams, $aPlayedGames, $iRound))
+		{
+			//$aTeamNotPlaying = null;
+			//Logger.Write("Algoritmes", string.Format("Ongeldige ladder invoer van ronde {0}, met {1} $aTeams en {2} gespeelde wedstrijden.", $iRound, $aInputTeams.Count, $aInputPlayedgames.Count));
+			//log
+			return array();
 		}
 
 		//Maak de graaf met mogelijke wedstrijden.
@@ -96,6 +94,7 @@ class Algorithms
 		//Logger.Write("Algoritmes", string.Format("Begin ladder algoritme in ronde {0}, met {1} $aTeams en {2} gespeelde wedstrijden.", $iRound, $aInputTeams.Count, $aInputPlayedgames.Count));
 		$aResult = $oLadder->GenerateLadder($aTeams, $oPossibilities, $iRound, $iInactiveIndex);
 
+		/*
 		//Verwijdert bye team en geeft aan welk team niet speelt.
 		$aTeamNotPlaying = null;
 
@@ -132,6 +131,7 @@ class Algorithms
 			if ($aTeamNotPlaying["IsInOperative"])
 				$aTeamNotPlaying = null;
 		}
+		*/
 
 		return $aResult;
 	}
@@ -151,6 +151,7 @@ class Algorithms
 				return $i;
 			}
 		}
+		//log
 		return -1;
 	}
 
@@ -166,6 +167,7 @@ class Algorithms
 	{
 		//Rond af naar volgende even waarde.
 		$iTeamAmountToCheck = count($aTeams) + (count($aTeams) & 1);
+        
         //Ongeldig rondenummer
 		if ($iRound < 1 || $iRound > $iTeamAmountToCheck - 1)
 		{
