@@ -130,7 +130,7 @@ class Ladder
 		if ($depth == floor((count($this->teams) - 1) / 2)) 
         {
 			// Kijk naar deadlock situaties
-			if ($this->round < count($this->teams) - 2)
+			if ($this->round > count($this->teams) - 4)
 			{
 				//Deze indeling is niet geldig vanwege deadlock
 				//if(unevenGraph(teams, generatedMatches)) return;
@@ -158,7 +158,7 @@ class Ladder
 				}
  
 				//Deze indeling leidt onvermijdelijk tot een deadlock over 2 ronden
-				if ($this->round > count($this->teams) - 3 && $this->graph->LeadsToSingleConnectionGraph())
+				if ($this->round > count($this->teams) - 4 && $this->graph->LeadsToSingleConnectionGraph())
 				{
 					$matchedUp[$matchWith] = false;
 					unset($generatedMatches[count($generatedMatches) - 1]);

@@ -1,22 +1,25 @@
 <?php
 error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
 include("LadderGenerator.php");
 include("Graph.php");
 include("Graph32.php");
 include("Ladder.php");
 
-
-
 //PDO credentials isbt db
 define('ISBT_DSN', 'mysql:dbname=isbt;host=127.0.0.1');
-define('ISBT_USER', 'isbt');
-define('ISBT_PWD', 'wrAn6wrEhedr');
+define('ISBT_USER', 'root');
+define('ISBT_PWD', '');
 
 class Example
 {
 	public function Example()
 	{
-        $ladderGenerator = new LadderGenerator($this->getTestTeams(), 1, $this->getTestMatches(), null);
+        echo "<pre>";
+        print_r($this->getTeams(2));
+        echo "<br /><br />";
+        $ladderGenerator = new LadderGenerator($this->getTeams(2), 15, $this->getMatches(2));
 		print_r($ladderGenerator->generate());
         //print_r($this->getTeams(1));exit;
 		//print_r(Algorithms::GenerateLadder($this->getTeams(1), 2, $this->getMatches(1), null));
@@ -26,47 +29,6 @@ class Example
 		// - aan het eind moeten de juiste id's nog terug gerekend worden... m.b.v. de getTeams array
 		// - wanneer er gerekend wordt met een poule met een oneven aantal teams dan gaat het mis, dit komt denk ik doordat er gewerkt wordt met een id van -1 voor een bye team...
 	}
-
-    private function getTestTeams()
-    {
-        return array(
-            array("id" => 1, "IsInOperative" => 0),
-            array("id" => 2, "IsInOperative" => 0),
-            array("id" => 3, "IsInOperative" => 0),
-            array("id" => 4, "IsInOperative" => 0),
-            array("id" => 5, "IsInOperative" => 0),
-            array("id" => 6, "IsInOperative" => 0),
-            array("id" => 7, "IsInOperative" => 0),
-            array("id" => 8, "IsInOperative" => 0),
-            array("id" => 9, "IsInOperative" => 0),
-            array("id" => 10, "IsInOperative" => 0),
-            array("id" => 11, "IsInOperative" => 0),
-            array("id" => 12, "IsInOperative" => 0),
-            array("id" => 13, "IsInOperative" => 0),
-            array("id" => 14, "IsInOperative" => 0),
-            array("id" => 15, "IsInOperative" => 0),
-            array("id" => 16, "IsInOperative" => 0),
-            array("id" => 17, "IsInOperative" => 0),
-            array("id" => 18, "IsInOperative" => 0),
-            array("id" => 19, "IsInOperative" => 0),
-            array("id" => 20, "IsInOperative" => 0),
-            array("id" => 21, "IsInOperative" => 0),
-            array("id" => 22, "IsInOperative" => 0),
-            array("id" => 23, "IsInOperative" => 0),
-            array("id" => 24, "IsInOperative" => 0),
-            array("id" => 25, "IsInOperative" => 0),
-            array("id" => 26, "IsInOperative" => 0),
-            array("id" => 27, "IsInOperative" => 0),
-            array("id" => 28, "IsInOperative" => 0),
-            array("id" => 29, "IsInOperative" => 0),
-            array("id" => 30, "IsInOperative" => 0)
-        );
-    }
-    
-    private function getTestMatches()
-    {
-        return array();
-    }
     
 	private function getTeams($poule)
 	{
@@ -102,4 +64,5 @@ class Example
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
+
 new Example();

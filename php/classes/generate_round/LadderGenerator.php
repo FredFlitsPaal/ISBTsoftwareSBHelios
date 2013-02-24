@@ -41,6 +41,7 @@ class LadderGenerator
 			return array();
 		}
 
+        
         $this->oGraph = $this->createGraph();
         
         // Verwijder al gespeelde wedstrijden uit de graaf
@@ -132,7 +133,7 @@ class LadderGenerator
     {
 		foreach ($this->aPlayedMatches as $aPlayedMatch)
 		{
-			$this->oGraph->RemoveUndirectedEdge($this->getIndexOfTeam($aPlayedMatch["team1"]), $this->indexOfTeam($aPlayedMatch["team2"]));
+			$this->oGraph->RemoveUndirectedEdge($this->getIndexOfTeam($aPlayedMatch["team1"]), $this->getIndexOfTeam($aPlayedMatch["team2"]));
 		}
     }
     
@@ -187,8 +188,8 @@ class LadderGenerator
 			}
 		}
         
-        // LOG
-		return -1;
+        // LOG Team not found
+		return -2;
 	}
 
     private function addByeTeam()
@@ -227,7 +228,7 @@ class LadderGenerator
         // Er komen teams voor in de gespeelde wedstrijden die niet bestaan
         foreach ($this->aPlayedMatches as $aPlayedMatch)
         {
-            if (getIndexOfTeam($aPlayedMatch["team1"]) == -1 || getIndexOfTeam($aPlayedMatch["team2"]) == -1)
+            if ($this->getIndexOfTeam($aPlayedMatch["team1"]) == -1 || $this->getIndexOfTeam($aPlayedMatch["team2"]) == -1)
             {
             	return false;
             }
