@@ -24,7 +24,14 @@ class CourtInformationController
 		
 		if(!empty($_POST['action']) && $_POST['action'] == "end-match")
 		{
-			$message = $this->endMatch($_POST['match-id'], $_POST['addScore']);
+            if(!empty($_POST['addScore']))
+            {
+    			$message = $this->endMatch($_POST['match-id'], $_POST['addScore']);            
+            }
+            else
+            {
+                $message = $this->endMatch($_POST['match-id'], false);
+            }
 		}
 				
 		$matchesOnCourt = $this->getMatches('matches_on_court');

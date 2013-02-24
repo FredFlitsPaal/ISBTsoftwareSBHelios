@@ -69,6 +69,11 @@ $(document).ready(function() {
 	
 	$("form").live('submit', function()
 	{
+        if($(this).attr("id") == "startNextRoundForm")
+        {
+            $("#startNextRoundBtn").attr("disabled", "disabled");
+        }
+        
 		var anchor = getAnchor();
 
 		servePageWithData(anchor, $(this).serializeArray());
@@ -122,6 +127,11 @@ $(document).ready(function() {
 		$(newModalId).modal("show");
 		$("#" + oldModalId).modal("hide");
 	});
+    
+//    $("#startNextRoundBtn").live("click", function()
+//    {
+//        $(this).attr("disabled", "disabled");
+//    });
 });
 
 //call for page

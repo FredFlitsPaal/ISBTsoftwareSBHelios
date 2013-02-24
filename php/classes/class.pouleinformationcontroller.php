@@ -189,17 +189,27 @@ class pouleInformationController
 		try
 		{
 			$pdo->beginTransaction();
-			
+            
 			foreach($matches as $match)
 			{			
 				$this->updateTeamResults($pdo, $match['team1'], ToolBox::getTeamResults(1, $match));
 				$this->updateTeamResults($pdo, $match['team2'], ToolBox::getTeamResults(2, $match));
 			}
 			
-			$success = $this->startNextRound($pdo, $poule);
+            $pdo->commit();
+        }
+		catch(PDOException $e)
+		{
+			Monolog::getInstance()->addAlert('Error while updating team results, PDOException: ' . var_export($e, true));
+			$pdo->rollBack();
+		}
+        
+		try
+        {
+            $pdo->beginTransaction();
 			
-			$pdo->commit();
-			
+            $success = $this->startNextRound($pdo, $poule);
+            
 			if($success == true)
 			{
 				return array("type" => "alert-success", "text" => "New round started");
@@ -257,34 +267,21 @@ class pouleInformationController
 		$stmt->bindParam(":poule", $poule['id']);
 		$stmt->execute();
 		
-		$success = $this->generateMatches($pdo, $poule);
-
-		return $success;
+		return $this->generateMatches($pdo, $poule);
 	}
 	
 	private function generateMatches($pdo, $poule)
 	{
-		//TODO: use the algoritm of https://github.com/FredFlitsPaal/SharpShuttle to generate these matches
-
 		$teams = $this->getTeams($pdo, $poule);
 		$matches = array();
-		$alreadyPlayedMatches = $this->getAlreadyPlayedMatches($pdo, $poule);
-		$inThisRound = array();
+     
+        $alreadyPlayedMatches = $this->getAlreadyPlayedMatches($pdo, $poule);
 		
-		if(sizeof($teams) > 1)
+        if(sizeof($teams) > 1)
 		{
-			foreach($teams as $team1)
-			{
-				foreach($teams as $team2)
-				{
-					if(!in_array($team1['id'] . "-" . $team2['id'], $matches) && !in_array($team2['id'] . "-" . $team1['id'], $matches) && $team1['id'] != $team2['id'] && !in_array($team1['id'] . "-" . $team2['id'], $alreadyPlayedMatches) && !in_array($team2['id'] . "-" . $team1['id'], $alreadyPlayedMatches) && !in_array($team1['id'], $inThisRound) && !in_array($team2['id'], $inThisRound))
-					{
-						$matches[] = ($team1['id'] . "-" . $team2['id']);
-						$inThisRound[] = $team1['id'];
-						$inThisRound[] = $team2['id'];
-					}
-				}
-			}	
+            Monolog::getInstance()->addDebug('New round : ' . ($poule['round'] + 1));
+            $generator = new LadderGenerator($teams, $poule['round'] + 1, $alreadyPlayedMatches);
+            $matches = $generator->generate();
 		}
 		
 		if(count($matches) > 0)
@@ -305,15 +302,20 @@ class pouleInformationController
 			
 			foreach($matches as $match)
 			{
-				list($team1, $team2) = explode("-", $match);
-				
 				$sql = "INSERT INTO `match` (`team1`, `team2`, `round`, `status`)
 						VALUES (:team1, :team2, :round, :status)";
 				$stmt = $pdo->prepare($sql);
-				$stmt->bindParam(":team1", $team1);
-				$stmt->bindParam(":team2", $team2);
+				$stmt->bindParam(":team1", $match['team1']['id']);
+				$stmt->bindParam(":team2", $match['team2']['id']);
 				$stmt->bindValue(":round", $poule['round'] + 1);
-				$stmt->bindValue(":status", MATCH_NOT_YET_STARTED);
+                if($match['team1']['id'] == -1 || $match['team2']['id'] == -1)
+                {
+                    $stmt->bindValue(":status", MATCH_FINISHED);
+                }
+                else
+                {
+                    $stmt->bindValue(":status", MATCH_NOT_YET_STARTED);
+                }
 				$stmt->execute();
 			}
 		}
@@ -344,16 +346,7 @@ class pouleInformationController
             $stmt = $pdo->prepare($sql);
 			$stmt->bindParam(":poule", $poule['id']);
             $stmt->execute();
-			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            //bouw array om naar formaat $team1['id'] . "-" . $team2['id']
-            $alreadyPlayedMatches = array();
-            foreach ($result as $match)
-            {
-            	$alreadyPlayedMatches[] = $match["team1"].'-'.$match["team2"];
-            }
-
-            return $alreadyPlayedMatches;
+			return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(PDOException $e)
         {

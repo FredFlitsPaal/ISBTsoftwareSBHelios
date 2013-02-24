@@ -46,6 +46,10 @@ class initialiseISBT{
 		foreach (glob(LIB_DIR."*.php") as $filename)
 		{
 		    require_once($filename);
+		} 
+        foreach (glob(LIB_DIR."*/*.php") as $filename)
+		{
+		    require_once($filename);
 		}
 	}
 }

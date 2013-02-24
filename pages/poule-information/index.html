@@ -191,7 +191,7 @@
 
 <!--     Le Modals     -->
 <div id="startnextround-poule-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="startnextround-poule-x" aria-hidden="true">
-	<form method="post">
+	<form method="post" id="startNextRoundForm">
 		<input type="hidden" name="startNextRound" value="1"/>
 		<input type="hidden" name="poule" value="<?php echo $poule['id'] ?>" />
 		<div class="modal-header">
@@ -203,7 +203,7 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
-			<button class="btn btn-primary" type="submit" name="nextRound" value="1">Start next round</button>
+			<button id="startNextRoundBtn" class="btn btn-primary" type="submit" name="nextRound" value="1">Start next round</button>
 		</div>
 	</form>
 </div>

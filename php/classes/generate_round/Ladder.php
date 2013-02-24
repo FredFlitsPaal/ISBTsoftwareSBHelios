@@ -84,9 +84,6 @@ class Ladder
 				}
 			}
 		}
-
-        $end_time = microtime(true);
-        echo ($end_time - $this->startTime) . "<br />";
         
 		return $this->bestMatching;
 	}
@@ -121,7 +118,8 @@ class Ladder
 		}
 
 		//Genereer een nieuwe wedstrijd.
-		$generatedMatches[] = $first.'-'.$matchWith;
+		//$generatedMatches[] = $first.'-'.$matchWith;
+        $generatedMatches[] = array("team1" => $this->teams[$first], "team2" => $this->teams[$matchWith]);
 		$this->graph->RemoveUndirectedEdge($first, $matchWith);
 		$matchedUp[$matchWith] = true;
 

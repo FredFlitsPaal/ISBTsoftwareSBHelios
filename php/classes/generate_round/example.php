@@ -2,25 +2,20 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-include("LadderGenerator.php");
-include("Graph.php");
-include("Graph32.php");
-include("Ladder.php");
-
 //PDO credentials isbt db
-define('ISBT_DSN', 'mysql:dbname=isbt;host=127.0.0.1');
-define('ISBT_USER', 'root');
-define('ISBT_PWD', '');
+//define('ISBT_DSN', 'mysql:dbname=isbt;host=127.0.0.1');
+//define('ISBT_USER', 'root');
+//define('ISBT_PWD', '');
 
 class Example
 {
 	public function Example()
 	{
-        echo "<pre>";
-        print_r($this->getTeams(2));
-        echo "<br /><br />";
-        $ladderGenerator = new LadderGenerator($this->getTeams(2), 15, $this->getMatches(2));
-		print_r($ladderGenerator->generate());
+//        echo "<pre>";
+//        print_r($this->getTeams(2));
+//        echo "<br /><br />";
+//        $ladderGenerator = new LadderGenerator($this->getTeams(2), 15, $this->getMatches(2));
+//		print_r($ladderGenerator->generate());
         //print_r($this->getTeams(1));exit;
 		//print_r(Algorithms::GenerateLadder($this->getTeams(1), 2, $this->getMatches(1), null));
 		//print_r(Algorithms::GenerateLadder($this->getTeams(1), 1, array(), null));
@@ -65,4 +60,4 @@ class Example
     }
 }
 
-new Example();
+//new Example();
