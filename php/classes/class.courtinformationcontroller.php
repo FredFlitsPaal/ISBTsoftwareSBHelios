@@ -195,40 +195,74 @@ class CourtInformationController
 	
 	private function startMatch($match)
 	{
-		$courts = $this->getAvaiableCourts();
-		
-        if(sizeof($courts) == 0)
-		{
-			return array("type" => "", "text" => "No courts available!");
-		}
-		
 		try
         {
             $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
-            $sql = "UPDATE 
+            $sql = "SELECT 
+						`match`.status,
+						`match`.court
+					FROM
 						`match`
-					SET
-						`court` = :court,
-						`status` = :status,
-						`start_time` = NOW()
 					WHERE
 						`id` = :id";
 
             $stmt = $pdo->prepare($sql);
 			$stmt->bindParam(":id", $match);
-			$stmt->bindValue(":court", $courts[0]['id']);
-			$stmt->bindValue(":status", MATCH_STARTED);
             $stmt->execute();
-			
-			return array("type" => "alert-success", "text" => "The match is assigned to court number ".$courts[0]['id']);
         }
         catch(PDOException $e)
         {
-            Monolog::getInstance()->addAlert('Error starting match, PDOException: ' . var_export($e, true));
+            Monolog::getInstance()->addAlert('Error selecting match, PDOException: ' . var_export($e, true));
         }
-		
-		return array("type" => "", "text" => "Could not assign match to court");
+
+        $result = $stmt->fetchAll();
+        if($result[0]['status'] != 0 && $result[0]['court'] != NULL)
+        {
+        	return array("type" => "alert-warning", "text" => "The match is already assigned to court number ".$result[0]['court']);
+        }
+        elseif($result[0]['status'] != 0)
+        {
+        	return array("type" => "alert-warning", "text" => "The match is already finished!");
+        }
+        else
+        {
+			$courts = $this->getAvaiableCourts();
+			
+	        if(sizeof($courts) == 0)
+			{
+				return array("type" => "", "text" => "No courts available!");
+			}
+			
+			try
+	        {
+	            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				
+	            $sql = "UPDATE 
+							`match`
+						SET
+							`court` = :court,
+							`status` = :status,
+							`start_time` = NOW()
+						WHERE
+							`id` = :id";
+
+	            $stmt = $pdo->prepare($sql);
+				$stmt->bindParam(":id", $match);
+				$stmt->bindValue(":court", $courts[0]['id']);
+				$stmt->bindValue(":status", MATCH_STARTED);
+	            $stmt->execute();
+				
+				return array("type" => "alert-success", "text" => "The match is assigned to court number ".$courts[0]['id']);
+	        }
+	        catch(PDOException $e)
+	        {
+	            Monolog::getInstance()->addAlert('Error starting match, PDOException: ' . var_export($e, true));
+	        }
+			
+			return array("type" => "", "text" => "Could not assign match to court");
+		}
 	}
 }

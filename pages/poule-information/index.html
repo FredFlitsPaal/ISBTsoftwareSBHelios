@@ -33,7 +33,10 @@
 									Points
 								</th>
 								<th rowspan="2" class="points-balance align-center">
-									Balance
+									Average sets<br>won/match
+								</th>
+								<th rowspan="2" class="points-balance align-center">
+									Points<br>balance
 								</th>								
 							</tr>
 							<tr>
@@ -99,6 +102,9 @@
 									</td>
 									<td>
 										<?php echo $result['points_lost']; ?>
+									</td>
+									<td class="points-balance align-center">
+										<button class="btn btn-inverse disabled"><?php echo round($result['average_sets_won'], 2); ?></button>
 									</td>
 									<td class="points-balance align-center">
 										<button class="btn btn-inverse disabled"><?php echo $result['points_balance']; ?></button>

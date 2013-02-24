@@ -121,7 +121,7 @@ class pouleInformationController
                     LEFT JOIN `user` `user2` ON(user2 = user2.id) 
 					INNER JOIN `poule` ON(`team`.poule = `poule`.id)
 					WHERE `poule`.id = :poule
-					ORDER BY matches_won DESC, matches_draw DESC, sets_won DESC, points_won DESC, points_balance DESC";
+					ORDER BY `average_sets_won` DESC, `points_balance` DESC";
 
             $stmt = $pdo->prepare($sql);
 			$stmt->bindParam(":poule", $poule);
@@ -250,6 +250,7 @@ class pouleInformationController
 					`sets_lost` = `sets_lost` + :sets_lost,
 					`points_won` = `points_won` + :points_won,
 					`points_lost` = `points_lost` + :points_lost,
+					`average_sets_won` = `sets_won` / `matches_played`,
 					`points_balance` = `points_balance` + :points_won - :points_lost
 				WHERE id = :team";
 		$stmt = $pdo->prepare($sql);
@@ -307,7 +308,7 @@ class pouleInformationController
 	{
 		if(sizeof($matches) > 0)
 		{
-			Monolog::getInstance()->addDebug('Matches: ' . var_export($matches, true));
+			//Monolog::getInstance()->addDebug('Matches: ' . var_export($matches, true));
 			
 			foreach($matches as $match)
 			{
@@ -327,6 +328,7 @@ class pouleInformationController
                 }
 				$stmt->execute();
 			}
+			Monolog::getInstance()->addDebug('Matches added for poule: '.$poule['id'].', round: '.$poule['round'] + 1);
 		}
 	}
 	
