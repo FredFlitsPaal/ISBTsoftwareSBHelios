@@ -318,10 +318,18 @@ class ToolBox{
 		$playersOnCourts = self::getPlayersOnCourts();
 		
 		$delayed = array();
-		if(in_array($match['team1_user1'], $playersOnCourts) == true) $delayed[] = $match['team1_user1'];
-		if(in_array($match['team1_user2'], $playersOnCourts) == true) $delayed[] = $match['team1_user2'];
-		if(in_array($match['team2_user1'], $playersOnCourts) == true) $delayed[] = $match['team2_user1'];
-		if(in_array($match['team2_user2'], $playersOnCourts) == true) $delayed[] = $match['team2_user2'];
+		if(isset($match['team1_user1'])) {
+			if(in_array($match['team1_user1'], $playersOnCourts) == true) $delayed[] = $match['team1_user1'];
+		}
+		if(isset($match['team1_user2'])) {
+			if(in_array($match['team1_user2'], $playersOnCourts) == true) $delayed[] = $match['team1_user2'];
+		}
+		if(isset($match['team2_user1'])) {
+			if(in_array($match['team2_user1'], $playersOnCourts) == true) $delayed[] = $match['team2_user1'];
+		}
+		if(isset($match['team2_user2'])) {
+			if(in_array($match['team2_user2'], $playersOnCourts) == true) $delayed[] = $match['team2_user2'];
+		}
 
 		return $delayed;
 	}

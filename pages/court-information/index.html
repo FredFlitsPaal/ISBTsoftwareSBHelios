@@ -49,12 +49,12 @@
 									</td>
 									<td class="team">
 											<div><?php echo $match['team1_user1']; ?></div>
-											<div>&nbsp;+&nbsp;</div>
+											<div><?php if(isset($match['team1_user2'])) { ?>&nbsp;+&nbsp;<?php } ?></div>
 											<div><?php echo (!empty($match['team1_user2']) ? $match['team1_user2'] : ""); ?></div>
 									</td>
 									<td class="team">
 										<div><?php echo $match['team2_user1']; ?></div>
-										<div>&nbsp;+&nbsp;</div>
+										<div><?php if(isset($match['team2_user2'])) { ?>&nbsp;+&nbsp;<?php } ?></div>
 										<div><?php echo (!empty($match['team2_user2']) ? $match['team2_user2'] : ""); ?></div>
 									</td>
 									<td>
@@ -119,12 +119,12 @@
 									</td>
 									<td class="team">
 											<div><?php echo ToolBox::getCheckedStatusPlayer($match['team1_user1'], $match); ?></div>
-											<div>&nbsp;+&nbsp;</div>
+											<div><?php if(isset($match['team1_user2'])) { ?>&nbsp;+&nbsp;<?php } ?></div>
 											<div><?php echo ToolBox::getCheckedStatusPlayer($match['team1_user2'], $match); ?></div>
 									</td>
 									<td class="team">
 										<div><?php echo ToolBox::getCheckedStatusPlayer($match['team2_user1'], $match); ?></div>
-										<div>&nbsp;+&nbsp;</div>
+										<div><?php if(isset($match['team2_user2'])) { ?>&nbsp;+&nbsp;<?php } ?></div>
 										<div><?php echo ToolBox::getCheckedStatusPlayer($match['team2_user2'], $match); ?></div>
 									</td>
 									<td>
