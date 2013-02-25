@@ -77,6 +77,7 @@ class carousselController
 				$sStarttime = str_replace("|", " ", $latestStartTime);
 				$addStarttime = " AND `match`.start_time > :starttime";
 			} else {
+				$addStarttime = "";
 				if($maxAllowed > 0) $addLimit = " LIMIT 0," . $maxAllowed;
 			}
 			
@@ -167,6 +168,7 @@ class carousselController
 				$endTime = str_replace("|", " ", $latestEndTime);
 				$addEndtime = " AND `match`.end_time > :endtime";
 			} else {
+				$addEndtime = "";
 				if($maxAllowed > 0) $addLimit = " LIMIT 0," . $maxAllowed;
 			}
 

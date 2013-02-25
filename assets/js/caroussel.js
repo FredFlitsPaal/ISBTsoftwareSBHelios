@@ -66,7 +66,7 @@ function servePage(anchor){
 	servePageWithData(anchor, []);
 }
 
-var maxAllowed = 5;
+var maxAllowed = 10;
 
 function startRefresh(set) {
 	refreshTime = 10000;
