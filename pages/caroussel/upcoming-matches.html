@@ -1,0 +1,16 @@
+<?php foreach($newUpcomingMatches as $newMatch) { ?>
+						<div class="row-fluid slide-down" id="matchid|<?php echo $newMatch["id"]; ?>">
+							<div class="span5 teams team1">
+								<?php echo $newMatch["team1_user1"]; ?><br /><?php echo $newMatch["team1_user2"]; ?>
+							</div>
+							<div class="span5 teams team2">
+								<?php echo $newMatch["team2_user1"]; ?><br /><?php echo $newMatch["team2_user2"]; ?>
+							</div>
+							<div class="span2 poule">
+								<div class="vertical-aligner">
+									<h1><?php echo $newMatch["category_level"]; ?></h1>
+									<div><?php echo str_replace(" ", "<br />", $newMatch["category_name"]); ?></div>
+								</div>
+							</div>
+						</div>
+<?php } ?>

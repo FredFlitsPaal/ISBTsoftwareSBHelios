@@ -1,0 +1,15 @@
+<?php foreach($newMatchScores as $newMatch) { ?>
+						<div class="row-fluid slide-down" id="endtime|<?php echo str_replace(" ", "|", $newMatch["end_time"]); ?>">
+							<div class="span5 teams team1">
+							<?php echo $newMatch["team1_user1"]; ?><br /><?php echo $newMatch["team1_user2"]; ?>
+							</div>
+							<div class="span5 teams team2">
+							<?php echo $newMatch["team2_user1"]; ?><br /><?php echo $newMatch["team2_user2"]; ?>
+							</div>
+							<div class="span2 score">
+								<div class="vertical-aligner">
+									<?php echo $newMatch["team1_set1_score"]; ?>-<?php echo $newMatch["team2_set1_score"]; ?><br /><?php echo $newMatch["team1_set2_score"]; ?>-<?php echo $newMatch["team2_set2_score"]; ?>
+								</div>
+							</div>
+						</div>
+<?php } ?>

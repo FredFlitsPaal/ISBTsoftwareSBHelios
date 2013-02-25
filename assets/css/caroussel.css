@@ -1,0 +1,105 @@
+body {
+	background: url("../img/caroussel/2560.jpg") no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	font-size: 1em;
+	line-height: 1.2em;
+}
+
+header {
+	line-height: 10em;
+}
+
+header h1 {
+	color: #000;
+	line-height: 10em;
+}
+
+header .messages {
+	margin-top: 4em;
+	line-height: 1em;
+	vertical-align: middle;
+	text-align: center;
+}
+
+img.isbt-logo {
+	max-height: 10em;
+}
+
+img.dirtydisney-logo {
+	vertical-align: middle;
+}
+
+.match-container {
+	overflow: hidden;
+	box-shadow: 0 0 0.2em rgba(0,0,0,0.2);
+	border-radius: 0.2em;
+	border: 0.1em solid rgba(255,255,255,0.3);
+}
+
+.match-header {
+	text-align: center;
+	background-color:rgba(255,255,255,0.7);
+	border-bottom: 0.15em solid rgba(255,255,255,0.6) !important;
+}
+
+.match-data {
+	background-color:rgba(255,255,255,0.8);
+}
+
+.match-data > div {
+	border-bottom: 0.1em solid rgba(255,255,255,0.6);
+}
+
+.match-data > div:last-child {
+	border-bottom: 0;
+}
+
+.match-data > div {
+	padding: 0.6em 0.3em;
+}
+
+.match-data > div .teams {
+	border-left: 0.2em solid #000;
+	padding-left: 0.4em;
+	margin: 0.5em 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.match-data > div .score, .match-data > div .court, .match-data > div .poule {
+	font-weight: bold;
+	text-align: center;
+	line-height: 3em;
+}
+
+.match-data > div .vertical-aligner {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 1.2em;
+}
+
+.match-data > div .court div, .match-data > div .poule div {
+	width: 100%;
+	font-size: 0.8em;
+	line-height: 0.8em;
+	text-align: center;
+	font-variant: small-caps;
+}
+
+.match-data > div h1 {
+	margin: 0;
+	padding: 0;
+	line-height: 0.9em;
+}
+
+.match-data > div.slide-down {
+	display: none;
+}
+
+.match-data > div.highlight {
+/* 	background-color: rgba(0,0,0,0.05); */
+}

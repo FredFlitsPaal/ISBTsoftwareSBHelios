@@ -6,6 +6,15 @@ new initialiseISBT();
 
 if(isset($_POST["page"])){
     $l_sPage = $_POST["page"];
+	
+	if(substr($l_sPage, 0, 10) == "caroussel_")
+	{
+		Monolog::getInstance()->addDebug('Calling carousselController now!');
+		new carousselController(substr($l_sPage, 10));
+		
+		exit;
+	
+	}
 } 
 
 Monolog::getInstance()->addDebug('calling pageController now!');
