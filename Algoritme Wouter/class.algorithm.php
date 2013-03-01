@@ -47,10 +47,13 @@ class RoundGenerator {
 			    		// The chosen next round will induce a deadlock, so prevent it!
 						$this->aPlayedMatches = $this->aFictionalDeadlockPlayedMatches;
 						
+						$this->forbiddenDeadlockMatches = array();
 						foreach($this->aPossibleDeadlockMatches as $aDeadlockMatch) {
 							array_push($this->forbiddenDeadlockMatches, array($aDeadlockMatch["team1"], $aDeadlockMatch["team2"]));
 						}
-
+						// You have to allow one of the forbidden matches, because otherwise it isn't possible to generate a new round anymore
+						array_shift($this->forbiddenDeadlockMatches);
+						
 				    	$this->execute(false, true, true);
 			    	}
 			    } else {
@@ -156,8 +159,8 @@ class RoundGenerator {
 		$iMaxRounds = count($this->aTeams) - 1;
 		$iRoundsLeftAfterThisRound = $iMaxRounds - $this->round;
 		
-		if($iRoundsLeftAfterThisRound <= self::DeadlockRiskLevel){
-			// There is a risk to generate a deadlock this round
+		if($iRoundsLeftAfterThisRound == self::DeadlockRiskLevel){
+			// There is a risk to generate a deadlock this round, after this round you're save
 			return true;
 		}
 	}
@@ -182,11 +185,10 @@ class RoundGenerator {
 
 // aTeam may just contain team id's
 $aTeams = array(array("id"=> "1"), array("id"=> "2"), array("id"=> "3"), array("id"=> "4"), array("id"=> "5"), array("id"=> "6"));
-// aPlayedMatches may just contain team id's
-// PreDeathlock (algorithm chooses correct): $aPlayedMatches = array(array(1, 2), array(3, 4), array(5, 6), array(1, 6), array(2, 3), array(4, 5));
-//PreDeathlock (algorithm chooses wrong): 
-$aPlayedMatches = array(array(1, 4), array(1, 6), array(2, 3), array(2, 5), array(3, 6), array(4, 5));
-// Deathlock: $aPlayedMatches = array(array(1, 2), array(3, 4), array(5, 6), array(1, 6), array(2, 3), array(4, 5), array(1, 4), array(3, 6), array(2, 5));
+// aPlayedMatches contains team id's
+// PreDeathlock (algorithm chooses correct): $aPlayedMatches = array(array("team1" => 1, "team2" => 2), array("team1" => 3, "team2" => 4), array("team1" => 5, "team2" => 6), array("team1" => 1, "team2" => 6), array("team1" => 2, "team2" => 3), array("team1" => 4, "team2" => 5));
+//PreDeathlock (algorithm chooses wrong in first instance, but correct after deadlock check): 
+$aPlayedMatches = array(array("team1" => 1, "team2" => 4), array("team1" => 1, "team2" => 6), array("team1" => 2, "team2" => 3), array("team1" => 2, "team2" => 5), array("team1" => 3, "team2" => 6), array("team1" => 4, "team2" => 5));
 
 $oRoundGenerator = new RoundGenerator($aTeams, $aPlayedMatches, 3);
 $aPossibleMatches = $oRoundGenerator->execute();
