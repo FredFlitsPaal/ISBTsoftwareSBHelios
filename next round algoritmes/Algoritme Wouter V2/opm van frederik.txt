@@ -1,0 +1,29 @@
+
+
+#### //?? penalty checken?? -- waarsch. om te checken of deze wedstrijd al in een ronde zat die geprobeerd werd te genereren maar dat mislukte.. ??
+
+
+//moeten we hier niet alsnog checken??, aangezien een team nu miss wel een wedstrijd heeft maar niet de best mogelijke???
+- zoals het nu is ingericht wordt de voorkeur gegeven aan een laagste penalty voor het hoogste team, alles doorlopen en de penalty van alle wedstrijden in een ronde optellen zou betekenen dat we op gaan voor de laagste gem. deler. doen we nu niet.. opzich maakt dat niet uit maar het neemt een hoop andere voordelen met zich mee, namelijk we hoeven een potentiele ronde niet te checken op een deadlock als de gem. deler lager is dan de tot dan toe beste optie die gevonden is
+
+
+
+#### //om onderstaande reden id van het byeteam overal gelijk trekken, m.a.w. aantal teams + 1 = id bye team
+//hier kunnen we ervoor zorgen dat byes uitgedeeld worden bij voorkeur aan het laagste team door het bye team een id te geven dat 1 hoger is dan het laatste team...
+//in dit geval is de hoogste waarschijnlijkheid van een bye tegen het hoogste team
+
+
+### // stel 3 tegen 4 en 3 tegen 5 heeft al gespeeld, dan stopt ie dus gewoon? - regel 74 class.roundgenerator (waarsch. klopt dit wel, maar snap ik het niet ;-))
+
+#### //waarom? $i-- 	- regel 77 class.roundgenerator (waarsch. klopt dit wel, maar snap ik het niet ;-))
+
+
+### //could return NULL, hier wordt geen rekening mee gehouden, - regel 45 class.roundgenerator
+
+
+##### // in principe kan hij hier toch nooit komen als je twee rondes doorrekend naar voren??
+
+#### checkIfGeneratedRoundLeadsToDeadlock - hier wordt een simulatie gedaan van de volgende ronde, dit is indd een mogelijkheid.
+probleem is echter dat ook in de laatste ronde nog de deadlock op kan treden en daar wordt geen rekening mee gehouden. (toch?)
+hier is een "simpele" oplossing voor, namelijk, zoals johan vertelde, checken op oneven eilandjes. dan hoef je niet door te rekenen naar volgende rondes, dat is een stuk overzichtelijker.
+zijn er oneven eilandjes, dan kan dit theoretisch een deadlock geven (hoeft niet) en dan zeggen we gewoon: deadlock risico, deze ronde mag niet.

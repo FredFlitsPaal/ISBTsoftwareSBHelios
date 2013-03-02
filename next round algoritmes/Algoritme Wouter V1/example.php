@@ -1,19 +1,9 @@
 <?php
-include("class.roundgenerator.php");
-
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-
-//PDO credentials isbt db
-define('ISBT_DSN', 'mysql:dbname=isbt;host=127.0.0.1');
-define('ISBT_USER', 'isbt');
-define('ISBT_PWD', 'wrAn6wrEhedr');
-
 class Example
 {
-	const pouleId = 1;
+	const pouleId = 2;
 	
-	private $iNextRound;
+	private $iCurrentRound;
 	private $aTeams = array();
 	private $aTeamIDs = array();
 	private $aAllreadyPlayedMatches = array();
@@ -21,30 +11,32 @@ class Example
 	private $aPossibleMatches = array();
 	
 	public function Example()
-	{
+	{echo'hoi';exit;
         $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		
 		$this->aTeams = $this->getTeams($pdo, array("id" => self::pouleId));
-		$this->iNextRound = $this->findNextRound();
+		$this->iCurrentRound = $this->findCurrentRound();
 		$this->aAllreadyPlayedMatches = $this->getAlreadyPlayedMatches($pdo, array("id" => self::pouleId));
 		
 		//To test what happens with an uneven array
 		//array_pop($this->aTeams);
 		
-		if(count($this->aTeams) & 1) {
+		if(count($this->aTeams) % 2) {
 			//Add bye team and bye team matches if there is an uneven number of teams
 			$this->addByeTeam();
 			$this->addByeTeamMatches();
+			Monolog::getInstance()->addDebug('added a bye team'));
 		}
-		
+		//print_r($this->aAllreadyPlayedMatches);
+		exit;
 		$this->aPossibleMatches = array();
 		if(sizeof($this->aTeams) > 1)
 		{
 			// Just input the team id's to the algorithm
 			$this->setTeamIDs();
 //            Monolog::getInstance()->addDebug('New round : ' . ($poule['round'] + 1));
-			$oRoundGenerator = new RoundGenerator($this->aTeamIDs, $this->aAllreadyPlayedMatches, $this->iNextRound);
+			$oRoundGenerator = new RoundGenerator($this->aTeamIDs, $this->aAllreadyPlayedMatches, $this->iCurrentRound);
 			$this->aPossibleMatches = $oRoundGenerator->execute();
 		}
 
@@ -79,13 +71,13 @@ class Example
 	
 	private function addByeTeam()
 	{
-		$this->aTeams[] = array("id" => "10000000", "matches_played" => $this->iNextRound - 1);
+		$this->aTeams[] = array("id" => "10000000", "matches_played" => $this->iCurrentRound - 1);
 	}
 	
 	private function addByeTeamMatches()
 	{
 		foreach($this->aTeams as $aTeam) {
-			if($aTeam["matches_played"] < $this->iNextRound) array_push($this->aAllreadyPlayedMatches, array("team1" => $aTeam["id"], "team2" => "-1"));
+			if($aTeam["matches_played"] < $this->iCurrentRound) array_push($this->aAllreadyPlayedMatches, array("team1" => $aTeam["id"], "team2" => "-1"));
 		}
 	}
 
@@ -122,19 +114,32 @@ class Example
         }
 	}
 	
-	private function findNextRound()
+	private function findCurrentRound()
 	{
 		$i = 0;
-		foreach($this->aTeams as $aTeam) {
-			if($aTeam["matches_played"] > $i) $i = $aTeam["matches_played"];
+		foreach($this->aTeams as $aTeam)
+		{
+			if($aTeam["matches_played"] > $i)
+			{
+				$i = $aTeam["matches_played"];	
+			} 
 		}
 		
 		return $i;
 	}
 }
 
-$oExample = new Example();
-$aPossibleMatches = $oExample->getPossibleMatches();
+include("class.roundgenerator.php");
+
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
+//PDO credentials isbt db
+define('ISBT_DSN', 'mysql:dbname=isbt;host=127.0.0.1');
+define('ISBT_USER', 'isbt');
+define('ISBT_PWD', 'wrAn6wrEhedr');
 
 echo "<pre>";
-var_dump($aPossibleMatches);
+$oExample = new Example();
+//$aPossibleMatches = $oExample->getPossibleMatches();
+//var_dump($aPossibleMatches);

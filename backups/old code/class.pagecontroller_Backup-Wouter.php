@@ -1,5 +1,5 @@
 <?php
-
+/*
 class BpageController{
     //security, login, etc.. later in dev.
     
@@ -15,7 +15,7 @@ class BpageController{
         }
 
 
-       	switch($p_aPage[0]) {
+       	switch($p_aPage[0]) {*/
 /*
         	case 'poule-information':
         		if($p_aPage[0] != $p_aPage[1]) {
@@ -25,6 +25,7 @@ class BpageController{
 	        	}
         		break;
 */
+/*
         	default:
         		$p_aPage = $this->checkPageExists($p_aPage);
         		$l_aPageCall["html"] = file_get_contents(PAGE_DIR . $p_aPage[0] . '/' . $p_aPage[1] . '.html');                
@@ -45,3 +46,4 @@ class BpageController{
         }
     }
 }
+*/

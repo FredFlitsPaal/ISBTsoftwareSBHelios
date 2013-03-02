@@ -15,7 +15,7 @@ class RoundGenerator {
 	public $aTeams = array();
 	private $round;
 	
-	private $recurseMatchResult = false;
+	//private $recurseMatchResult = false;
 	private $forbiddenDeadlockMatches = array();
 
 	public function __construct($aTeams, $aPlayedMatches, $iRound)
@@ -31,16 +31,23 @@ class RoundGenerator {
 		$this->aPossibleMatches = array();
 
 		// Generate possible new round
-		for($i = 0; $i < count($this->aTeams); $i++) {
+		$i_NumTeams = count($this->aTeams);
+
+		for($i = 0; $i < $i_NumTeams; $i++)
+		{
 		    $j = $i + 1;
-		    if(!$this->recurseMatch($i, $j, $ignoreMatchesAlreadyPlayed)) {
+		    if($this->recurseMatch($i, $j, $ignoreMatchesAlreadyPlayed) == false) {
 		    	// recurseMatch returned false, this means the round it was building wasn't possible at a certain level
 		    	
 		    	// Remove a higher level and choose an lower opponent, then recheck if the round is possible
+		    	//could return NULL
 		    	$aLastMatchPossibleMatches = array_pop($this->aPossibleMatches);
-		    	if(empty($this->aPossibleMatches)) {
-		    		if($deadlockCheck && !$deadlockFailed) {
+		    	if(empty($this->aPossibleMatches) == true)
+		    	{
+		    		if($deadlockCheck == true && $deadlockFailed == false) {
 			    		// The chosen next round will induce a deadlock, so prevent it!
+			    		//hier komt ie nooit toch?? - omdat bovenstaande op regel 45 nooit empty zal zijn als $ignoreMatchesAlreadyPlayed = true; 
+			    		//oke hij komt hier wel bij de deadlock check indd..
 						$this->aPlayedMatches = $this->aFictionalDeadlockPlayedMatches;
 						
 						$this->forbiddenDeadlockMatches = array();
@@ -51,21 +58,27 @@ class RoundGenerator {
 						array_shift($this->forbiddenDeadlockMatches);
 						
 				    	$this->execute(false, true, true);
-			    	} else {
+			    	}
+			    	else
+			    	{
+			    		// in principe kan hij hier toch nooit komen als je twee rondes doorrekend naar voren??
 			    		// Unavoidable deadlock!!!
 			    		// It isn't possible to create a round without duplicate matches, so duplicate one WITH duplicate matches
 				    	$this->execute(true, true);
 			    	}
 
-			    } else {
+			    }
+			    else
+			    {
+			    	// stel 3 tegen 4 en 3 tegen 5 heeft al gespeeld, dan stopt ie dus gewoon?
 			    	$this->recurseMatch($aLastMatchPossibleMatches["team1"], $aLastMatchPossibleMatches["team2"] + 1, $ignoreMatchesAlreadyPlayed);
 			    }
-		    	
+		    	//waarom?
 		    	$i--;
 		    }
 		}
 		
-		if($this->isRoundBeforeDeadlockRisk() && !$deadlockCheck) {
+		if($this->isRoundBeforeDeadlockRisk() == true && $deadlockCheck == false) {
 			// Check if a deadlock occures in the next round when the choosen round will be played
 			$this->checkIfGeneratedRoundLeadsToDeadlock();
 		}
@@ -75,32 +88,53 @@ class RoundGenerator {
 	
 	private function recurseMatch($currentTeamId, $opponentTeamId, $ignoreMatchesAlreadyPlayed = false)
 	{
-		// If current team already in possibleMatches it doesn't have to be set anymore
-	    if(!$this->idExistsInPossibleMatches($this->aTeams[$currentTeamId]["id"])) {
-	    	// If the array id of the opponent exceeds the number of teams, reset it to nill
-			if($opponentTeamId >= count($this->aTeams)) $opponentTeamId = 0;
+		//moeten we hier niet alsnog checken??, aangezien een team nu miss wel een wedstrijd heeft maar niet de best mogelijke???
+
+		// check If current team is already in the possibleMatches array and check if array key penalty doesn't exist
+	    if($this->idExistsInPossibleMatches($this->aTeams[$currentTeamId]["id"]) == false)
+	    {
+	    	// If the array id of the opponent exceeds the number of teams, reset it to zero
+	    	
+	    	//om onderstaande reden id van het byeteam overal gelijk trekken, m.a.w. aantal teams + 1 = id bye team
+	    	//hier kunnen we ervoor zorgen dat byes uitgedeeld worden bij voorkeur aan het laagste team door het bye team een id te geven dat 1 hoger is dan het laatste team...
+			//in dit geval is de hoogste waarschijnlijkheid van een bye tegen het hoogste team
+			if($opponentTeamId >= count($this->aTeams))
+			{
+				$opponentTeamId = 0;
+			}
+			
 
 	        // Penalty based on distance teams, this is absolute to prevent negative values
 	        $iPenalty =  abs($opponentTeamId - $currentTeamId);
 	        $aMatchOption = array("team1" => $this->aTeams[$currentTeamId]["id"], "team2" => $this->aTeams[$opponentTeamId]["id"], "penalty" => $iPenalty);
 
-			if($this->matchIsValid($aMatchOption, $currentTeamId, $opponentTeamId) || $ignoreMatchesAlreadyPlayed == true) {
+			if($this->matchIsValid($aMatchOption, $currentTeamId, $opponentTeamId) == true || $ignoreMatchesAlreadyPlayed == true)
+			{
 				// Match is possible, set it
 	            $this->aPossibleMatches[] = $aMatchOption;
-	            $this->recurseMatchResult = true;
-		    } else {
-		    	if($this->aTeams[$currentTeamId]["id"] != $this->aTeams[$opponentTeamId]["id"]) {
+	            $brecurseMatchResult = true;
+		    }
+		    else
+		    {
+		    	if($this->aTeams[$currentTeamId]["id"] != $this->aTeams[$opponentTeamId]["id"])
+		    	{
 		    		// The match isn't possible between these opponents, but we can still try to match with an other opponent
 		            $this->recurseMatch($currentTeamId, $opponentTeamId + 1, $ignoreMatchesAlreadyPlayed);
-		        } else {
-			        // Match cannot be matched in this possibility with the current upper matchlevels, no other opponents left
-		            $this->recurseMatchResult = false;
+		        }
+		        else
+		        {
+			        // a team can't play against his self, this check could be done first to optimize algorithm...
+		            $brecurseMatchResult = false;
 		        }
 			}
 	    }
+	    else
+	    {
+	    	$brecurseMatchResult = false;
+	    }
 	    
 	    //Jippie, match set!
-	    return $this->recurseMatchResult;
+	    return $brecurseMatchResult;
 	}
 	
 	private function matchIsValid($aMatchOption, $currentTeamId, $opponentTeamId)
@@ -119,9 +153,12 @@ class RoundGenerator {
 	{
 		unset($aMatch["penalty"]);
 		
-	    foreach($this->aPlayedMatches as $aPlayedMatch) {
-	        if(count(array_intersect($aPlayedMatch, $aMatch)) == count($aMatch)) {
-	            // ID already in possible matches array
+	    foreach($this->aPlayedMatches as $aPlayedMatch)
+	    {
+	    	//2 = 2 if true
+	        if(count(array_intersect($aPlayedMatch, $aMatch)) == count($aMatch))
+	        {
+	            // ID already in possible aPlayedMatches array
 	            return true;
 	        }
 	    }
@@ -133,9 +170,12 @@ class RoundGenerator {
 	{
 		unset($aMatch["penalty"]);
 		
-	    foreach($this->forbiddenDeadlockMatches as $aForbiddenMatch) {
-	        if(count(array_intersect($aForbiddenMatch, $aMatch)) == count($aMatch)) {
-	            // ID already in possible matches array
+	    foreach($this->forbiddenDeadlockMatches as $aForbiddenMatch)
+	    {
+	    	//2 = 2 if true
+	        if(count(array_intersect($aForbiddenMatch, $aMatch)) == count($aMatch))
+	        {
+	            // ID already in forbiddenDeadlockMatches array
 	            return true;
 	        }
 	    }
@@ -146,8 +186,11 @@ class RoundGenerator {
 	private function idExistsInPossibleMatches($id)
 	{
 	    $bResult = false;
-	    foreach($this->aPossibleMatches as $aPossibleMatch) {
-	        if(in_array($id, $aPossibleMatch) && array_search($id, $aPossibleMatch) != "penalty") {
+	    foreach($this->aPossibleMatches as $aPossibleMatch)
+	    {
+	    	//?? penalty checken??
+	        if(in_array($id, $aPossibleMatch) && array_search($id, $aPossibleMatch) != "penalty")
+	        {
 	            // ID already in possible matches array
 	            $bResult = true;
 	        }
@@ -166,6 +209,10 @@ class RoundGenerator {
 		}
 	}
 	
+	//onderstaande kunnen we op deze manier waarsch. wel doen, echter snap ik het niet helemaal meer nu :-P
+	//wat makkelijker / overzichtelijker is, is om hier niet weer twee hele rondes door te gaan rekenen, want dat kan ook, en dat gebeuerd nu,
+	//maar om hier te kijken of er oneven eilandjes zijn, want als dat zo is dan kan het een deadlock zijn, maar hoeft niet.
+	//als het zo kan zijn, dan zeggen we dat het een deadlock is...
 	private function checkIfGeneratedRoundLeadsToDeadlock() {
 		// Make backup of new generated round
 		$this->aPossibleDeadlockMatches = $this->aPossibleMatches;
