@@ -39,11 +39,7 @@ class RoundGenerator {
 		    	// Remove a higher level and choose an lower opponent, then recheck if the round is possible
 		    	$aLastMatchPossibleMatches = array_pop($this->aPossibleMatches);
 		    	if(empty($this->aPossibleMatches)) {
-		    		if($deadlockCheck && $deadlockFailed) {
-		    			// Unavoidable deadlock!!!
-			    		// It isn't possible to create a round without duplicate matches, so duplicate one WITH duplicate matches
-				    	$this->execute(true, true);
-			    	} else {
+		    		if($deadlockCheck && !$deadlockFailed) {
 			    		// The chosen next round will induce a deadlock, so prevent it!
 						$this->aPlayedMatches = $this->aFictionalDeadlockPlayedMatches;
 						
@@ -55,7 +51,12 @@ class RoundGenerator {
 						array_shift($this->forbiddenDeadlockMatches);
 						
 				    	$this->execute(false, true, true);
+			    	} else {
+			    		// Unavoidable deadlock!!!
+			    		// It isn't possible to create a round without duplicate matches, so duplicate one WITH duplicate matches
+				    	$this->execute(true, true);
 			    	}
+
 			    } else {
 			    	$this->recurseMatch($aLastMatchPossibleMatches["team1"], $aLastMatchPossibleMatches["team2"] + 1, $ignoreMatchesAlreadyPlayed);
 			    }
@@ -183,6 +184,7 @@ class RoundGenerator {
 	}
 }
 
+/*
 // aTeam may just contain team id's
 $aTeams = array(array("id"=> "1"), array("id"=> "2"), array("id"=> "3"), array("id"=> "4"), array("id"=> "5"), array("id"=> "6"));
 // aPlayedMatches contains team id's
@@ -196,3 +198,4 @@ $aPossibleMatches = $oRoundGenerator->execute();
 echo "<pre>";
 var_dump($aPossibleMatches);
 echo "</pre>";
+*/
