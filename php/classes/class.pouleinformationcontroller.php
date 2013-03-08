@@ -337,7 +337,7 @@ class pouleInformationController
 		$sql = "SELECT *
 				FROM `team`
 				WHERE `poule` = :poule
-				ORDER BY `matches_played` ASC";
+				ORDER BY `average_sets_won` DESC, `points_balance` DESC";
 		$stmt = $pdo->prepare($sql);
 		$stmt->bindParam(":poule", $poule['id']);
 		$stmt->execute();
