@@ -108,6 +108,7 @@ class RoundGenerator {
 	}
 }
 
+/*
 // aTeam may just contain team id's
 $aTeams = array(array("id"=> "1"), array("id"=> "2"), array("id"=> "3"), array("id"=> "4"), array("id"=> "5"), array("id"=> "6"));
 // aPlayedMatches contains team id's
@@ -122,3 +123,4 @@ $aPossibleMatches = $oRoundGenerator->execute();
 echo "<pre>";
 var_dump($aPossibleMatches);
 echo "</pre>";
+*/
