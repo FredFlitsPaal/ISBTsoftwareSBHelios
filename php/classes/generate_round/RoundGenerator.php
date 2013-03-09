@@ -107,15 +107,13 @@ class RoundGenerator {
 	    return $bResult;
 	}
 }
-/*
 
 // aTeam may just contain team id's
 $aTeams = array(array("id"=> "1"), array("id"=> "2"), array("id"=> "3"), array("id"=> "4"), array("id"=> "5"), array("id"=> "6"));
 // aPlayedMatches contains team id's
 // PreDeathlock (algorithm chooses correct): $aPlayedMatches = array(array("team1" => 1, "team2" => 2), array("team1" => 3, "team2" => 4), array("team1" => 5, "team2" => 6), array("team1" => 1, "team2" => 6), array("team1" => 2, "team2" => 3), array("team1" => 4, "team2" => 5));
 //PreDeathlock (algorithm chooses wrong in first instance, but correct after deadlock check): $aPlayedMatches = array(array("team1" => 1, "team2" => 4), array("team1" => 1, "team2" => 6), array("team1" => 2, "team2" => 3), array("team1" => 2, "team2" => 5), array("team1" => 3, "team2" => 6), array("team1" => 4, "team2" => 5));
-//Deadlock occured: 
-$aPlayedMatches = array(array("team1" => 1, "team2" => 4), array("team1" => 1, "team2" => 6), array("team1" => 2, "team2" => 3), array("team1" => 2, "team2" => 5), array("team1" => 3, "team2" => 6), array("team1" => 4, "team2" => 5), array("team1" => 1, "team2" => 2), array("team1" => 3, "team2" => 4), array("team1" => 5, "team2" => 6));
+//Deadlock occured: $aPlayedMatches = array(array("team1" => 1, "team2" => 4), array("team1" => 1, "team2" => 6), array("team1" => 2, "team2" => 3), array("team1" => 2, "team2" => 5), array("team1" => 3, "team2" => 6), array("team1" => 4, "team2" => 5), array("team1" => 1, "team2" => 2), array("team1" => 3, "team2" => 4), array("team1" => 5, "team2" => 6));
 
 
 $oRoundGenerator = new RoundGenerator($aTeams, $aPlayedMatches);
@@ -124,4 +122,3 @@ $aPossibleMatches = $oRoundGenerator->execute();
 echo "<pre>";
 var_dump($aPossibleMatches);
 echo "</pre>";
-*/
