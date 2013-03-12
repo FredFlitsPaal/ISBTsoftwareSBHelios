@@ -1,6 +1,6 @@
 <?php
 require_once("class.roundgenerator.php");
-require_once(dirname(__FILE__) . "/../php/classes/class.initialiseISBT.php");
+require_once(dirname(__FILE__) . "/../../php/classes/class.initialiseISBT.php");
 new initialiseISBT();
 
 error_reporting(E_ALL);
