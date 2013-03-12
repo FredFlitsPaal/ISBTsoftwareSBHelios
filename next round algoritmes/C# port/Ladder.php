@@ -128,13 +128,18 @@ class Ladder
 		if ($depth == floor((count($this->teams) - 1) / 2)) 
         {
 			// Kijk naar deadlock situaties
-			if ($this->round > count($this->teams) - 4)
+			/*
+if ($this->round > count($this->teams) - 4)
 			{
+				Monolog::getInstance()->addAlert("Kijk naar deadlock situaties");
+			
 				//Deze indeling is niet geldig vanwege deadlock
 				//if(unevenGraph(teams, generatedMatches)) return;
 				//ik heb 8 knopen, verdeeld in twee ielandjes van 3 en 5 knopen
 				if ($this->graph->HasUnevenSubgraph())
 				{
+					Monolog::getInstance()->addAlert("Deadlock: HasUnevenSubgraph");
+					
 					if ($this->minPenalty == PHP_INT_MAX)
 					{
 						$this->bestMatching = $generatedMatches;
@@ -149,6 +154,8 @@ class Ladder
 				//Deze indeling leidt onvermijdelijk tot een deadlock in de volgende ronde
 				if ($this->graph->LeadsToUnevenSubgraph())
 				{
+					Monolog::getInstance()->addAlert("Deadlock risico: LeadsToUnevenSubgraph");
+					
 					$matchedUp[$matchWith] = false;
 					unset($generatedMatches[count($generatedMatches) - 1]);
 					$this->graph->AddUndirectedEdge($first, $matchWith);
@@ -158,12 +165,14 @@ class Ladder
 				//Deze indeling leidt onvermijdelijk tot een deadlock over 2 ronden
 				if ($this->round > count($this->teams) - 4 && $this->graph->LeadsToSingleConnectionGraph())
 				{
+					Monolog::getInstance()->addAlert("Deadlock risico: LeadsToSingleConnectionGraph");
 					$matchedUp[$matchWith] = false;
 					unset($generatedMatches[count($generatedMatches) - 1]);
 					$this->graph->AddUndirectedEdge($first, $matchWith);
 					return;
 				}
 			}
+*/
 
 			//Als deze score beter is, update dan de beste score
 			if ($penalty < $this->minPenalty)
