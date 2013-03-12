@@ -115,34 +115,44 @@ class ToolBox{
         $team1Score = 0;
         $team2Score = 0;
 
-        if(!empty($match) && !empty($match['team1_set1_score']))
+        if(isset($match['team1_set1_score']) == true && isset($match['team2_set1_score']) == true)
         {
             if($match['team1_set1_score'] > $match['team2_set1_score'])
+            {
                 $team1Score++;
+            }
             else
+            {
                 $team2Score++;
-        }
-        else
-        {
-            return "";
+            }
         }
 
-        if(!empty($match['team1_set2_score']))
+        if(isset($match['team1_set2_score']) == true && isset($match['team2_set2_score']) == true)
         {
             if($match['team1_set2_score'] > $match['team2_set2_score'])
+            {
                 $team1Score++;
+            }
             else
+            {
                 $team2Score++;
+            }
         }
 
-        if(!empty($match['team1_set3_score']) && $team1Score < 2 && $team2Score < 2)
+        /*
+        // we need this when supporting matches with 3 sets, for now don't look at it. b/c at a lot of places the 3rd set is set hardcoded 0 - 0
+        if(isset($match['team1_set3_score']) == true && isset($match['team2_set3_score']) == true && $team1Score < 2 && $team2Score < 2)
         {
             if($match['team1_set3_score'] > $match['team2_set3_score'])
+            {
                 $team1Score++;
+            }
             else
+            {
                 $team2Score++;
+            }
         }
-
+		*/
         return $team1Score . " - " . $team2Score;
     }
 	
