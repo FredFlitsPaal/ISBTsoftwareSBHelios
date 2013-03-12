@@ -56,7 +56,6 @@ class matchScoreController {
 		//at least two sets should be filled with scores, otherwise somebody did something invalid
 		if($_POST['set-1-1'] != '' && $_POST['set-1-2'] != '' && $_POST['set-2-1'] != '' && $_POST['set-2-2'] != '')
 		{
-
 	        try
 	        {
 	            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
@@ -66,7 +65,8 @@ class matchScoreController {
 				$set3Team1 = 0;
 				$set3Team2 = 0;
 
-	            $sql = "UPDATE `match`
+	            $sql = "UPDATE 
+	            			`match`
 						SET 
 							`team1_set1_score` = :team1_set1_score,
 							`team1_set2_score` = :team1_set2_score,
@@ -74,7 +74,6 @@ class matchScoreController {
 							`team2_set1_score` = :team2_set1_score,
 							`team2_set2_score` = :team2_set2_score,
 							`team2_set3_score` = :team2_set3_score,
-							`end_time` = NOW(),
 							`status` = '4'
 						WHERE
 							`id` = :match_id";
@@ -102,11 +101,5 @@ class matchScoreController {
 		{
 			return array("type" => "alert-info", "text" => "Invalid match results, at least two sets must be submitted");
 		}
-	}
-	
-	static public function remoteUpdateScore()
-	{
-		$oMatchScores = new matchScoreController();
-		$oMatchScores->updateScore();
 	}
 }

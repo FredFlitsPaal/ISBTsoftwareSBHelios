@@ -26,11 +26,11 @@ class CourtInformationController
 		{
             if(!empty($_POST['addScore']))
             {
-    			$message = $this->endMatch($_POST['match-id'], $_POST['addScore']);            
+    			$message = $this->endMatchAndAddScore($_POST['match-id']);
             }
             else
             {
-                $message = $this->endMatch($_POST['match-id'], false);
+                $message = $this->endMatch($_POST['match-id']);
             }
 		}
 				
@@ -156,7 +156,7 @@ class CourtInformationController
         }
 	}
 	
-	private function endMatch($match, $addScore = false)
+	private function endMatch($match)
 	{
         try
         {
@@ -174,14 +174,9 @@ class CourtInformationController
 
             $stmt = $pdo->prepare($sql);
 			$stmt->bindParam(":id", $match);
-			
-			if($addScore == true) $stmt->bindValue(":status", MATCH_FINISHED);
-			else $stmt->bindValue(":status", MATCH_ENDED);
+			$stmt->bindValue(":status", MATCH_ENDED);
             
             $stmt->execute();
-            
-            // Set scores if meant to
-            if($addScore == true) matchScoreController::remoteUpdateScore();
 			
 			return array("type" => "alert-success", "text" => "Match ended");
         }
@@ -190,7 +185,62 @@ class CourtInformationController
             Monolog::getInstance()->addAlert('Error ending match, PDOException: ' . var_export($e, true));
         }
 		
-		return array("type" => "", "text" => "Match status could not be changed");
+		return array("type" => "alert-error", "text" => "Match status could not be changed");
+	}
+
+	private function endMatchAndAddScore($match)
+	{
+		//at least two sets should be filled with scores, otherwise somebody did something invalid
+		if($_POST['set-1-1'] != '' && $_POST['set-1-2'] != '' && $_POST['set-2-1'] != '' && $_POST['set-2-2'] != '')
+		{
+	        try
+	        {
+	            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+				//fixed values
+				$set3Team1 = 0;
+				$set3Team2 = 0;
+
+	            $sql = "UPDATE 
+	            			`match`
+						SET 
+							`team1_set1_score` = :team1_set1_score,
+							`team1_set2_score` = :team1_set2_score,
+							`team1_set3_score` = :team1_set3_score,
+							`team2_set1_score` = :team2_set1_score,
+							`team2_set2_score` = :team2_set2_score,
+							`team2_set3_score` = :team2_set3_score,
+							`status` = :status,
+							`court` = NULL,
+							`end_time` = NOW()
+						WHERE
+							`id` = :match_id";
+
+	            $stmt = $pdo->prepare($sql);
+				$stmt->bindParam(":team1_set1_score", $_POST['set-1-1'], PDO::PARAM_INT);
+				$stmt->bindParam(":team1_set2_score", $_POST['set-2-1'], PDO::PARAM_INT);
+				$stmt->bindParam(":team1_set3_score", $set3Team1);
+				$stmt->bindParam(":team2_set1_score", $_POST['set-1-2'], PDO::PARAM_INT);
+				$stmt->bindParam(":team2_set2_score", $_POST['set-2-2'], PDO::PARAM_INT);
+				$stmt->bindParam(":team2_set3_score", $set3Team2);
+				$stmt->bindValue(":status", 		  MATCH_FINISHED);
+				$stmt->bindParam(":match_id", $match, PDO::PARAM_INT);
+	            $stmt->execute();
+				
+				return array("type" => "alert-success", "text" => "Match ended and the match results were saved.");
+	        }
+	        catch(PDOException $e)
+	        {
+	            Monolog::getInstance()->addAlert('Error ending match and updating score, PDOException: ' . var_export($e, true));
+	        }
+			
+			return array("type" => "alert-error", "text" => "Match status could not be changed and failed to save match results");
+		}
+		else
+		{
+			return array("type" => "alert-info", "text" => "Invalid match results, at least two sets must be submitted! Nothing changed, try again please...");
+		}
 	}
 	
 	private function startMatch($match)
@@ -215,6 +265,7 @@ class CourtInformationController
         catch(PDOException $e)
         {
             Monolog::getInstance()->addAlert('Error selecting match, PDOException: ' . var_export($e, true));
+            return array("type" => "alert-error", "text" => "Could not assign match to court");
         }
 
         $result = $stmt->fetchAll();
@@ -232,7 +283,7 @@ class CourtInformationController
 			
 	        if(sizeof($courts) == 0)
 			{
-				return array("type" => "", "text" => "No courts available!");
+				return array("type" => "alert-warning", "text" => "No courts available!");
 			}
 			
 			try
@@ -262,7 +313,7 @@ class CourtInformationController
 	            Monolog::getInstance()->addAlert('Error starting match, PDOException: ' . var_export($e, true));
 	        }
 			
-			return array("type" => "", "text" => "Could not assign match to court");
+			return array("type" => "alert-error", "text" => "Could not assign match to court");
 		}
 	}
 }
