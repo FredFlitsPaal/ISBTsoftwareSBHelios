@@ -7,66 +7,89 @@ class carousselController
 		$aResult = array();
 		$aResult["error"] = false;
 		
-		if($sRequest == "current-matches") {
-			$aResult["column"] = "current-matches";
-			
-			$newCurrentMatches = $this->reloadCurrentMatches($_POST["latestStartTime"], $_POST["maxAllowed"]);
-
-			if(!isset($newCurrentMatches)) {
-				$aResult["error"] = true;
-			} else {
-				ob_start();
-				include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "caroussel" . DIRECTORY_SEPARATOR . "current-matches.html");
-	
-				$aResult["html"] = ob_get_clean();
-			}
+		if($sRequest == "current-matches")
+		{
+			$aResult = $this->reloadCurrentMatches($_POST["latestStartTime"], $_POST["maxAllowed"]);
 		}
-		elseif($sRequest == "upcoming-matches") {
-			$aResult["column"] = "upcoming-matches";
-			
-			$newUpcomingMatches = $this->reloadUpcomingMatches($_POST["lastUpcomingMatchId"], $_POST["maxAllowed"]);
-
-			if(!isset($newUpcomingMatches)) {
-				$aResult["error"] = true;
-			} else {
-				// Je wilt alleen de komende x aantal wedstrijden, wat nu wordt weergegeven moet niet in de array zitten.
-				$newUpcomingMatches = array_reverse($newUpcomingMatches);
-				if(isset($_POST["lastUpcomingMatchId"])) {
-					for($i = 0, $size = count($newUpcomingMatches); $i < $size; ++$i) {
-						if($newUpcomingMatches[$i]["id"] <= $_POST["lastUpcomingMatchId"]) {
-							unset($newUpcomingMatches[$i]);
-						}
-					}
-				}
-				
-				ob_start();
-				include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "caroussel" . DIRECTORY_SEPARATOR . "upcoming-matches.html");
-	
-				$aResult["html"] = ob_get_clean();
-			}
+		elseif($sRequest == "upcoming-matches")
+		{
+			$aResult = $this->reloadUpcomingMatches($_POST["lastUpcomingMatchId"], $_POST["maxAllowed"]);
 		}
-		elseif($sRequest == "match-scores") {
-			$aResult["column"] = "match-scores";
-			
-			$newMatchScores = $this->reloadMatchScores($_POST["latestEndTime"], $_POST["maxAllowed"]);
-
-			if(!isset($newMatchScores)) {
-				$aResult["error"] = true;
-			} else {
-				ob_start();
-				include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "caroussel" . DIRECTORY_SEPARATOR . "match-scores.html");
-	
-				$aResult["html"] = ob_get_clean();
-			}
+		elseif($sRequest == "match-scores")
+		{
+			$aResult = $this->reloadMatchScores($_POST["latestEndTime"], $_POST["maxAllowed"]);
 		}
-		else {
+		else
+		{
 			$aResult = $this->reloadAll();
 		}
 		
 		echo json_encode($aResult);
 	}
 	
+	private function reloadAll()
+	{
+			$aResult["allColumns"] = true;
+			$aResult["currentMatches"] = $this->reloadCurrentMatches();
+			$aResult["upcomingMatches"] = $this->reloadUpcomingMatches();
+			$aResult["matchScores"] = $this->reloadMatchScores();
+			
+			return $aResult;
+	}
+	
 	private function reloadCurrentMatches($latestStartTime = null, $maxAllowed = 10)
+	{
+		$aResult["column"] = "current-matches";
+		
+		$newCurrentMatches = $this->getCurrentMatches($latestStartTime, $maxAllowed);
+
+		if(!isset($newCurrentMatches)) {
+			$aResult["error"] = true;
+		} else {
+			ob_start();
+			include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "caroussel" . DIRECTORY_SEPARATOR . "current-matches.html");
+
+			$aResult["html"] = ob_get_clean();
+		}
+
+		return $aResult;
+	}
+	
+	private function reloadUpcomingMatches($lastUpcomingMatchId = null, $maxAllowed = 10)
+	{
+		$aResult["column"] = "upcoming-matches";
+		
+		$newUpcomingMatches = $this->getUpcomingMatches($lastUpcomingMatchId, $maxAllowed);
+		if(!isset($newUpcomingMatches)) {
+			$aResult["error"] = true;
+		} else {
+			ob_start();
+			include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "caroussel" . DIRECTORY_SEPARATOR . "upcoming-matches.html");
+
+			$aResult["html"] = ob_get_clean();
+		}
+		
+		return $aResult;
+	}
+	
+	private function reloadMatchScores($latestEndTime = null, $maxAllowed = 10)
+	{
+		$aResult["column"] = "match-scores";
+		
+		$newMatchScores = $this->getMatchScores($latestEndTime, $maxAllowed);
+		if(!isset($newMatchScores)) {
+			$aResult["error"] = true;
+		} else {
+			ob_start();
+			include_once(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "pages" . DIRECTORY_SEPARATOR . "caroussel" . DIRECTORY_SEPARATOR . "match-scores.html");
+
+			$aResult["html"] = ob_get_clean();
+		}
+
+		return $aResult;
+	}
+	
+	private function getCurrentMatches($latestStartTime = null, $maxAllowed = 10)
 	{
         try
         {
@@ -78,8 +101,8 @@ class carousselController
 				$addStarttime = " AND `match`.start_time > :starttime";
 			} else {
 				$addStarttime = "";
-				if($maxAllowed > 0) $addLimit = " LIMIT 0," . $maxAllowed;
 			}
+			if($maxAllowed > 0) $addLimit = " LIMIT 0," . $maxAllowed;
 			
             $sql = "SELECT 
 						`match`.*,
@@ -105,7 +128,7 @@ class carousselController
 					LEFT JOIN `court` ON(`match`.court = `court`.id)
                     WHERE poule.round = match.round
                     AND `match`.court != ''";
-            $sql .= $addStarttime;
+//            $sql .= $addStarttime;
             $sql .= " ORDER BY `match`.start_time DESC";
             $sql .= $addLimit;
 
@@ -121,7 +144,7 @@ class carousselController
         }
 	}
 	
-	private function reloadUpcomingMatches($lastUpcomingMatchId = null, $maxAllowed = 10)
+	private function getUpcomingMatches($lastUpcomingMatchId = null, $maxAllowed = 10)
 	{
         try
         {
@@ -131,7 +154,18 @@ class carousselController
 			if($maxAllowed > 0) $addLimit = " LIMIT 0," . $maxAllowed;
 
 			
-            $sql = "SELECT `match`.*, `user1`.name as `team1_user1`, `user2`.name `team1_user2`, `user3`.name as `team2_user1`, `user4`.name as `team2_user2`, `category`.name as category_name, `category`.level as category_level
+            $sql = "SELECT
+            			`match`.*,
+						`user1`.name as `team1_user1`,
+						`user2`.name `team1_user2`,
+						`user3`.name as `team2_user1`,
+						`user4`.name as `team2_user2`,
+						`category`.name as category_name,
+						`category`.level as category_level,
+						`user1`.postponed as `user1_postponed`,
+						`user2`.postponed as `user2_postponed`,
+						`user3`.postponed as `user3_postponed`,
+						`user4`.postponed as `user4_postponed`
                     FROM `match` 
                     INNER JOIN `team` `team1` ON(team1.id = match.team1) 
                     INNER JOIN `team` `team2` ON(team2.id = match.team2) 
@@ -157,7 +191,7 @@ class carousselController
         }
 	}
 	
-	private function reloadMatchScores($latestEndTime = null, $maxAllowed = 10)
+	private function getMatchScores($latestEndTime = null, $maxAllowed = 10)
 	{
         try
         {
@@ -198,14 +232,5 @@ class carousselController
         {
             Monolog::getInstance()->addAlert('Error selecting matches, PDOException: ' . var_export($e, true));
         }
-	}
-	
-	private function reloadAll()
-	{
-			$aResult["result"]["currentMatches"] = $this->reloadCurrentMatches();
-			$aResult["result"]["upcomingMatches"] = $this->reloadUpcomingMatches();
-			$aResult["result"]["matchScores"] = $this->reloadMatchScores();
-			
-			return $aResult;
 	}
 }

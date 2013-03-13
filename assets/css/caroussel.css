@@ -49,6 +49,40 @@ img.dirtydisney-logo {
 	background-color:rgba(255,255,255,0.8);
 }
 
+.match-data div {
+	position: relative;
+}
+
+.match-data .postponed {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color:rgba(255,0,0,0.3);
+	color: #a00;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 3em;
+	line-height: 1.4em;
+	opacity: 0.5;
+}
+
+.match-data .delayed {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color:rgba(255,255,100,0.4);
+	color: #ea0;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 3em;
+	line-height: 1.4em;
+	opacity: 0.5;
+}
+
 .match-data > div {
 	border-bottom: 0.1em solid rgba(255,255,255,0.6);
 }

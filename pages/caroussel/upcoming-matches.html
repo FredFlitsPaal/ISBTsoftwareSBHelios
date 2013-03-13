@@ -1,5 +1,11 @@
 <?php foreach($newUpcomingMatches as $newMatch) { ?>
-						<div class="row-fluid slide-down" id="matchid|<?php echo $newMatch["id"]; ?>">
+						<div class="row-fluid" id="matchid|<?php echo $newMatch["id"]; ?>">
+							<?php if(Toolbox::hasPostponedPlayers($newMatch)) { ?>
+								<div class="postponed">postponed</div>
+							<?php } ?>
+							<?php if(Toolbox::hasDelayedPlayers($newMatch)) { ?>
+								<div class="delayed">delayed</div>
+							<?php } ?>
 							<div class="span5 teams team1">
 								<?php echo $newMatch["team1_user1"]; ?><br /><?php echo $newMatch["team1_user2"]; ?>
 							</div>

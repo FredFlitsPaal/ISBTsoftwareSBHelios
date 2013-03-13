@@ -39,21 +39,34 @@ function servePageWithData(anchor, data)
 
 	$.post('pages/servePage.php', data, function(data) {
 		if(data.error == true){
-			//define some error specific stuff here later...
 			$('header .messages').html("<div class=\"alert alert-error\" style=\"display: none;\"><strong>Oh snap! </strong> Something went wrong with fetching new results.</div>");
 			$("header .messages .alert").fadeIn();
 		}else{
-			$("." + data.column + " .match-data").prepend(data.html);
+			if(data.allColumns == true)
+			{
+				$("." + data.currentMatches.column + " .match-data").html(data.currentMatches.html).fadeIn();
+				$("." + data.upcomingMatches.column + " .match-data").html(data.upcomingMatches.html).fadeIn();
+				$("." + data.matchScores.column + " .match-data").html(data.matchScores.html).fadeIn();
+			} else {			
+				$("." + data.column + " .match-data").html(data.html).fadeIn();
 				
-			$(".slide-down").slideDown("slow");
-			$("." + data.column + " .match-data > div:gt(" + ( maxAllowed-1 ) + ")" ).slideUp("slow", function() {
-				$(this).remove();
-			});
-
-			$(".slide-down").addClass("highlight").removeClass("slide-down");
-			setTimeout(function() {
-				$(".highlight").removeClass("highlight");
-			}, 30000)
+	
+	/*
+				$("." + data.column + " .match-data").prepend(data.html);
+					
+				$(".slide-down").slideDown("slow");
+				$("." + data.column + " .match-data > div:gt(" + ( maxAllowed-1 ) + ")" ).slideUp("slow", function() {
+					$(this).remove();
+				});
+	
+				$(".slide-down").addClass("highlight").removeClass("slide-down");
+				setTimeout(function() {
+					$(".highlight").removeClass("highlight");
+				}, 30000)
+	*/
+				
+				// Remove error message if there was one
+			}
 			
 			$("header .messages .alert").fadeOut(function() {
 				$(this).remove();
@@ -72,9 +85,7 @@ function startRefresh(set) {
 	refreshTime = 10000;
 	setTimeout(startRefresh, refreshTime);
 	
-	reloadCurrentMatches();
-	reloadUpcomingMatches();
-	reloadMatchScores();
+	reloadAll();
 }
 
 function reloadCurrentMatches() {
@@ -114,4 +125,11 @@ function reloadMatchScores() {
 	data.push({"name" : "maxAllowed", "value" : maxAllowed});
 
 	servePageWithData("match-scores", data);
+}
+
+function reloadAll() {
+	data = [];
+	data.push({"name" : "maxAllowed", "value" : maxAllowed});
+
+	servePageWithData("all", data);
 }
