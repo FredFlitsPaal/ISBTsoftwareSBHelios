@@ -114,6 +114,7 @@ class ToolBox{
     {
         $team1Score = 0;
         $team2Score = 0;
+        $scores_set = false;
 
         if(isset($match['team1_set1_score']) == true && isset($match['team2_set1_score']) == true)
         {
@@ -125,6 +126,7 @@ class ToolBox{
             {
                 $team2Score++;
             }
+            $scores_set = true;
         }
 
         if(isset($match['team1_set2_score']) == true && isset($match['team2_set2_score']) == true)
@@ -137,6 +139,7 @@ class ToolBox{
             {
                 $team2Score++;
             }
+            $scores_set = true;
         }
 
         /*
@@ -153,7 +156,15 @@ class ToolBox{
             }
         }
 		*/
-        return $team1Score . " - " . $team2Score;
+
+		if($scores_set == true)
+		{
+			return $team1Score . " - " . $team2Score;
+		}
+        else
+        {
+        	return "";
+        }
     }
 	
 	public static function getScore($match, $set, $team)

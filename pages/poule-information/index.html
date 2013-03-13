@@ -36,7 +36,7 @@
 									Average sets<br>won/match
 								</th>
 								<th rowspan="2" class="points-balance align-center">
-									Points<br>balance
+									Average points<br>balance/match
 								</th>								
 							</tr>
 							<tr>
@@ -107,7 +107,7 @@
 										<button class="btn btn-inverse disabled"><?php echo round($result['average_sets_won'], 2); ?></button>
 									</td>
 									<td class="points-balance align-center">
-										<button class="btn btn-inverse disabled"><?php echo $result['points_balance']; ?></button>
+										<button class="btn btn-inverse disabled"><?php echo round($result['points_balance'], 2); ?></button>
 									</td>
 								</tr>
 							<?php endforeach; ?>
