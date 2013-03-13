@@ -23,6 +23,12 @@ class pouleInformationController
 			$message = $this->endRound($poule, $matches);
 			$matches = $this->getMatches($poule['id']);
 		}
+
+		if(!empty($_POST['finishPoule']))
+		{
+			$message = $this->finishPoule($poule, $matches);
+			$matches = $this->getMatches($poule['id']);
+		}
 		
 		$pouleResults = $this->getPouleResults($poule['id']);
 		$poules = $this->getPoules();
@@ -185,56 +191,109 @@ class pouleInformationController
 	{
         if(Toolbox::hasFinishedRound($poule['id']))
         {
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        	if(count($matches) > 0)
+        	{
+	            try
+	            {
+	            	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+	            	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	                $pdo->beginTransaction();
 
-            try
-            {
-                $pdo->beginTransaction();
+	                foreach($matches as $match)
+	                {			
+	                    $this->updateTeamResults($pdo, $match['team1'], ToolBox::getTeamResults(1, $match));
+	                    $this->updateTeamResults($pdo, $match['team2'], ToolBox::getTeamResults(2, $match));
+	                }
 
-                foreach($matches as $match)
-                {			
-                    $this->updateTeamResults($pdo, $match['team1'], ToolBox::getTeamResults(1, $match));
-                    $this->updateTeamResults($pdo, $match['team2'], ToolBox::getTeamResults(2, $match));
-                }
+	                $pdo->commit();
+	            }
+	            catch(PDOException $e)
+	            {
+	                Monolog::getInstance()->addAlert('Error while updating team results, PDOException: ' . var_export($e, true));
+	                $pdo->rollBack();
+	                return array("type" => "alert-danger", "text" => "Failed to start a new round");
+	            }
+	            
+	            try
+	            {
+	            	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+	            	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	                $pdo->beginTransaction();
+	                
+	                $success = $this->startNextRound($pdo, $poule);
 
-                $pdo->commit();
-            }
-            catch(PDOException $e)
-            {
-                Monolog::getInstance()->addAlert('Error while updating team results, PDOException: ' . var_export($e, true));
-                $pdo->rollBack();
-            }
+	                $pdo->commit();
+	                
+	                if($success == true)
+	                {
+	                    return array("type" => "alert-success", "text" => "New round started");
+	                }
+	                else
+	                {
+	                    return array("type" => "alert-danger", "text" => "New round started, but no new matches were generated because all different combinations of matches are already played...");
+	                }
+	            }
+	            catch(PDOException $e)
+	            {
+	                Monolog::getInstance()->addAlert('Error ending round, PDOException: ' . var_export($e, true));
+	                $pdo->rollBack();
+	                return array("type" => "alert-danger", "text" => "Failed to start a new round");
+	            }
+	        }
+        	else
+        	{
+        		return array("type" => "alert-warning", "text" => "Could not start a new round, because the poule was already finished before!");
+        	}
+        }
+        return array("type" => "alert-warning", "text" => "Could not start a new round, as a new round was already started by someone else.");
+    }
 
-            $pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            try
-            {
-                $pdo->beginTransaction();
-                
-                $success = $this->startNextRound($pdo, $poule);
+    private function finishPoule($poule, $matches)
+	{
+        if(Toolbox::hasFinishedRound($poule['id']))
+        {
+        	if(count($matches) > 0)
+        	{
+	            try
+	            {
+	            	$pdo = new PDO(ISBT_DSN, ISBT_USER, ISBT_PWD, array(PDO::ATTR_PERSISTENT => true));
+	            	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	                $pdo->beginTransaction();
 
-                $pdo->commit();
-                
-                if($success == true)
-                {
-                    return array("type" => "alert-success", "text" => "New round started");
-                }
-                else
-                {
-                    return array("type" => "alert-danger", "text" => "New round started, but no new matches were generated because all different combinations of matches are already played...");
-                }
-            }
-            catch(PDOException $e)
-            {
-                Monolog::getInstance()->addAlert('Error ending round, PDOException: ' . var_export($e, true));
-                $pdo->rollBack();
-            }
-            return array("type" => "", "text" => "Failed to start a new round");
+	                foreach($matches as $match)
+	                {			
+	                    $this->updateTeamResults($pdo, $match['team1'], ToolBox::getTeamResults(1, $match));
+	                    $this->updateTeamResults($pdo, $match['team2'], ToolBox::getTeamResults(2, $match));
+	                }
+
+	                $sql = "UPDATE 
+								`poule`
+							SET
+								`round` = `round` + 1
+							WHERE
+								`id` = :poule";
+					$stmt = $pdo->prepare($sql);
+					$stmt->bindParam(":poule", $poule['id']);
+					$stmt->execute();
+
+	                $pdo->commit();
+
+	                return array("type" => "alert-success", "text" => "Finished poule!");
+	            }
+	            catch(PDOException $e)
+	            {
+	                Monolog::getInstance()->addAlert('Error while updating team results, PDOException: ' . var_export($e, true));
+	                $pdo->rollBack();
+	                return array("type" => "alert-danger", "text" => "Failed to finish poule");
+	            }
+        	}
+        	else
+        	{
+        		return array("type" => "alert-warning", "text" => "Could not finish the poule, as someone else already finished the poule.");
+        	}
         }
         
-        return array("type" => "", "text" => "Could not start a new round, as a new round was already started by someone else.");
+        return array("type" => "alert-warning", "text" => "Could not finish the poule, as a new round was already started by someone else.");
     }
 
 	private function updateTeamResults($pdo, $team, $results)

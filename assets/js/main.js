@@ -73,6 +73,11 @@ $(document).ready(function() {
         {
             $("#startNextRoundBtn").attr("disabled", "disabled");
         }
+
+        if($(this).attr("id") == "finishPouleForm")
+        {
+            $("#finishPouleBtn").attr("disabled", "disabled");
+        }
         
 		var anchor = getAnchor();
 
@@ -127,11 +132,6 @@ $(document).ready(function() {
 		$(newModalId).modal("show");
 		$("#" + oldModalId).modal("hide");
 	});
-    
-//    $("#startNextRoundBtn").live("click", function()
-//    {
-//        $(this).attr("disabled", "disabled");
-//    });
 });
 
 //call for page

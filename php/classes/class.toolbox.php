@@ -436,6 +436,17 @@ class ToolBox{
 		}
 	}
 
+	public static function getFinishPouleButton($poule){
+		if(self::hasFinishedRound($poule) == true)
+		{
+			return '<button class="span12 btn btn-danger" data-toggle="modal" data-target="#finish-poule-x">Finish poule</button>';
+		}
+		else
+		{
+			return '<button class="span12 btn btn-danger disabled" data-toggle="modal">Finish poule</button>';
+		}
+	}
+
 	public static function hasFinishedRound($poule){
 		try
         {

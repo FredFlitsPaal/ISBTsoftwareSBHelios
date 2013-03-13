@@ -190,6 +190,8 @@
 				<a href="pages/print/?poule=<?php echo $poule['id']; ?>" target="_blank" class="span12 btn btn-inverse">Print game notes</a>
 				<br /><br /><br />
 				<?php echo ToolBox::getStartNextRoundButton($poule['id']); ?>
+				<br /><br /><br />
+				<?php echo ToolBox::getFinishPouleButton($poule['id']); ?>
 			</div>
 		</div>
 	</div>
@@ -210,6 +212,25 @@
 		<div class="modal-footer">
 			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
 			<button id="startNextRoundBtn" class="btn btn-primary" type="submit" name="nextRound" value="1">Start next round</button>
+		</div>
+	</form>
+</div>
+
+<div id="finish-poule-x" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="finish-poule-x" aria-hidden="true">
+	<form method="post" id="finishPouleForm">
+		<input type="hidden" name="finishPoule" value="1"/>
+		<input type="hidden" name="poule" value="<?php echo $poule['id'] ?>" />
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="startnextround">Finish poule</h3>
+		</div>
+		<div class="modal-body">
+			<p>You're about to finish <?php echo ToolBox::getCategoryLabel($poule['category']); ?> If you proceed, the system will process the scores of the current round and you will not be able to edit scores of this round anymore.</p>
+			<p>No new matches will be generated, are you sure you want to proceed?! Use this functionality only at the end of the tournament!</p>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button id="finishPouleBtn" class="btn btn-primary" type="submit" name="finishPoule" value="1">Finish poule</button>
 		</div>
 	</form>
 </div>
