@@ -191,7 +191,7 @@ class pouleInformationController
 	{
         if(Toolbox::hasFinishedRound($poule['id']))
         {
-        	if(count($matches) > 0)
+        	if(count($matches) > 0 || $poule['round'] == 0)
         	{
 	            try
 	            {
