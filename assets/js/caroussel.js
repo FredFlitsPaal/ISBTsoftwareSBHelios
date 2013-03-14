@@ -1,4 +1,7 @@
 $(document).ready(function() {
+	//auto start
+	startRefresh();
+	
 	// Reload columns
 	$(".isbt-logo").click(function() {
 		startRefresh();
