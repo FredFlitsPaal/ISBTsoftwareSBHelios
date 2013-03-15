@@ -348,8 +348,34 @@ class pouleInformationController
 		
         if(sizeof($teams) > 1)
 		{
+			//determine if the poule has uneven teams
+			if(count($teams) % 2)
+			{
+				//uneven, so add bye team
+				$numTeams = count($teams) + 1;
+			}
+			else
+			{
+				$numTeams = count($teams);
+			}
+
+			if($numTeams <= $poule['round'] + 1)
+			{
+				//we need to downgrade the poule round number and we need to know how many times all the rounds were already played
+				$alreadyPlayedAllRounds = floor($poule['round'] / ($numTeams - 1));
+				$fictionalRound = ($poule['round'] + 1) - ($alreadyPlayedAllRounds * ($numTeams - 1));
+
+				//strip off matches
+				$stripOff = ($numTeams / 2) * ($numTeams - 1) * $alreadyPlayedAllRounds;
+				$alreadyPlayedMatches = array_slice($alreadyPlayedMatches, $stripOff);
+			}
+			else
+			{
+				$fictionalRound = $poule['round'] + 1;
+			}
+
             Monolog::getInstance()->addDebug('New round : ' . ($poule['round'] + 1));
-            $generator = new LadderGenerator($teams, $poule['round'] + 1, $alreadyPlayedMatches);
+            $generator = new LadderGenerator($teams, $fictionalRound, $alreadyPlayedMatches);
             $matches = $generator->generate();
 		}
 		
@@ -411,7 +437,8 @@ class pouleInformationController
                     FROM `match` 
                     INNER JOIN `team` `team1` ON(team1.id = match.team1) 
                     INNER JOIN `poule` ON(poule.id = team1.poule)
-                    WHERE poule.id = :poule";
+                    WHERE poule.id = :poule
+                    ORDER BY `match`.id ASC";
 
             $stmt = $pdo->prepare($sql);
 			$stmt->bindParam(":poule", $poule['id']);
