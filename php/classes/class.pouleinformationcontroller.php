@@ -310,7 +310,7 @@ class pouleInformationController
 					`points_won` = `points_won` + :points_won,
 					`points_lost` = `points_lost` + :points_lost,
 					`average_sets_won` = `sets_won` / `matches_played`,
-					`points_balance` = (`points_balance` + :points_won - :points_lost) / `matches_played`
+					`points_balance` = (`points_won` - `points_lost`) / `matches_played`
 				WHERE id = :team";
 		$stmt = $pdo->prepare($sql);
 		$stmt->bindParam(":matches_won", $results['matches_won']);

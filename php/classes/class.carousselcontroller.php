@@ -177,7 +177,6 @@ class carousselController
                     INNER JOIN `category` ON (poule.category = category.id)
                     WHERE `status` = '0'";
             $sql .= " ORDER BY `match`.id ASC";
-            $sql .= $addLimit;
 
             $stmt = $pdo->prepare($sql);
 			$stmt->bindParam(":upcomingid", $lastUpcomingId);
