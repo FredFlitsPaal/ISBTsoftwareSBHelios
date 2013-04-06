@@ -29,6 +29,10 @@ Have a bug or a feature request? [Please open a new issue](https://github.com/Fr
 
 + [https://github.com/WoBaDijk](https://github.com/WoBaDijk)
 
+**Special thanks to the following contributors**
+
++ Leon Bunschoten [https://github.com/lbunschoten](https://github.com/lbunschoten)
+
 
 
 ## Copyright and license
